@@ -11,6 +11,8 @@ const fontMono = Geist_Mono({
     variable: "--font-mono",
 })
 
+import { Toaster } from "sonner"
+
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -28,7 +30,10 @@ export default function RootLayout({
             )}
         >
             <body>
-                <ThemeProvider>{children}</ThemeProvider>
+                <ThemeProvider>
+                    {children}
+                    <Toaster position="top-center" richColors />
+                </ThemeProvider>
             </body>
         </html>
     )
