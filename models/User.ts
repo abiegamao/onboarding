@@ -16,6 +16,7 @@ export interface IUser extends Document {
     connection: {
         snapshot: Map<string, any> // Step 1B
         triage: {
+            pdlLeaderScore?: string
             neurodiversity?: string
             internalWiring?: string // CliftonStrengths/Human Design
             disc?: string // Body
@@ -25,15 +26,21 @@ export interface IUser extends Document {
     }
     // Phase 2 Data: Awareness
     awareness: {
-        evaluation360: Map<string, string>[]
+        evaluation360: any[] 
+        growthInputs: Map<string, string>
+        eveningPulse: {
+            goodToday: string
+            heavyToday: string
+            peaceLevel: number
+        }
         rhythmSnapshot: Map<string, any>
         bossIndex: Map<string, any>
-        eveningCheck: string
         capacityPulse: string[]
         commitments: string[]
     }
     // Phase 3 Data: Stabilization
     stabilization: {
+        visionActivation: Map<string, string>
         visionStatements: Map<string, string>
         idealDayStory: string
         wordOfYear: string
@@ -61,6 +68,7 @@ const UserSchema = new Schema<IUser>(
         connection: {
             snapshot: { type: Map, of: Schema.Types.Mixed, default: {} },
             triage: {
+                pdlLeaderScore: String,
                 neurodiversity: String,
                 internalWiring: String,
                 disc: String,
@@ -69,16 +77,20 @@ const UserSchema = new Schema<IUser>(
             openShare: String,
         },
         awareness: {
-            evaluation360: [
-                { type: Map, of: String }
-            ],
+            evaluation360: [{ type: Map, of: String }],
+            growthInputs: { type: Map, of: String, default: {} },
+            eveningPulse: {
+                goodToday: String,
+                heavyToday: String,
+                peaceLevel: { type: Number, min: 1, max: 10 },
+            },
             rhythmSnapshot: { type: Map, of: Schema.Types.Mixed, default: {} },
             bossIndex: { type: Map, of: Schema.Types.Mixed, default: {} },
-            eveningCheck: String,
             capacityPulse: [String],
             commitments: [String],
         },
         stabilization: {
+            visionActivation: { type: Map, of: String, default: {} },
             visionStatements: { type: Map, of: String, default: {} },
             idealDayStory: String,
             wordOfYear: String,
