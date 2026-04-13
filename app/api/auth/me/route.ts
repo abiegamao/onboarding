@@ -15,22 +15,30 @@ export async function GET() {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
         }
 
-        const { payload } = await jwtVerify(token, new TextEncoder().encode(JWT_SECRET))
+        const { payload } = await jwtVerify(
+            token,
+            new TextEncoder().encode(JWT_SECRET)
+        )
         const userId = (payload as any).userId
 
         await connectDB()
-        const user = await User.findById(userId).select("firstName lastName email")
+        const user = await User.findById(userId).select(
+            "firstName lastName email"
+        )
 
         if (!user) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 })
+            return NextResponse.json(
+                { error: "User not found" },
+                { status: 404 }
+            )
         }
 
         return NextResponse.json({
             user: {
                 firstName: user.firstName,
                 lastName: user.lastName,
-                email: user.email
-            }
+                email: user.email,
+            },
         })
     } catch (error) {
         console.error("Auth me error:", error)
