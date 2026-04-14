@@ -318,7 +318,7 @@ export default function OnboardingPage() {
               Getting to Know You
             </h1>
             <p className="text-xl text-muted-foreground italic font-medium">
-              "Insight to support you well—without the need to repeat yourself."
+              "Insight to support you well ~ without the need to repeat yourself."
             </p>
           </>
         )}

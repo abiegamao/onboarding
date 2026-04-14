@@ -233,7 +233,7 @@ export function Phase1Connection({ currentStep, formData, setFormData }: Phase1P
           <div className="space-y-4 max-w-lg">
             <h2 className="text-3xl font-bold">Divine Identity Uncovered</h2>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              This reveals your Divine Identity—The Real You—uncovered from the weight of past experiences and the noise of your present reality.
+              This reveals your Divine Identity ~ The Real You ~ uncovered from the weight of past experiences and the noise of your present reality.
             </p>
           </div>
           <Button size="lg" className="h-16 px-12 rounded-2xl text-xl font-bold shadow-xl shadow-primary/20 group">
