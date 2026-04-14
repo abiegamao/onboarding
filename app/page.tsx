@@ -1,9 +1,8 @@
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 import { Button } from "@/components/ui/button"
-import { ModeToggle } from "@/components/mode-toggle"
+import { LandingNav } from "@/components/landing-nav"
 import { Sparkles, UserCircle, HeartPulse, ShieldCheck, Zap, ArrowRight, Check } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
 
 const PHASES = [
     {
@@ -87,28 +86,7 @@ export default function Page() {
             }} />
 
             {/* Navigation */}
-            <nav className="relative z-20 flex items-center justify-between px-4 md:px-8 py-6 max-w-7xl mx-auto">
-                <div className="flex items-center gap-2 md:gap-3">
-                    <div className="relative w-8 h-8 md:w-10 md:h-10 overflow-hidden">
-                        <Image src="/assets/logo.png" alt="Logo" fill className="object-cover" />
-                    </div>
-                    <span className="text-lg md:text-xl font-bold tracking-tight">
-                        <span className="hidden sm:inline">The Peace-Driven Leader</span>
-                        <span className="sm:hidden">Minesha</span>
-                    </span>
-                </div>
-                <div className="flex items-center gap-3 md:gap-6">
-                    <Link href="/login" className="text-xs md:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                        Sign In
-                    </Link>
-                    <ModeToggle />
-                    <Link href="/signup">
-                        <Button variant="outline" size="sm" className="rounded-xl border-primary/30 bg-primary/5 hover:bg-primary/10 text-xs md:text-base">
-                            Join
-                        </Button>
-                    </Link>
-                </div>
-            </nav>
+            <LandingNav />
 
             <main className="relative z-10 px-4 md:px-6 pt-10 md:pt-24 pb-40 max-w-7xl mx-auto space-y-32 md:space-y-40">
 
