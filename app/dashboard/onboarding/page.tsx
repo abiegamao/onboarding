@@ -566,7 +566,7 @@ export default function OnboardingPage() {
               <button
                 onClick={handleBack}
                 disabled={isUpdating}
-                className="h-11 px-6 rounded-xl border border-border/50 text-sm font-medium text-muted-foreground hover:text-foreground hover:border-border transition-colors disabled:opacity-40"
+                className="h-12 px-6 rounded-xl border border-border/40 text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 disabled:opacity-40"
               >
                 Back
               </button>
@@ -575,12 +575,12 @@ export default function OnboardingPage() {
             <button
               onClick={handleContinue}
               disabled={isUpdating || isLocked}
-              className="group relative h-11 px-8 rounded-xl text-sm font-bold uppercase tracking-wider overflow-hidden transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-lg"
+              className="group relative h-12 px-10 rounded-xl text-sm font-bold uppercase tracking-wider overflow-hidden transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed border border-transparent hover:border-primary/20"
               style={{
-                backgroundImage: isLocked ? "none" : "linear-gradient(135deg, var(--primary), #d4b483)",
+                backgroundImage: isLocked ? "none" : "linear-gradient(135deg, var(--primary), var(--accent-foreground, #d4b483))",
                 backgroundColor: isLocked ? "var(--muted)" : undefined,
                 color: isLocked ? "var(--muted-foreground)" : "var(--primary-foreground)",
-                boxShadow: isLocked ? "none" : "0 4px 20px rgba(182,149,74,0.2)",
+                boxShadow: isLocked ? "none" : "0 4px 24px rgba(182,149,74,0.25), 0 0 0 1px rgba(182,149,74,0.1)",
               }}
             >
               <span className="relative z-10 flex items-center gap-2">
@@ -602,7 +602,7 @@ export default function OnboardingPage() {
               </span>
               {!isLocked && !isUpdating && (
                 <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{
-                  backgroundImage: "linear-gradient(135deg, #d4b483, var(--primary))",
+                  backgroundImage: "linear-gradient(135deg, var(--accent-foreground, #d4b483), var(--primary))",
                 }} />
               )}
             </button>
