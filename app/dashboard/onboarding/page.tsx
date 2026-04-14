@@ -9,7 +9,7 @@ import { Phase1Connection } from "@/components/onboarding/phases/Phase1Connectio
 import { Phase2Awareness } from "@/components/onboarding/phases/Phase2Awareness"
 import { Phase3Stabilization } from "@/components/onboarding/phases/Phase3Stabilization"
 import { Phase4Activation } from "@/components/onboarding/phases/Phase4Activation"
-const LOCKED_STEPS = ["1F", "2C", "3E"]
+const LOCKED_STEPS = ["2C", "3E"]
 
 export default function OnboardingPage() {
   const router = useRouter()
