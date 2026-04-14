@@ -189,16 +189,16 @@ export function Phase1Connection({ currentStep, formData, setFormData }: Phase1P
         <div className="space-y-12 animate-in fade-in duration-700 max-w-4xl mx-auto">
           <div className="grid grid-cols-1 gap-10">
             {[
-              { title: "Mission & Vision", id: "ft9eAypjpac", icon: <Sparkles className="h-4 w-4" /> },
-              { title: "Our Culture", id: "G-IJMF9WN6I", icon: <Heart className="h-4 w-4" /> },
-              { title: "Signature Key Terms", id: "b75eF1j3BdE", icon: <ShieldCheck className="h-4 w-4" /> }
+              { title: "Mission & Vision", id: "1182657390", icon: <Sparkles className="h-4 w-4" /> },
+              { title: "Our Culture", id: "1182657388", icon: <Heart className="h-4 w-4" /> },
+              { title: "Signature Key Terms", id: "1182657395", icon: <ShieldCheck className="h-4 w-4" /> }
             ].map((video) => (
               <div key={video.id} className="space-y-4">
                 <div className="relative aspect-video rounded-sm overflow-hidden bg-neutral-900 border border-primary/10 shadow-2xl">
                   <iframe
-                    src={`https://www.youtube.com/embed/${video.id}`}
+                    src={`https://player.vimeo.com/video/${video.id}?h=0&title=0&byline=0&portrait=0`}
                     className="absolute inset-0 w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allow="autoplay; fullscreen; picture-in-picture"
                     allowFullScreen
                   />
                 </div>
