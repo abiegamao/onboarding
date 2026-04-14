@@ -153,7 +153,7 @@ export default function OnboardingPage() {
       if (res.ok) {
         const newStatus = await res.json()
         setStatus(newStatus)
-        if (!hasShownToast) {
+        if (!hasShownToast && currentStep === "1A") {
           toast.success("Pathway Activated!", { duration: 3000 })
           setHasShownToast(true)
         }
