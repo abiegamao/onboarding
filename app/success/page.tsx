@@ -99,8 +99,8 @@ export default function SuccessPage() {
           <div className="relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-primary/10 rounded-3xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
             <VideoPlayer 
-              title="Welcome to Minesha" 
-              videoId="6xdbGNPE63c" 
+              title="Welcome to Minesha"
+              videoId="bNdeTAV9UJg" 
               className="relative w-full aspect-video rounded-2xl shadow-2xl border border-primary/20 overflow-hidden"
             />
           </div>
@@ -123,8 +123,8 @@ export default function SuccessPage() {
           <div className="relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-primary/10 rounded-3xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
             <VideoPlayer 
-              title="The Core Methodology" 
-              videoId="edqAzcIRxm8" 
+              title="The Core Methodology"
+              videoId="gpJXBcNWmTg" 
               className="relative w-full aspect-video rounded-2xl shadow-2xl border border-primary/20 overflow-hidden"
             />
           </div>
