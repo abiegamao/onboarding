@@ -18,6 +18,7 @@ export default function OnboardingPage() {
   const [userData, setUserData] = useState<any>(null)
   const [formData, setFormData] = useState<any>({})
   const [isUpdating, setIsUpdating] = useState(false)
+  const [hasShownToast, setHasShownToast] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
@@ -152,7 +153,10 @@ export default function OnboardingPage() {
       if (res.ok) {
         const newStatus = await res.json()
         setStatus(newStatus)
-        toast.success("Pathway Activated!")
+        if (!hasShownToast) {
+          toast.success("Pathway Activated!", { duration: 3000 })
+          setHasShownToast(true)
+        }
         router.refresh() // Sync the server-side sidebar
         
         if (dataToSave["onboardingStatus.isCompleted"]) {
