@@ -2,14 +2,11 @@
 
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { Sparkles, ArrowRight, Heart, Play } from "lucide-react"
+import { Sparkles, ArrowRight, Heart, Play, Crown, Shield } from "lucide-react"
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 import { toast } from "sonner"
 import { Confetti, type ConfettiRef } from "@/components/ui/confetti"
 import { VideoPlayer } from "@/components/marketing/video-player"
-
-import Lottie from "lottie-react"
-import welcomeAnimation from "@/public/assets/welcome.json"
 
 export default function SuccessPage() {
   const router = useRouter()
@@ -58,26 +55,51 @@ export default function SuccessPage() {
       title: "Welcome Home!",
       subtitle: '"I’m truly so glad you’re here."',
       content: (
-        <div className="space-y-8 animate-in fade-in zoom-in duration-1000">
-          <div className="relative mx-auto w-64 h-64 flex items-center justify-center transition-all duration-700 hover:scale-110">
-            <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
-            <Lottie 
-              animationData={welcomeAnimation} 
-              loop={true} 
-              className="w-full h-full relative z-10"
-            />
-            <Sparkles className="h-12 w-12 text-primary absolute -top-4 -right-4 animate-bounce z-20" />
-            <Heart className="h-10 w-10 text-primary/40 absolute -bottom-4 -left-4 animate-pulse z-20" />
+        <div className="space-y-10 animate-in fade-in duration-1000">
+          <style>{`
+            @keyframes welcomeGlow { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.1); } }
+            @keyframes welcomeFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+            @keyframes welcomeRing { 0% { transform: scale(0.8); opacity: 0; } 50% { opacity: 0.3; } 100% { transform: scale(1.6); opacity: 0; } }
+          `}</style>
+          {/* Premium crown emblem */}
+          <div className="relative mx-auto w-48 h-48 flex items-center justify-center">
+            {/* Glow */}
+            <div className="absolute inset-0 rounded-full blur-3xl pointer-events-none" style={{
+              background: "radial-gradient(circle, rgba(182,149,74,0.3) 0%, transparent 70%)",
+              animation: "welcomeGlow 4s ease-in-out infinite",
+            }} />
+            {/* Pulsing rings */}
+            <div className="absolute inset-0 rounded-full border border-primary/20" style={{ animation: "welcomeRing 3s ease-out infinite" }} />
+            <div className="absolute inset-0 rounded-full border border-primary/15" style={{ animation: "welcomeRing 3s ease-out infinite 1s" }} />
+            {/* Inner circle */}
+            <div className="relative w-32 h-32 rounded-full flex items-center justify-center" style={{
+              backgroundImage: "linear-gradient(135deg, var(--primary), var(--accent-foreground, #d4b483))",
+              boxShadow: "0 8px 40px rgba(182,149,74,0.3)",
+              animation: "welcomeFloat 4s ease-in-out infinite",
+            }}>
+              <Crown size={48} className="text-primary-foreground" />
+            </div>
+            {/* Floating accents */}
+            <Shield size={20} className="text-primary/40 absolute -top-2 -right-2" style={{ animation: "welcomeFloat 3s ease-in-out infinite 0.5s" }} />
+            <Heart size={16} className="text-primary/30 absolute -bottom-1 -left-3" style={{ animation: "welcomeFloat 3.5s ease-in-out infinite 1s" }} />
+            <Sparkles size={14} className="text-primary/25 absolute top-4 -left-6" style={{ animation: "welcomeFloat 4s ease-in-out infinite 1.5s" }} />
           </div>
           <div className="space-y-4">
-            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-50 drop-shadow-sm">
-              Welcome Home!
+            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-foreground">
+              Welcome{" "}
+              <span className="italic font-normal" style={{
+                backgroundImage: "linear-gradient(135deg, var(--primary), var(--accent-foreground, #d4b483))",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+                WebkitTextFillColor: "transparent",
+              }}>Home.</span>
             </h1>
             <p className="text-xl sm:text-2xl text-muted-foreground font-medium italic">
-              "I’m truly so glad you’re here."
+              &ldquo;I&rsquo;m truly so glad you&rsquo;re here.&rdquo;
             </p>
             <div className="max-w-md mx-auto text-muted-foreground leading-relaxed">
-              You’ve made a beautiful decision. From this moment forward, you do not have to carry everything alone. You’ve partnered with a team ready to help you thrive.
+              You&rsquo;ve made a beautiful decision. From this moment forward, you do not have to carry everything alone. You&rsquo;ve partnered with a team ready to help you thrive.
             </div>
           </div>
         </div>
