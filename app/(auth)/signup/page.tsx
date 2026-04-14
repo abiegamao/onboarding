@@ -82,7 +82,7 @@ export default function SignupPage() {
                   your journey.
                 </span>
               </h2>
-              <p className="italic text-foreground/35 text-sm mb-8 max-w-sm leading-relaxed">
+              <p className="italic text-muted-foreground text-sm mb-8 max-w-sm leading-relaxed">
                 Create your account and step into a guided pathway designed to help you offload what weighs you down.
               </p>
 
@@ -99,7 +99,7 @@ export default function SignupPage() {
                           boxShadow: step.highlight ? "0 0 20px rgba(182,149,74,0.1)" : "none",
                         }}
                       >
-                        <step.icon size={16} className={`transition-colors duration-300 ${step.highlight ? "text-primary" : "text-foreground/30 group-hover:text-primary"}`} />
+                        <step.icon size={16} className={`transition-colors duration-300 ${step.highlight ? "text-primary" : "text-muted-foreground/70 group-hover:text-primary"}`} />
                       </div>
                       {i < JOURNEY.length - 1 && (
                         <div className="w-px h-6 mt-1" style={{
@@ -120,7 +120,7 @@ export default function SignupPage() {
                         }}>{step.phase}</span>
                         <span className="text-sm font-bold text-foreground">{step.title}</span>
                       </div>
-                      <p className="italic text-foreground/30 text-xs leading-relaxed">{step.desc}</p>
+                      <p className="italic text-muted-foreground/70 text-xs leading-relaxed">{step.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -135,7 +135,7 @@ export default function SignupPage() {
                     }}>
                       <Check size={10} className="text-primary" />
                     </div>
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-foreground/35">{perk}</span>
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{perk}</span>
                   </div>
                 ))}
               </div>

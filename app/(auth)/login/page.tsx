@@ -42,12 +42,12 @@ export default function LoginPage() {
           `}</style>
           <div className="relative rounded-3xl overflow-hidden p-8 xl:p-10 bg-gradient-to-br from-[#f6f0e4] via-[#f9f5ed] to-[#f2eadb] dark:from-[#10241f] dark:via-[#1a2e28] dark:to-[#0d1f1a] border border-[#e0d5c0] dark:border-white/5">
             {/* Glow orbs */}
-            <div className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl pointer-events-none" style={{
-              background: "radial-gradient(circle, rgba(182,149,74,0.15) 0%, transparent 70%)",
+            <div className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl pointer-events-none opacity-100 dark:opacity-100" style={{
+              background: "radial-gradient(circle, rgba(182,149,74,0.2) 0%, transparent 70%)",
               animation: "jGlow 6s ease-in-out infinite",
             }} />
             <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full blur-3xl pointer-events-none" style={{
-              background: "radial-gradient(circle, rgba(182,149,74,0.08) 0%, transparent 70%)",
+              background: "radial-gradient(circle, rgba(182,149,74,0.12) 0%, transparent 70%)",
               animation: "jGlow 8s ease-in-out infinite 2s",
             }} />
 
@@ -75,7 +75,7 @@ export default function LoginPage() {
                   Cares.
                 </span>
               </h2>
-              <p className="italic text-foreground/35 text-sm mb-8 max-w-sm leading-relaxed">
+              <p className="italic text-muted-foreground text-sm mb-8 max-w-sm leading-relaxed">
                 A guided pathway to connection, awareness, stabilization, and activation. One step at a time.
               </p>
 
@@ -92,7 +92,7 @@ export default function LoginPage() {
                           boxShadow: step.highlight ? "0 0 20px rgba(182,149,74,0.1)" : "none",
                         }}
                       >
-                        <step.icon size={16} className={`transition-colors duration-300 ${step.highlight ? "text-primary" : "text-foreground/30 group-hover:text-primary"}`} />
+                        <step.icon size={16} className={`transition-colors duration-300 ${step.highlight ? "text-primary" : "text-muted-foreground/70 group-hover:text-primary"}`} />
                       </div>
                       {i < JOURNEY.length - 1 && (
                         <div className="w-px h-6 mt-1" style={{
@@ -113,30 +113,30 @@ export default function LoginPage() {
                         }}>{step.phase}</span>
                         <span className="text-sm font-bold text-foreground">{step.title}</span>
                       </div>
-                      <p className="italic text-foreground/30 text-xs leading-relaxed">{step.desc}</p>
+                      <p className="italic text-muted-foreground/70 text-xs leading-relaxed">{step.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* Stats */}
-              <div className="mt-8 pt-6 flex items-center gap-6" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="mt-8 pt-6 flex items-center gap-6" style={{ borderTop: "1px solid var(--border)" }}>
                 {[
                   { val: "4", label: "Phases" },
                   { val: "17", label: "Steps" },
                   { val: "Guided", label: "Pathway" },
                 ].map((stat, i) => (
                   <div key={stat.label} className="flex items-center gap-6">
-                    {i > 0 && <div className="w-px h-8" style={{ background: "rgba(255,255,255,0.06)" }} />}
+                    {i > 0 && <div className="w-px h-8" style={{ background: "var(--border)" }} />}
                     <div>
                       <p className="font-bold text-2xl tracking-tight" style={{
-                        backgroundImage: "linear-gradient(135deg, #ffffff, rgba(182,149,74,0.8))",
+                        backgroundImage: "linear-gradient(135deg, var(--primary), var(--accent-foreground, #d4b483))",
                         backgroundClip: "text",
                         WebkitBackgroundClip: "text",
                         color: "transparent",
                         WebkitTextFillColor: "transparent",
                       }}>{stat.val}</p>
-                      <p className="font-mono text-[8px] uppercase tracking-widest text-foreground/25">{stat.label}</p>
+                      <p className="font-mono text-[8px] uppercase tracking-widest text-muted-foreground/60">{stat.label}</p>
                     </div>
                   </div>
                 ))}
