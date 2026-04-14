@@ -40,23 +40,15 @@ export default function LoginPage() {
             .j-step:nth-child(3) { animation-delay: 0.4s; }
             .j-step:nth-child(4) { animation-delay: 0.55s; }
           `}</style>
-          <div className="relative rounded-3xl overflow-hidden p-8 xl:p-10" style={{
-            background: "linear-gradient(135deg, #10241f 0%, #1a2e28 25%, #10241f 50%, #0d1f1a 75%, #10241f 100%)",
-          }}>
+          <div className="relative rounded-3xl overflow-hidden p-8 xl:p-10 bg-gradient-to-br from-[#f6f0e4] via-[#f9f5ed] to-[#f2eadb] dark:from-[#10241f] dark:via-[#1a2e28] dark:to-[#0d1f1a] border border-[#e0d5c0] dark:border-white/5">
             {/* Glow orbs */}
-            <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full blur-3xl pointer-events-none" style={{
-              background: "radial-gradient(circle, rgba(182,149,74,0.25) 0%, transparent 70%)",
+            <div className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl pointer-events-none" style={{
+              background: "radial-gradient(circle, rgba(182,149,74,0.15) 0%, transparent 70%)",
               animation: "jGlow 6s ease-in-out infinite",
             }} />
-            <div className="absolute -bottom-16 -left-16 w-48 h-48 rounded-full blur-3xl pointer-events-none" style={{
-              background: "radial-gradient(circle, rgba(182,149,74,0.12) 0%, transparent 70%)",
+            <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full blur-3xl pointer-events-none" style={{
+              background: "radial-gradient(circle, rgba(182,149,74,0.08) 0%, transparent 70%)",
               animation: "jGlow 8s ease-in-out infinite 2s",
-            }} />
-
-            {/* Grid */}
-            <div className="absolute inset-0 opacity-[0.03]" style={{
-              backgroundImage: "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
-              backgroundSize: "32px 32px",
             }} />
 
             <div className="relative z-10">
@@ -71,7 +63,7 @@ export default function LoginPage() {
                 <span className="font-mono text-[9px] uppercase tracking-[4px] text-primary">Your Journey</span>
               </div>
 
-              <h2 className="text-3xl xl:text-4xl font-bold text-white leading-[0.95] mb-3">
+              <h2 className="text-3xl xl:text-4xl font-bold text-foreground leading-[0.95] mb-3">
                 Offloading{" "}
                 <span className="italic font-normal" style={{
                   backgroundImage: "linear-gradient(135deg, #b6954a, #d4b483)",
@@ -83,7 +75,7 @@ export default function LoginPage() {
                   Cares.
                 </span>
               </h2>
-              <p className="italic text-white/35 text-sm mb-8 max-w-sm leading-relaxed">
+              <p className="italic text-foreground/35 text-sm mb-8 max-w-sm leading-relaxed">
                 A guided pathway to connection, awareness, stabilization, and activation. One step at a time.
               </p>
 
@@ -100,7 +92,7 @@ export default function LoginPage() {
                           boxShadow: step.highlight ? "0 0 20px rgba(182,149,74,0.1)" : "none",
                         }}
                       >
-                        <step.icon size={16} className={`transition-colors duration-300 ${step.highlight ? "text-primary" : "text-white/30 group-hover:text-primary"}`} />
+                        <step.icon size={16} className={`transition-colors duration-300 ${step.highlight ? "text-primary" : "text-foreground/30 group-hover:text-primary"}`} />
                       </div>
                       {i < JOURNEY.length - 1 && (
                         <div className="w-px h-6 mt-1" style={{
@@ -119,9 +111,9 @@ export default function LoginPage() {
                           color: "transparent",
                           WebkitTextFillColor: "transparent",
                         }}>{step.phase}</span>
-                        <span className="text-sm font-bold text-white">{step.title}</span>
+                        <span className="text-sm font-bold text-foreground">{step.title}</span>
                       </div>
-                      <p className="italic text-white/30 text-xs leading-relaxed">{step.desc}</p>
+                      <p className="italic text-foreground/30 text-xs leading-relaxed">{step.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -144,7 +136,7 @@ export default function LoginPage() {
                         color: "transparent",
                         WebkitTextFillColor: "transparent",
                       }}>{stat.val}</p>
-                      <p className="font-mono text-[8px] uppercase tracking-widest text-white/25">{stat.label}</p>
+                      <p className="font-mono text-[8px] uppercase tracking-widest text-foreground/25">{stat.label}</p>
                     </div>
                   </div>
                 ))}
