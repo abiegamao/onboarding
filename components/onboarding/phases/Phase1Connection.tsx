@@ -1,6 +1,7 @@
 "use client"
 import { Play, ArrowRight, ShieldCheck, Heart, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { LeadershipAssessment } from "@/components/onboarding/LeadershipAssessment"
 
 interface Phase1Props {
   currentStep: string
@@ -85,27 +86,12 @@ export function Phase1Connection({ currentStep, formData, setFormData }: Phase1P
               </div>
               
               <div className="space-y-6">
-                {/* PDL Score */}
-                <div className="flex flex-col md:flex-row md:items-end gap-6 pb-6 border-b border-primary/10">
-                  <div className="flex-1 space-y-3">
-                    <p className="font-bold text-sm uppercase tracking-wide">PDL Leader Score</p>
-                    <a 
-                      href="https://docs.google.com/document/d/1iYCURCTSHcaqVVYYyfa_iz9RkNsF1FRRFoTnMoCMWxE/edit?usp=sharing"
-                      target="_blank"
-                      className="inline-flex items-center text-primary hover:underline text-sm font-medium"
-                    >
-                      Open PDL Assessment Doc <ArrowRight className="ml-1 h-3 w-3" />
-                    </a>
-                  </div>
-                  <div className="w-full md:w-48">
-                    <input 
-                      type="text"
-                      value={formData.triage_pdl}
-                      onChange={(e) => setFormData({...formData, triage_pdl: e.target.value})}
-                      placeholder="Your Score"
-                      className="w-full bg-background border-2 border-border/50 rounded-xl p-3 focus:ring-2 focus:ring-primary/20 outline-none"
-                    />
-                  </div>
+                {/* PDL Score ~ Embedded Assessment */}
+                <div className="pb-6 border-b border-primary/10">
+                  <LeadershipAssessment
+                    value={formData.triage_pdl || ""}
+                    onChange={(score) => setFormData({...formData, triage_pdl: score})}
+                  />
                 </div>
 
                 {/* Neurodiversity */}

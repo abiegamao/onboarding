@@ -1,5 +1,6 @@
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 import { Button } from "@/components/ui/button"
+import { ModeToggle } from "@/components/mode-toggle"
 import { Sparkles, UserCircle, HeartPulse, ShieldCheck, Zap, ArrowRight, Check } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -45,7 +46,7 @@ const PROMISES = [
 
 export default function Page() {
     return (
-        <div className="relative min-h-screen bg-background overflow-hidden font-sans text-foreground">
+        <div className="relative min-h-screen bg-background overflow-x-hidden font-sans text-foreground">
             {/* Global animations */}
             <style>{`
                 @keyframes glow { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.08); } }
@@ -100,6 +101,7 @@ export default function Page() {
                     <Link href="/login" className="text-xs md:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                         Sign In
                     </Link>
+                    <ModeToggle />
                     <Link href="/signup">
                         <Button variant="outline" size="sm" className="rounded-xl border-primary/30 bg-primary/5 hover:bg-primary/10 text-xs md:text-base">
                             Join
@@ -171,7 +173,7 @@ export default function Page() {
                         <p className="font-mono text-[10px] md:text-xs uppercase tracking-[4px] text-primary">The Pathway</p>
                         <h2 className="text-3xl md:text-5xl font-bold tracking-tighter">
                             Four Phases to{" "}
-                            <span className="italic font-normal" style={{
+                            <span className="italic font-normal pr-1" style={{
                                 backgroundImage: "linear-gradient(135deg, var(--primary), var(--gold-soft, #f1ddb0))",
                                 backgroundClip: "text",
                                 WebkitBackgroundClip: "text",
@@ -243,12 +245,12 @@ export default function Page() {
                 </section>
 
                 {/* ── Journey Timeline (vertical) ── */}
-                <section className="max-w-2xl mx-auto space-y-12">
+                <section className="max-w-3xl mx-auto space-y-12">
                     <div className="text-center space-y-4 fade-up">
                         <p className="font-mono text-[10px] md:text-xs uppercase tracking-[4px] text-primary">How It Works</p>
                         <h2 className="text-3xl md:text-5xl font-bold tracking-tighter">
                             Your{" "}
-                            <span className="italic font-normal" style={{
+                            <span className="italic font-normal pr-1" style={{
                                 backgroundImage: "linear-gradient(135deg, var(--primary), var(--gold-soft, #f1ddb0))",
                                 backgroundClip: "text",
                                 WebkitBackgroundClip: "text",
@@ -260,24 +262,16 @@ export default function Page() {
                         </h2>
                     </div>
 
-                    {/* Premium dark card */}
-                    <div className="relative rounded-3xl overflow-hidden p-8 md:p-10" style={{
-                        background: "linear-gradient(135deg, #10241f 0%, #1a2e28 25%, #10241f 50%, #0d1f1a 75%, #10241f 100%)",
-                    }}>
+                    {/* Premium journey card ~ light: warm cream/gold, dark: deep green */}
+                    <div className="relative rounded-3xl overflow-clip p-8 md:p-10 bg-gradient-to-br from-[#f6f0e4] via-[#f9f5ed] to-[#f2eadb] dark:from-[#10241f] dark:via-[#1a2e28] dark:to-[#0d1f1a] border border-[#e0d5c0] dark:border-white/5">
                         {/* Glow orbs */}
-                        <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full blur-3xl pointer-events-none" style={{
-                            background: "radial-gradient(circle, rgba(182,149,74,0.2) 0%, transparent 70%)",
+                        <div className="absolute top-0 right-0 w-56 h-56 rounded-full blur-3xl pointer-events-none" style={{
+                            background: "radial-gradient(circle, rgba(182,149,74,0.15) 0%, transparent 70%)",
                             animation: "glow 6s ease-in-out infinite",
                         }} />
-                        <div className="absolute -bottom-12 -left-12 w-40 h-40 rounded-full blur-3xl pointer-events-none" style={{
-                            background: "radial-gradient(circle, rgba(182,149,74,0.1) 0%, transparent 70%)",
+                        <div className="absolute bottom-0 left-0 w-40 h-40 rounded-full blur-3xl pointer-events-none" style={{
+                            background: "radial-gradient(circle, rgba(182,149,74,0.08) 0%, transparent 70%)",
                             animation: "glow 8s ease-in-out infinite 2s",
-                        }} />
-
-                        {/* Grid */}
-                        <div className="absolute inset-0 opacity-[0.03]" style={{
-                            backgroundImage: "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
-                            backgroundSize: "32px 32px",
                         }} />
 
                         <div className="relative z-10 space-y-2">
@@ -287,16 +281,16 @@ export default function Page() {
                                         <div
                                             className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110"
                                             style={{
-                                                background: i < 2 ? "linear-gradient(135deg, rgba(182,149,74,0.25), rgba(212,180,131,0.2))" : "rgba(255,255,255,0.04)",
-                                                border: i < 2 ? "1px solid rgba(182,149,74,0.3)" : "1px solid rgba(255,255,255,0.08)",
-                                                boxShadow: i < 2 ? "0 0 24px rgba(182,149,74,0.1)" : "none",
+                                                background: i < 2 ? "linear-gradient(135deg, rgba(182,149,74,0.2), rgba(212,180,131,0.15))" : "rgba(128,128,128,0.06)",
+                                                border: i < 2 ? "1px solid rgba(182,149,74,0.3)" : "1px solid rgba(128,128,128,0.12)",
+                                                boxShadow: i < 2 ? "0 0 24px rgba(182,149,74,0.08)" : "none",
                                             }}
                                         >
-                                            <phase.icon size={20} className={`transition-colors duration-300 ${i < 2 ? "text-[#b6954a]" : "text-white/30 group-hover:text-[#b6954a]"}`} />
+                                            <phase.icon size={20} className={`transition-colors duration-300 ${i < 2 ? "text-primary" : "text-muted-foreground/40 group-hover:text-primary"}`} />
                                         </div>
                                         {i < PHASES.length - 1 && (
                                             <div className="w-px h-8 mt-2" style={{
-                                                background: "linear-gradient(to bottom, rgba(182,149,74,0.3), transparent)",
+                                                background: "linear-gradient(to bottom, rgba(182,149,74,0.25), transparent)",
                                                 animation: "pulseLine 3s ease-in-out infinite",
                                                 animationDelay: `${i * 0.5}s`,
                                             }} />
@@ -311,9 +305,9 @@ export default function Page() {
                                                 color: "transparent",
                                                 WebkitTextFillColor: "transparent",
                                             }}>{phase.phase}</span>
-                                            <span className="text-base font-bold text-white">{phase.title}</span>
+                                            <span className="text-base font-bold text-foreground">{phase.title}</span>
                                         </div>
-                                        <p className="italic text-white/30 text-sm leading-relaxed">{phase.desc}</p>
+                                        <p className="italic text-muted-foreground/60 text-sm leading-relaxed">{phase.desc}</p>
                                     </div>
                                 </div>
                             ))}
@@ -357,7 +351,7 @@ export default function Page() {
                         <div className="relative z-10 space-y-6">
                             <h2 className="text-3xl md:text-6xl font-bold tracking-tighter leading-tight text-white">
                                 Your Legacy Begins{" "}
-                                <span className="italic font-normal" style={{
+                                <span className="italic font-normal pr-1" style={{
                                     backgroundImage: "linear-gradient(135deg, #b6954a, #f1ddb0)",
                                     backgroundClip: "text",
                                     WebkitBackgroundClip: "text",
