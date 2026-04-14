@@ -3,7 +3,7 @@ import { jwtVerify } from "jose"
 import connectDB from "@/lib/mongodb"
 import User from "@/models/User"
 import { OnboardingSidebar } from "@/components/onboarding-sidebar"
-import { Progress } from "@/components/ui/progress"
+import { OnboardingProgress } from "@/components/onboarding/OnboardingProgress"
 
 const JWT_SECRET = process.env.JWT_SECRET || "peace-driven-default-secret-key"
 
@@ -53,14 +53,12 @@ export default async function OnboardingLayout({
 
         {/* Main Content Area */}
         <div className="flex-1 max-w-4xl space-y-8">
-          {/* Progress Overview (Mobile/Tablet Top Bar) */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between text-sm font-medium">
-              <span className="text-primary font-bold">Pathway Progress</span>
-              <span className="text-muted-foreground">{Math.round(progressValue)}%</span>
-            </div>
-            <Progress value={progressValue} className="h-2 bg-primary/10" />
-          </div>
+          {/* Progress Overview */}
+          <OnboardingProgress
+            currentPhase={status.currentPhase}
+            currentStep={status.currentStep}
+            progressValue={progressValue}
+          />
 
           <div className="bg-card/50 backdrop-blur-sm rounded-3xl border border-border/50 p-6 sm:p-10 shadow-xl shadow-primary/5 min-h-[60vh]">
             {children}

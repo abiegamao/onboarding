@@ -9,7 +9,7 @@ import { Phase1Connection } from "@/components/onboarding/phases/Phase1Connectio
 import { Phase2Awareness } from "@/components/onboarding/phases/Phase2Awareness"
 import { Phase3Stabilization } from "@/components/onboarding/phases/Phase3Stabilization"
 import { Phase4Activation } from "@/components/onboarding/phases/Phase4Activation"
-const LOCKED_STEPS = ["1F", "2C", "3E"]
+const LOCKED_STEPS = ["2C", "3E"]
 
 export default function OnboardingPage() {
   const router = useRouter()
@@ -18,6 +18,7 @@ export default function OnboardingPage() {
   const [userData, setUserData] = useState<any>(null)
   const [formData, setFormData] = useState<any>({})
   const [isUpdating, setIsUpdating] = useState(false)
+  const [hasShownToast, setHasShownToast] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
@@ -152,7 +153,10 @@ export default function OnboardingPage() {
       if (res.ok) {
         const newStatus = await res.json()
         setStatus(newStatus)
-        toast.success("Pathway Activated!")
+        if (!hasShownToast && currentStep === "1A") {
+          toast.success("Pathway Activated!", { duration: 3000 })
+          setHasShownToast(true)
+        }
         router.refresh() // Sync the server-side sidebar
         
         if (dataToSave["onboardingStatus.isCompleted"]) {
@@ -318,7 +322,7 @@ export default function OnboardingPage() {
               Getting to Know You
             </h1>
             <p className="text-xl text-muted-foreground italic font-medium">
-              "Insight to support you well—without the need to repeat yourself."
+              "Insight to support you well ~ without the need to repeat yourself."
             </p>
           </>
         )}
@@ -529,56 +533,84 @@ export default function OnboardingPage() {
       )}
 
       {/* CTA Area */}
-      <div className="pt-6 border-t border-border/50 flex flex-col items-center sm:flex-row sm:justify-between gap-4">
-        <div className="text-center sm:text-left">
-          <p className="text-xs text-muted-foreground">
-            {currentStep === "1C" ? "Final Step of Phase 1" : "Ready to proceed?"}
-          </p>
-          <p className="font-semibold text-sm">
-            {isLocked && "Next Phase Coming Soon..."}
-            {!isLocked && (
-              <>
-                {currentStep === "1A" && "Next: Getting to Know You"}
-                {currentStep === "1B" && "Next: Your Triage"}
-                {currentStep === "1C" && "Next: Open Share"}
-                {currentStep === "1D" && "Next: Getting to Know Us"}
-                {currentStep === "1E" && "Next: Schedule Orientation"}
-                {currentStep === "1F" && "Next: 360° Evaluation"}
-                {currentStep === "2A" && "Next: Growth Inputs"}
-                {currentStep === "2B" && "Next: Evening Pulse"}
-                {currentStep === "2C" && "Next: Phase 3 Stabilization"}
-                {currentStep === "3A" && "Next: Vision Statements"}
-                {currentStep === "3B" && "Next: Ideal Day Narrative"}
-                {currentStep === "3C" && "Next: Word of the Year"}
-                {currentStep === "3D" && "Next: Family Mission"}
-                {currentStep === "3E" && "Next: Final Kickoff Phase"}
-                {currentStep === "4A" && "Next: Community Access"}
-                {currentStep === "4B" && "Next: Wealth Strategy"}
-                {currentStep === "4C" && "Finish Onboarding"}
-              </>
+      <div className="pt-8 mt-4 border-t border-border/30">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <p className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground/50 mb-0.5">
+              {isLocked ? "Locked" : "Up next"}
+            </p>
+            <p className="text-sm font-medium text-foreground/70">
+              {isLocked && "Next phase coming soon..."}
+              {!isLocked && (
+                <>
+                  {currentStep === "1A" && "Getting to Know You"}
+                  {currentStep === "1B" && "Your Triage"}
+                  {currentStep === "1C" && "Open Share"}
+                  {currentStep === "1D" && "Getting to Know Us"}
+                  {currentStep === "1E" && "Schedule Orientation"}
+                  {currentStep === "1F" && "360 Evaluation"}
+                  {currentStep === "2A" && "Growth Inputs"}
+                  {currentStep === "2B" && "Evening Pulse"}
+                  {currentStep === "2C" && "Phase 3 ~ Stabilization"}
+                  {currentStep === "3A" && "Vision Statements"}
+                  {currentStep === "3B" && "Ideal Day Narrative"}
+                  {currentStep === "3C" && "Word of the Year"}
+                  {currentStep === "3D" && "Family Mission"}
+                  {currentStep === "3E" && "Final Kickoff Phase"}
+                  {currentStep === "4A" && "Community Access"}
+                  {currentStep === "4B" && "Wealth Strategy"}
+                  {currentStep === "4C" && "Complete Your Pathway"}
+                </>
+              )}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {currentStep !== "1A" && (
+              <button
+                onClick={handleBack}
+                disabled={isUpdating}
+                className="h-12 px-6 rounded-xl border border-border/40 text-sm font-medium text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 disabled:opacity-40"
+              >
+                Back
+              </button>
             )}
-          </p>
-        </div>
-        
-        <div className="flex items-center gap-3">
-          {currentStep !== "1A" && (
-            <Button 
-              variant="outline" 
-              onClick={handleBack}
-              disabled={isUpdating}
-              className="h-11 px-6 rounded-xl border-2"
+
+            <button
+              onClick={handleContinue}
+              disabled={isUpdating || isLocked}
+              className="group relative h-12 px-10 rounded-xl text-sm font-bold uppercase tracking-wider overflow-hidden transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed border border-transparent hover:border-primary/20"
+              style={{
+                backgroundImage: isLocked ? "none" : "linear-gradient(135deg, var(--primary), var(--accent-foreground, #d4b483))",
+                backgroundColor: isLocked ? "var(--muted)" : undefined,
+                color: isLocked ? "var(--muted-foreground)" : "var(--primary-foreground)",
+                boxShadow: isLocked ? "none" : "0 4px 24px rgba(182,149,74,0.25), 0 0 0 1px rgba(182,149,74,0.1)",
+              }}
             >
-              Back
-            </Button>
-          )}
-          
-          <InteractiveHoverButton 
-            onClick={handleContinue}
-            disabled={isUpdating || isLocked}
-            className="h-11 px-8"
-          >
-            {isUpdating ? "Saving..." : (isLocked ? "Phase Locked" : (currentStep === "4C" ? (status?.onboardingStatus?.isCompleted ? "Return to Dashboard" : "Complete Pathway") : "Continue"))}
-          </InteractiveHoverButton>
+              <span className="relative z-10 flex items-center gap-2">
+                {isUpdating ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-current/30 border-t-current rounded-full animate-spin" />
+                    Saving
+                  </>
+                ) : isLocked ? (
+                  "Locked"
+                ) : currentStep === "4C" ? (
+                  status?.onboardingStatus?.isCompleted ? "Dashboard" : "Complete"
+                ) : (
+                  <>
+                    Continue
+                    <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                  </>
+                )}
+              </span>
+              {!isLocked && !isUpdating && (
+                <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{
+                  backgroundImage: "linear-gradient(135deg, var(--accent-foreground, #d4b483), var(--primary))",
+                }} />
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>

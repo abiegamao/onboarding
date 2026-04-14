@@ -1,6 +1,7 @@
 "use client"
 import { Play, ArrowRight, ShieldCheck, Heart, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { LeadershipAssessment } from "@/components/onboarding/LeadershipAssessment"
 
 interface Phase1Props {
   currentStep: string
@@ -85,27 +86,12 @@ export function Phase1Connection({ currentStep, formData, setFormData }: Phase1P
               </div>
               
               <div className="space-y-6">
-                {/* PDL Score */}
-                <div className="flex flex-col md:flex-row md:items-end gap-6 pb-6 border-b border-primary/10">
-                  <div className="flex-1 space-y-3">
-                    <p className="font-bold text-sm uppercase tracking-wide">PDL Leader Score</p>
-                    <a 
-                      href="https://docs.google.com/document/d/1iYCURCTSHcaqVVYYyfa_iz9RkNsF1FRRFoTnMoCMWxE/edit?usp=sharing"
-                      target="_blank"
-                      className="inline-flex items-center text-primary hover:underline text-sm font-medium"
-                    >
-                      Open PDL Assessment Doc <ArrowRight className="ml-1 h-3 w-3" />
-                    </a>
-                  </div>
-                  <div className="w-full md:w-48">
-                    <input 
-                      type="text"
-                      value={formData.triage_pdl}
-                      onChange={(e) => setFormData({...formData, triage_pdl: e.target.value})}
-                      placeholder="Your Score"
-                      className="w-full bg-background border-2 border-border/50 rounded-xl p-3 focus:ring-2 focus:ring-primary/20 outline-none"
-                    />
-                  </div>
+                {/* PDL Score ~ Embedded Assessment */}
+                <div className="pb-6 border-b border-primary/10">
+                  <LeadershipAssessment
+                    value={formData.triage_pdl || ""}
+                    onChange={(score) => setFormData({...formData, triage_pdl: score})}
+                  />
                 </div>
 
                 {/* Neurodiversity */}
@@ -203,16 +189,16 @@ export function Phase1Connection({ currentStep, formData, setFormData }: Phase1P
         <div className="space-y-12 animate-in fade-in duration-700 max-w-4xl mx-auto">
           <div className="grid grid-cols-1 gap-10">
             {[
-              { title: "Mission & Vision", id: "ft9eAypjpac", icon: <Sparkles className="h-4 w-4" /> },
-              { title: "Our Culture", id: "G-IJMF9WN6I", icon: <Heart className="h-4 w-4" /> },
-              { title: "Signature Key Terms", id: "b75eF1j3BdE", icon: <ShieldCheck className="h-4 w-4" /> }
+              { title: "Mission & Vision", id: "1182657390", icon: <Sparkles className="h-4 w-4" /> },
+              { title: "Our Culture", id: "1182657388", icon: <Heart className="h-4 w-4" /> },
+              { title: "Signature Key Terms", id: "1182657395", icon: <ShieldCheck className="h-4 w-4" /> }
             ].map((video) => (
               <div key={video.id} className="space-y-4">
                 <div className="relative aspect-video rounded-sm overflow-hidden bg-neutral-900 border border-primary/10 shadow-2xl">
                   <iframe
-                    src={`https://www.youtube.com/embed/${video.id}`}
+                    src={`https://player.vimeo.com/video/${video.id}?h=0&title=0&byline=0&portrait=0`}
                     className="absolute inset-0 w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allow="autoplay; fullscreen; picture-in-picture"
                     allowFullScreen
                   />
                 </div>
@@ -247,7 +233,7 @@ export function Phase1Connection({ currentStep, formData, setFormData }: Phase1P
           <div className="space-y-4 max-w-lg">
             <h2 className="text-3xl font-bold">Divine Identity Uncovered</h2>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              This reveals your Divine Identity—The Real You—uncovered from the weight of past experiences and the noise of your present reality.
+              This reveals your Divine Identity ~ The Real You ~ uncovered from the weight of past experiences and the noise of your present reality.
             </p>
           </div>
           <Button size="lg" className="h-16 px-12 rounded-2xl text-xl font-bold shadow-xl shadow-primary/20 group">

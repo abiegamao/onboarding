@@ -1,6 +1,7 @@
 "use client"
 
 import { SignupForm } from "@/components/signup-form"
+import { ModeToggle } from "@/components/mode-toggle"
 import { Heart, Brain, Compass, Rocket, Check } from "lucide-react"
 
 const JOURNEY = [
@@ -20,6 +21,11 @@ const PERKS = [
 export default function SignupPage() {
   return (
     <div className="relative min-h-svh w-full flex items-center justify-center bg-background overflow-hidden">
+      {/* Theme toggle */}
+      <div className="absolute top-4 right-4 z-20">
+        <ModeToggle />
+      </div>
+
       {/* Subtle grid */}
       <div className="absolute inset-0 opacity-[0.03]" style={{
         backgroundImage: "linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)",
@@ -41,23 +47,15 @@ export default function SignupPage() {
             .j-step:nth-child(3) { animation-delay: 0.4s; }
             .j-step:nth-child(4) { animation-delay: 0.55s; }
           `}</style>
-          <div className="relative rounded-3xl overflow-hidden p-8 xl:p-10" style={{
-            background: "linear-gradient(135deg, #10241f 0%, #1a2e28 25%, #10241f 50%, #0d1f1a 75%, #10241f 100%)",
-          }}>
+          <div className="relative rounded-3xl overflow-hidden p-8 xl:p-10 bg-gradient-to-br from-[#f6f0e4] via-[#f9f5ed] to-[#f2eadb] dark:from-[#10241f] dark:via-[#1a2e28] dark:to-[#0d1f1a] border border-[#e0d5c0] dark:border-white/5">
             {/* Glow orbs */}
-            <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full blur-3xl pointer-events-none" style={{
-              background: "radial-gradient(circle, rgba(182,149,74,0.25) 0%, transparent 70%)",
+            <div className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl pointer-events-none" style={{
+              background: "radial-gradient(circle, rgba(182,149,74,0.15) 0%, transparent 70%)",
               animation: "jGlow 6s ease-in-out infinite",
             }} />
-            <div className="absolute -bottom-16 -left-16 w-48 h-48 rounded-full blur-3xl pointer-events-none" style={{
-              background: "radial-gradient(circle, rgba(182,149,74,0.12) 0%, transparent 70%)",
+            <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full blur-3xl pointer-events-none" style={{
+              background: "radial-gradient(circle, rgba(182,149,74,0.08) 0%, transparent 70%)",
               animation: "jGlow 8s ease-in-out infinite 2s",
-            }} />
-
-            {/* Grid */}
-            <div className="absolute inset-0 opacity-[0.03]" style={{
-              backgroundImage: "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
-              backgroundSize: "32px 32px",
             }} />
 
             <div className="relative z-10">
@@ -72,7 +70,7 @@ export default function SignupPage() {
                 <span className="font-mono text-[9px] uppercase tracking-[4px] text-primary">Start Here</span>
               </div>
 
-              <h2 className="text-3xl xl:text-4xl font-bold text-white leading-[0.95] mb-3">
+              <h2 className="text-3xl xl:text-4xl font-bold text-foreground leading-[0.95] mb-3">
                 Begin{" "}
                 <span className="italic font-normal" style={{
                   backgroundImage: "linear-gradient(135deg, #b6954a, #d4b483)",
@@ -84,7 +82,7 @@ export default function SignupPage() {
                   your journey.
                 </span>
               </h2>
-              <p className="italic text-white/35 text-sm mb-8 max-w-sm leading-relaxed">
+              <p className="italic text-muted-foreground text-sm mb-8 max-w-sm leading-relaxed">
                 Create your account and step into a guided pathway designed to help you offload what weighs you down.
               </p>
 
@@ -101,7 +99,7 @@ export default function SignupPage() {
                           boxShadow: step.highlight ? "0 0 20px rgba(182,149,74,0.1)" : "none",
                         }}
                       >
-                        <step.icon size={16} className={`transition-colors duration-300 ${step.highlight ? "text-primary" : "text-white/30 group-hover:text-primary"}`} />
+                        <step.icon size={16} className={`transition-colors duration-300 ${step.highlight ? "text-primary" : "text-muted-foreground/70 group-hover:text-primary"}`} />
                       </div>
                       {i < JOURNEY.length - 1 && (
                         <div className="w-px h-6 mt-1" style={{
@@ -120,9 +118,9 @@ export default function SignupPage() {
                           color: "transparent",
                           WebkitTextFillColor: "transparent",
                         }}>{step.phase}</span>
-                        <span className="text-sm font-bold text-white">{step.title}</span>
+                        <span className="text-sm font-bold text-foreground">{step.title}</span>
                       </div>
-                      <p className="italic text-white/30 text-xs leading-relaxed">{step.desc}</p>
+                      <p className="italic text-muted-foreground/70 text-xs leading-relaxed">{step.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -137,7 +135,7 @@ export default function SignupPage() {
                     }}>
                       <Check size={10} className="text-primary" />
                     </div>
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-white/35">{perk}</span>
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{perk}</span>
                   </div>
                 ))}
               </div>
