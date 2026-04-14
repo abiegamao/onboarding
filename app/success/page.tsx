@@ -204,21 +204,40 @@ export default function SuccessPage() {
         {currentStep.content}
 
         <div className="pt-4 flex flex-col items-center gap-6">
-          <InteractiveHoverButton
+          <button
             onClick={handleNext}
             disabled={isStarting}
-            className="h-16 px-12 text-xl border-primary/30 bg-card/50 backdrop-blur-xl shadow-2xl hover:border-primary transition-all group"
+            className="group relative h-14 md:h-16 px-10 md:px-14 rounded-xl text-base md:text-lg font-bold uppercase tracking-wider overflow-hidden transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{
+              backgroundImage: "linear-gradient(135deg, var(--primary), var(--accent-foreground, #d4b483))",
+              color: "var(--primary-foreground)",
+              boxShadow: "0 4px 24px rgba(182,149,74,0.25), 0 0 0 1px rgba(182,149,74,0.1)",
+            }}
           >
-            <span className="flex items-center gap-2">
-              {isStarting ? "Activating..." : currentStep.cta}
-              {!isStarting && <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />}
+            <span className="relative z-10 flex items-center gap-2">
+              {isStarting ? (
+                <>
+                  <span className="w-5 h-5 border-2 border-current/30 border-t-current rounded-full animate-spin" />
+                  Activating
+                </>
+              ) : (
+                <>
+                  {currentStep.cta}
+                  <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+                </>
+              )}
             </span>
-          </InteractiveHoverButton>
+            {!isStarting && (
+              <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{
+                backgroundImage: "linear-gradient(135deg, var(--accent-foreground, #d4b483), var(--primary))",
+              }} />
+            )}
+          </button>
 
           {step > 0 && !isStarting && (
-            <button 
+            <button
               onClick={() => setStep(step - 1)}
-              className="text-xs text-muted-foreground hover:text-primary transition-colors uppercase tracking-[0.2em] font-medium"
+              className="h-10 px-6 rounded-xl border border-border/40 text-xs font-medium text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 uppercase tracking-[0.15em]"
             >
               Go Back
             </button>
