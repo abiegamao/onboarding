@@ -1,6 +1,7 @@
 "use client"
 
 import { SignupForm } from "@/components/signup-form"
+import { ModeToggle } from "@/components/mode-toggle"
 import { Heart, Brain, Compass, Rocket, Check } from "lucide-react"
 
 const JOURNEY = [
@@ -20,6 +21,11 @@ const PERKS = [
 export default function SignupPage() {
   return (
     <div className="relative min-h-svh w-full flex items-center justify-center bg-background overflow-hidden">
+      {/* Theme toggle */}
+      <div className="absolute top-4 right-4 z-20">
+        <ModeToggle />
+      </div>
+
       {/* Subtle grid */}
       <div className="absolute inset-0 opacity-[0.03]" style={{
         backgroundImage: "linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)",
