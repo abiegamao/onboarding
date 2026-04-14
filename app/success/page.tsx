@@ -5,27 +5,12 @@ import { useRouter } from "next/navigation"
 import { Sparkles, ArrowRight, Heart, Play, Crown, Shield } from "lucide-react"
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 import { toast } from "sonner"
-import { Confetti, type ConfettiRef } from "@/components/ui/confetti"
 import { VideoPlayer } from "@/components/marketing/video-player"
 
 export default function SuccessPage() {
   const router = useRouter()
   const [step, setStep] = useState(0)
   const [isStarting, setIsStarting] = useState(false)
-  const confettiRef = useRef<ConfettiRef>(null)
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      confettiRef.current?.fire({
-        particleCount: 50,
-        spread: 60,
-        origin: { y: 0.6 },
-        colors: ["#d6b56c", "#f1ddb0", "#173029"], // Forest & Gold theme
-      })
-    }, 3000)
-
-    return () => clearInterval(interval)
-  }, [])
 
   async function handleComplete() {
     setIsStarting(true)
@@ -164,17 +149,43 @@ export default function SuccessPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 md:p-8 overflow-hidden relative">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary-rgb),0.05),transparent_70%)] focus-visible:outline-none pointer-events-none" />
-      
-      <Confetti
-        ref={confettiRef}
-        className="absolute left-0 top-0 z-0 h-full w-full"
-        options={{
-          get particleCount() {
-            return Math.floor(Math.random() * 50) + 50
-          },
-        }}
-      />
+      <style>{`
+        @keyframes particleRise {
+          0% { transform: translateY(100vh) scale(0); opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 0.6; }
+          100% { transform: translateY(-20vh) scale(1); opacity: 0; }
+        }
+        .gold-particle {
+          position: absolute;
+          border-radius: 50%;
+          pointer-events: none;
+          animation: particleRise linear infinite;
+        }
+      `}</style>
+      {/* Ambient glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full blur-3xl" style={{
+          background: "radial-gradient(circle, rgba(182,149,74,0.08) 0%, transparent 70%)",
+        }} />
+      </div>
+      {/* Floating gold particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {Array.from({ length: 12 }).map((_, i) => (
+          <div
+            key={i}
+            className="gold-particle"
+            style={{
+              left: `${8 + (i * 7.5)}%`,
+              width: i % 3 === 0 ? 4 : i % 3 === 1 ? 3 : 2,
+              height: i % 3 === 0 ? 4 : i % 3 === 1 ? 3 : 2,
+              background: `rgba(182,149,74,${0.15 + (i % 4) * 0.08})`,
+              animationDuration: `${8 + (i * 1.5)}s`,
+              animationDelay: `${i * 0.8}s`,
+            }}
+          />
+        ))}
+      </div>
       
       <div className="relative z-10 max-w-4xl w-full text-center space-y-12">
         
