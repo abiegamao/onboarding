@@ -49,9 +49,7 @@ export function LoginForm({
 
             // Redirect based on role
             const redirectPath =
-                data.user.role === "admin"
-                    ? "/dashboard/admin"
-                    : "/dashboard/onboarding"
+                data.user.role === "admin" ? "/admin" : "/dashboard"
             router.push(redirectPath)
             router.refresh()
         } catch (error: any) {

@@ -14,36 +14,59 @@ export async function proxyHandler(request: NextRequest) {
 
     // 1. Identify public vs protected paths
     const isPublicPath = pathname === "/login" || pathname === "/signup"
-    const isProtectedPath = pathname.startsWith("/dashboard")
+    const isAdminPath = pathname.startsWith("/admin")
+    const isDashboardPath = pathname.startsWith("/dashboard")
 
     // 2. Validate token if present
     let isValid = false
+    let userRole: string | null = null
     if (token) {
         try {
-            await jwtVerify(token, new TextEncoder().encode(JWT_SECRET))
+            const { payload } = await jwtVerify(
+                token,
+                new TextEncoder().encode(JWT_SECRET)
+            )
             isValid = true
+            userRole = (payload as any).role
         } catch (error) {
             isValid = false
         }
     }
 
     // 3. Redirect logic
-    if (isProtectedPath && !isValid) {
+    // Protect admin routes
+    if (isAdminPath && !isValid) {
         const response = NextResponse.redirect(new URL("/login", request.url))
         response.cookies.delete("auth_token") // Cleanup stale token
         return response
     }
 
-    if (isPublicPath && isValid) {
+    // Only admins can access /admin
+    if (isAdminPath && isValid && userRole !== "admin") {
         return NextResponse.redirect(new URL("/dashboard", request.url))
     }
 
-    // 4. Manual 404 handling for specific non-existent paths if needed
-    // (Next.js handles most via filesystem routing)
+    // Protect dashboard routes
+    if (isDashboardPath && !isValid) {
+        const response = NextResponse.redirect(new URL("/login", request.url))
+        response.cookies.delete("auth_token") // Cleanup stale token
+        return response
+    }
+
+    // Only clients can access /dashboard
+    if (isDashboardPath && isValid && userRole !== "client") {
+        return NextResponse.redirect(new URL("/admin", request.url))
+    }
+
+    // Redirect from login/signup if already authenticated
+    if (isPublicPath && isValid) {
+        const redirectPath = userRole === "admin" ? "/admin" : "/dashboard"
+        return NextResponse.redirect(new URL(redirectPath, request.url))
+    }
 
     return NextResponse.next()
 }
 
 export const config = {
-    matcher: ["/dashboard/:path*", "/login", "/signup"],
+    matcher: ["/admin/:path*", "/dashboard/:path*", "/login", "/signup"],
 }
