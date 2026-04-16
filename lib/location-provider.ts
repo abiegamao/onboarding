@@ -6,6 +6,8 @@ type ProviderCountry = {
     id: number
     name: string
     iso2: string
+    phoneCode: string
+    flag: string
 }
 
 type ProviderCity = {
@@ -45,8 +47,15 @@ export async function loadCountries() {
                         id: country.id,
                         name: country.name,
                         iso2: country.iso2,
+                        phoneCode: String(country.phone_code || "").trim(),
+                        flag: String(country.emoji || "").trim(),
                     }))
-                    .filter((country) => country.name && country.iso2)
+                    .filter(
+                        (country) =>
+                            country.name &&
+                            country.iso2 &&
+                            country.phoneCode
+                    )
             })
             .catch((error) => {
                 countriesPromise = null
