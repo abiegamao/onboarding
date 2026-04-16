@@ -11,6 +11,21 @@ export interface IOnboardingProfile extends Document {
     }
     connection: {
         snapshot: Map<string, any>
+        gettingToKnowYou: {
+            favoriteFoodSnacks?: string
+            hobbiesJoy?: string
+            selfCareTop3?: string[]
+            favoriteMoviesShows?: string
+            dreamDestinationsTop3?: string[]
+            financialGoals?: string
+            bucketListTop3?: string
+            proudGrowth?: string
+            workBusiness?: string
+            boundaries?: string
+            importantPeople?: string
+            personalPrinciples?: string
+            uncompromisableStandards?: string
+        }
         triage: {
             pdlLeaderScore?: string
             neurodiversity?: string
@@ -71,6 +86,21 @@ const OnboardingProfileSchema = new Schema<IOnboardingProfile>(
         },
         connection: {
             snapshot: { type: Map, of: Schema.Types.Mixed, default: {} },
+            gettingToKnowYou: {
+                favoriteFoodSnacks: String,
+                hobbiesJoy: String,
+                selfCareTop3: { type: [String], default: [] },
+                favoriteMoviesShows: String,
+                dreamDestinationsTop3: { type: [String], default: [] },
+                financialGoals: String,
+                bucketListTop3: String,
+                proudGrowth: String,
+                workBusiness: String,
+                boundaries: String,
+                importantPeople: String,
+                personalPrinciples: String,
+                uncompromisableStandards: String,
+            },
             triage: {
                 pdlLeaderScore: String,
                 neurodiversity: String,
