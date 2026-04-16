@@ -6,9 +6,9 @@ import OnboardingProfile from "@/models/OnboardingProfile"
 
 export async function POST(req: Request) {
     try {
-        const { name, email, password } = await req.json()
+        const { firstName, lastName, email, password } = await req.json()
 
-        if (!name || !email || !password) {
+        if (!firstName || !lastName || !email || !password) {
             return NextResponse.json(
                 { error: "Missing fields" },
                 { status: 400 }
@@ -23,12 +23,6 @@ export async function POST(req: Request) {
         }
 
         const hashedPassword = await bcrypt.hash(password, 12)
-
-        // Split name into first and last
-        const nameParts = name.trim().split(" ")
-        const firstName = nameParts[0]
-        const lastName =
-            nameParts.length > 1 ? nameParts.slice(1).join(" ") : ""
 
         const newUser = new User({
             firstName,
