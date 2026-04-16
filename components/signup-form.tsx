@@ -563,7 +563,9 @@ export function SignupForm({
                                 inputValue={countryQuery}
                                 onInputValueChange={handleCountryInputChange}
                                 onValueChange={(value) =>
-                                    handleCountrySelect(value as CountryOption | null)
+                                    handleCountrySelect(
+                                        value as CountryOption | null
+                                    )
                                 }
                                 itemToStringLabel={(item) =>
                                     `${item.name} (${item.code})`
@@ -597,7 +599,8 @@ export function SignupForm({
                                                         key={country.code}
                                                         value={country}
                                                     >
-                                                        {country.name} ({country.code})
+                                                        {country.name} (
+                                                        {country.code})
                                                     </ComboboxItem>
                                                 )}
                                             </ComboboxList>

@@ -12,16 +12,7 @@ type CountryOption = {
     code: string
 }
 
-const POPULAR_COUNTRY_CODES = [
-    "US",
-    "CA",
-    "GB",
-    "AU",
-    "DE",
-    "FR",
-    "IN",
-    "SG",
-]
+const POPULAR_COUNTRY_CODES = ["US", "CA", "GB", "AU", "DE", "FR", "IN", "SG"]
 
 export async function GET(req: Request) {
     try {
