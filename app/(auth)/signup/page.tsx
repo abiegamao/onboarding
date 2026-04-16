@@ -145,14 +145,25 @@ export default function SignupPage() {
 
         {/* Right ~ Signup form */}
         <div className="w-full max-w-sm mx-auto lg:mx-0 flex flex-col items-center gap-8">
-          <div className="flex justify-center">
-            <a href="#" className="flex items-center gap-2 font-medium">
-              <img src="/assets/logo.png" alt="Logo" className="size-20 object-contain" />
-            </a>
-          </div>
-          <div className="w-full">
+
+          <div className="w-full max-h-[calc(100vh-280px)] overflow-y-auto pr-2 custom-scrollbar">
             <SignupForm />
           </div>
+          <style>{`
+            .custom-scrollbar::-webkit-scrollbar {
+              width: 4px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-track {
+              background: ;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+              background: hsl(var(--primary) / 0.1);
+              border-radius: 10px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+              background: hsl(var(--primary) / 0.2);
+            }
+          `}</style>
 
           {/* Mobile journey */}
           <div className="lg:hidden w-full pt-6 border-t border-border/40">
