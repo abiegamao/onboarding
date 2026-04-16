@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -78,6 +78,7 @@ const NAME_REGEX = /^[A-Za-z][A-Za-z' -]{0,49}$/
 const LOCATION_REGEX = /^[A-Za-z][A-Za-z .'-]{0,59}$/
 const PHONE_REGEX = /^[+]?[0-9()\-\s]{7,20}$/
 const ZIP_REGEX = /^[A-Za-z0-9\-\s]{3,20}$/
+const COUNTRY_CODE_REGEX = /^[A-Za-z]{2}$/
 
 export function SignupForm({
     className,
@@ -94,6 +95,8 @@ export function SignupForm({
     const [isLoadingCountries, setIsLoadingCountries] = useState(false)
     const [isLoadingCities, setIsLoadingCities] = useState(false)
     const [isLiveCheckingLocation, setIsLiveCheckingLocation] = useState(false)
+    const [isSelectingCountry, setIsSelectingCountry] = useState(false)
+    const isSelectingCountryRef = useRef(false)
     const [isCountryValid, setIsCountryValid] = useState<boolean | null>(null)
     const [isCityCountryValid, setIsCityCountryValid] = useState<
         boolean | null
@@ -102,15 +105,21 @@ export function SignupForm({
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     const selectedCountryCode = useMemo(() => {
-        const countryInput = values.countryRegion.trim().toLowerCase()
+        const countryInput = values.countryRegion.trim()
         if (!countryInput) {
             return null
         }
 
+        if (COUNTRY_CODE_REGEX.test(countryInput)) {
+            return countryInput.toUpperCase()
+        }
+
+        const normalizedCountryInput = countryInput.toLowerCase()
+
         const exactMatch = countryOptions.find((country) => {
             return (
-                country.name.toLowerCase() === countryInput ||
-                country.code.toLowerCase() === countryInput
+                country.name.toLowerCase() === normalizedCountryInput ||
+                country.code.toLowerCase() === normalizedCountryInput
             )
         })
 
@@ -142,7 +151,7 @@ export function SignupForm({
 
     useEffect(() => {
         async function fetchCountries() {
-            if (step !== 2) {
+            if (step !== 2 || isSelectingCountry) {
                 return
             }
 
@@ -178,7 +187,7 @@ export function SignupForm({
         return () => {
             clearTimeout(timer)
         }
-    }, [step, countryQuery])
+    }, [step, countryQuery, isSelectingCountry])
 
     useEffect(() => {
         if (!values.countryRegion.trim()) {
@@ -190,8 +199,15 @@ export function SignupForm({
     }, [values.countryRegion, selectedCountryCode])
 
     function handleCountryInputChange(nextValue: string) {
-        updateValue("countryRegion", nextValue)
         setCountryQuery(nextValue)
+
+        if (isSelectingCountryRef.current) {
+            return
+        }
+
+        if (values.countryRegion) {
+            updateValue("countryRegion", "")
+        }
     }
 
     function handleCountrySelect(nextValue: CountryOption | null) {
@@ -200,9 +216,15 @@ export function SignupForm({
             return
         }
 
+        isSelectingCountryRef.current = true
+        setIsSelectingCountry(true)
         updateValue("countryRegion", nextValue.code)
-        setCountryQuery(nextValue.name)
+        setCountryQuery(`${nextValue.name} (${nextValue.code})`)
         setIsCountryValid(true)
+        setTimeout(() => {
+            isSelectingCountryRef.current = false
+            setIsSelectingCountry(false)
+        }, 0)
     }
 
     useEffect(() => {
@@ -562,15 +584,18 @@ export function SignupForm({
                                 }
                                 inputValue={countryQuery}
                                 onInputValueChange={handleCountryInputChange}
-                                onValueChange={(value) =>
-                                    handleCountrySelect(
+                                onValueChange={(value) => {
+                                    const country =
                                         value as CountryOption | null
-                                    )
-                                }
+                                    if (!country) {
+                                        handleCountryInputChange("")
+                                        return
+                                    }
+                                    handleCountrySelect(country)
+                                }}
                                 itemToStringLabel={(item) =>
                                     `${item.name} (${item.code})`
                                 }
-                                itemToStringValue={(item) => item.code}
                             >
                                 <ComboboxInput
                                     id="countryRegion"
