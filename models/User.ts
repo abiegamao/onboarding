@@ -5,6 +5,13 @@ export interface IUser extends Document {
     password?: string
     firstName: string
     lastName: string
+    addressLine1: string
+    addressLine2?: string
+    city: string
+    stateProvince: string
+    zipCode: string
+    countryRegion: string
+    phoneNumber: string
     role: "admin" | "client"
     createdAt?: Date
     updatedAt?: Date
@@ -16,6 +23,13 @@ const UserSchema = new Schema<IUser>(
         password: { type: String },
         firstName: { type: String, required: true },
         lastName: { type: String, required: true },
+        addressLine1: { type: String, required: true },
+        addressLine2: { type: String },
+        city: { type: String, required: true },
+        stateProvince: { type: String, required: true },
+        zipCode: { type: String, required: true },
+        countryRegion: { type: String, required: true },
+        phoneNumber: { type: String, required: true },
         role: { type: String, enum: ["admin", "client"], default: "client" },
     },
     { timestamps: true }
