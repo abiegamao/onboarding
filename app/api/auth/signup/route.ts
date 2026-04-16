@@ -2,13 +2,17 @@ import { NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
 import connectDB from "@/lib/mongodb"
 import User from "@/models/User"
+import OnboardingProfile from "@/models/OnboardingProfile"
 
 export async function POST(req: Request) {
     try {
         const { name, email, password } = await req.json()
 
         if (!name || !email || !password) {
-            return NextResponse.json({ error: "Missing fields" }, { status: 400 })
+            return NextResponse.json(
+                { error: "Missing fields" },
+                { status: 400 }
+            )
         }
 
         await connectDB()
@@ -23,7 +27,8 @@ export async function POST(req: Request) {
         // Split name into first and last
         const nameParts = name.trim().split(" ")
         const firstName = nameParts[0]
-        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : ""
+        const lastName =
+            nameParts.length > 1 ? nameParts.slice(1).join(" ") : ""
 
         const newUser = new User({
             firstName,
@@ -33,6 +38,7 @@ export async function POST(req: Request) {
         })
 
         await newUser.save()
+        await OnboardingProfile.create({ userId: newUser._id })
 
         return NextResponse.json({ message: "User created" }, { status: 201 })
     } catch (error: any) {

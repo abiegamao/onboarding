@@ -5,6 +5,7 @@ import { jwtVerify } from "jose"
 import Link from "next/link"
 import connectDB from "@/lib/mongodb"
 import User from "@/models/User"
+import OnboardingProfile from "@/models/OnboardingProfile"
 import { ArrowRight, Sparkles, CheckCircle2, Circle } from "lucide-react"
 import {
     Card,
@@ -35,14 +36,18 @@ export default async function DashboardPage() {
         const userId = (payload as any).userId
 
         await connectDB()
-        const user = await User.findById(userId)
+        const user = await User.findById(userId).select("firstName")
+        const profile = await OnboardingProfile.findOne({ userId }).select(
+            "status"
+        )
+        const onboardingStatus = profile?.status
 
-        if (user && !user.onboardingStatus?.hasSeenCelebration) {
+        if (user && onboardingStatus && !onboardingStatus.hasSeenCelebration) {
             redirect("/success")
         }
 
         // Granular progress calculation
-        const status = user?.onboardingStatus || {
+        const status = onboardingStatus || {
             currentPhase: 1,
             currentStep: "1A",
             isCompleted: false,
