@@ -81,7 +81,6 @@ const FIELD_LIMITS: Record<keyof SignupValues, number> = {
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const NAME_REGEX = /^[A-Za-z][A-Za-z' -]{0,49}$/
 const LOCATION_REGEX = /^[A-Za-z][A-Za-z .'-]{0,59}$/
-const PHONE_DIAL_CODE_REGEX = /^\+[1-9][0-9]{0,3}$/
 const ZIP_REGEX = /^[A-Za-z0-9\-\s]{3,20}$/
 const COUNTRY_CODE_REGEX = /^[A-Za-z]{2}$/
 
@@ -91,24 +90,12 @@ export function SignupForm({
 }: React.ComponentProps<"form">) {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
-    const [isValidatingLocation, setIsValidatingLocation] = useState(false)
     const [step, setStep] = useState(1)
     const [values, setValues] = useState<SignupValues>(INITIAL_VALUES)
     const [countryQuery, setCountryQuery] = useState("")
     const [countryOptions, setCountryOptions] = useState<CountryOption[]>([])
-    const [phoneCodeQuery, setPhoneCodeQuery] = useState("")
-    const [phoneCodeOptions, setPhoneCodeOptions] = useState<CountryOption[]>(
-        []
-    )
     const [cityOptions, setCityOptions] = useState<string[]>([])
     const [isLoadingCountries, setIsLoadingCountries] = useState(false)
-    const [isLoadingPhoneCodes, setIsLoadingPhoneCodes] = useState(false)
-    const [isLoadingCities, setIsLoadingCities] = useState(false)
-    const [isLiveCheckingLocation, setIsLiveCheckingLocation] = useState(false)
-    const [isSelectingCountry, setIsSelectingCountry] = useState(false)
-    const [isSelectingPhoneCode, setIsSelectingPhoneCode] = useState(false)
-    const isSelectingCountryRef = useRef(false)
-    const isSelectingPhoneCodeRef = useRef(false)
     const [isCountryValid, setIsCountryValid] = useState<boolean | null>(null)
     const [isCityCountryValid, setIsCityCountryValid] = useState<
         boolean | null
@@ -116,6 +103,12 @@ export function SignupForm({
     const [hasAgreedToPolicies, setHasAgreedToPolicies] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+    const [isLoadingCities, setIsLoadingCities] = useState(false)
+    const [isValidatingLocation, setIsValidatingLocation] = useState(false)
+    const [isLiveCheckingLocation, setIsLiveCheckingLocation] = useState(false)
+    const [isSelectingCountry, setIsSelectingCountry] = useState(false)
+    const isSelectingCountryRef = useRef(false)
 
     const selectedCountryCode = useMemo(() => {
         const countryInput = values.countryRegion.trim()
@@ -142,19 +135,6 @@ export function SignupForm({
 
         return null
     }, [values.countryRegion, countryOptions])
-
-    const selectedPhoneCodeOption = useMemo(() => {
-        const selectedDialCode = values.phoneDialCode.trim()
-        if (!selectedDialCode) {
-            return null
-        }
-
-        return (
-            phoneCodeOptions.find(
-                (country) => country.phoneCode === selectedDialCode
-            ) || null
-        )
-    }, [values.phoneDialCode, phoneCodeOptions])
 
     function updateValue(field: keyof SignupValues, value: string) {
         const maxLength = FIELD_LIMITS[field]
@@ -216,54 +196,9 @@ export function SignupForm({
     }, [step, countryQuery, isSelectingCountry])
 
     useEffect(() => {
-        async function fetchPhoneCodes() {
-            if (step !== 2 || isSelectingPhoneCode) {
-                return
-            }
-
-            setIsLoadingPhoneCodes(true)
-            try {
-                const params = new URLSearchParams({
-                    all: "1",
-                    limit: "20",
-                })
-
-                if (phoneCodeQuery.trim()) {
-                    params.set("q", phoneCodeQuery.trim())
-                }
-
-                const res = await fetch(
-                    `/api/location/countries?${params.toString()}`
-                )
-                const data = await res.json()
-                if (!res.ok) {
-                    throw new Error(data.error || "Could not load phone codes")
-                }
-                setPhoneCodeOptions(data.countries || [])
-            } catch (error: any) {
-                toast.error(error.message || "Could not load phone codes")
-            } finally {
-                setIsLoadingPhoneCodes(false)
-            }
-        }
-
-        const timer = setTimeout(() => {
-            void fetchPhoneCodes()
-        }, 250)
-
-        return () => {
-            clearTimeout(timer)
-        }
-    }, [step, phoneCodeQuery, isSelectingPhoneCode])
-
-    useEffect(() => {
-        if (!values.countryRegion.trim()) {
-            setIsCountryValid(null)
-            return
-        }
-
         setIsCountryValid(Boolean(selectedCountryCode))
     }, [values.countryRegion, selectedCountryCode])
+
 
     function handleCountryInputChange(nextValue: string) {
         setCountryQuery(nextValue)
@@ -288,7 +223,6 @@ export function SignupForm({
         updateValue("countryRegion", nextValue.code)
         if (!values.phoneDialCode.trim() && nextValue.phoneCode) {
             updateValue("phoneDialCode", nextValue.phoneCode)
-            setPhoneCodeQuery(`${nextValue.phoneCode} (${nextValue.code})`)
         }
         setCountryQuery(`${nextValue.name} (${nextValue.code})`)
         setIsCountryValid(true)
@@ -298,33 +232,6 @@ export function SignupForm({
         }, 0)
     }
 
-    function handlePhoneCodeInputChange(nextValue: string) {
-        setPhoneCodeQuery(nextValue)
-
-        if (isSelectingPhoneCodeRef.current) {
-            return
-        }
-
-        if (values.phoneDialCode) {
-            updateValue("phoneDialCode", "")
-        }
-    }
-
-    function handlePhoneCodeSelect(nextValue: CountryOption | null) {
-        if (!nextValue) {
-            handlePhoneCodeInputChange("")
-            return
-        }
-
-        isSelectingPhoneCodeRef.current = true
-        setIsSelectingPhoneCode(true)
-        updateValue("phoneDialCode", nextValue.phoneCode || "")
-        setPhoneCodeQuery(`${nextValue.phoneCode} (${nextValue.code})`)
-        setTimeout(() => {
-            isSelectingPhoneCodeRef.current = false
-            setIsSelectingPhoneCode(false)
-        }, 0)
-    }
 
     useEffect(() => {
         async function fetchCitySuggestions() {
@@ -469,10 +376,6 @@ export function SignupForm({
                 return false
             }
 
-            if (!PHONE_DIAL_CODE_REGEX.test(phoneDialCode)) {
-                toast.error("Select a valid phone code")
-                return false
-            }
 
             if (normalizedPhoneNumber.length < 6 || normalizedPhoneNumber.length > 15) {
                 toast.error("Enter a valid phone number")
@@ -906,85 +809,18 @@ export function SignupForm({
                             <FieldLabel htmlFor="phoneNumber">
                                 Phone Number
                             </FieldLabel>
-                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-[250px_minmax(0,1fr)]">
-                                <Combobox
-                                    items={phoneCodeOptions}
-                                    value={selectedPhoneCodeOption}
-                                    inputValue={phoneCodeQuery}
-                                    onInputValueChange={handlePhoneCodeInputChange}
-                                    onValueChange={(value) => {
-                                        const country =
-                                            value as CountryOption | null
-                                        if (!country) {
-                                            handlePhoneCodeInputChange("")
-                                            return
-                                        }
-                                        handlePhoneCodeSelect(country)
-                                    }}
-                                    itemToStringLabel={(item) =>
-                                        `${item.phoneCode} ${item.name} (${item.code})`
-                                    }
-                                >
-                                    <ComboboxInput
-                                        id="phoneDialCode"
-                                        name="phoneDialCode"
-                                        placeholder="Country code"
-                                        className="h-12 w-full border-border/50 bg-secondary"
-                                        showClear
-                                    />
-                                    <ComboboxContent>
-                                        {isLoadingPhoneCodes ? (
-                                            <div className="flex items-center justify-center gap-2 py-6">
-                                                <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-                                                <span className="text-sm text-muted-foreground">
-                                                    Loading phone codes...
-                                                </span>
-                                            </div>
-                                        ) : (
-                                            <>
-                                                <ComboboxEmpty>
-                                                    No phone code found. Keep typing.
-                                                </ComboboxEmpty>
-                                                <ComboboxList>
-                                                    {(country: CountryOption) => (
-                                                        <ComboboxItem
-                                                            key={`${country.code}-${country.phoneCode}`}
-                                                            value={country}
-                                                        >
-                                                            <span className="mr-1">
-                                                                {country.flag ||
-                                                                    " "}
-                                                            </span>
-                                                            {country.phoneCode} -{" "}
-                                                            {country.name} (
-                                                            {country.code})
-                                                        </ComboboxItem>
-                                                    )}
-                                                </ComboboxList>
-                                            </>
-                                        )}
-                                    </ComboboxContent>
-                                </Combobox>
-                                <Input
-                                    id="phoneNumber"
-                                    name="phoneNumber"
-                                    type="tel"
-                                    placeholder="Phone number"
-                                    maxLength={FIELD_LIMITS.phoneNumber}
-                                    value={values.phoneNumber}
-                                    onChange={(event) =>
-                                        updateValue(
-                                            "phoneNumber",
-                                            event.target.value
-                                        )
-                                    }
-                                    className="h-12 border-border/50 bg-secondary"
-                                />
-                            </div>
+                            <Input
+                                id="phoneNumber"
+                                name="phoneNumber"
+                                type="tel"
+                                placeholder="+1 123 456 7890"
+                                maxLength={FIELD_LIMITS.phoneNumber + 5}
+                                value={values.phoneNumber}
+                                onChange={(e) => updateValue("phoneNumber", e.target.value)}
+                                className="h-12 border-border/50 bg-secondary"
+                            />
                             <FieldDescription>
-                                {values.phoneDialCode
-                                    ? `Selected code: ${values.phoneDialCode}`
-                                    : "Pick country code, then enter number."}
+                                Please enter your full phone number with country code.
                             </FieldDescription>
                         </Field>
                     </>
