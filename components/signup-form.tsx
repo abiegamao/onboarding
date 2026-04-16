@@ -101,6 +101,7 @@ export function SignupForm({
     const [isCityCountryValid, setIsCityCountryValid] = useState<
         boolean | null
     >(null)
+    const [hasAgreedToPolicies, setHasAgreedToPolicies] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -398,6 +399,11 @@ export function SignupForm({
 
             if (values.password !== values.confirmPassword) {
                 toast.error("Passwords do not match")
+                return false
+            }
+
+            if (!hasAgreedToPolicies) {
+                toast.error("Agree to Terms and Privacy Policy to continue")
                 return false
             }
         }
@@ -921,6 +927,31 @@ export function SignupForm({
                                 Please confirm your password.
                             </FieldDescription>
                         </Field>
+                        <Field>
+                            <label
+                                htmlFor="agreeToPolicies"
+                                className="flex cursor-pointer items-start gap-3 rounded-lg border border-border/60 bg-secondary/40 p-3"
+                            >
+                                <input
+                                    id="agreeToPolicies"
+                                    name="agreeToPolicies"
+                                    type="checkbox"
+                                    checked={hasAgreedToPolicies}
+                                    onChange={(event) =>
+                                        setHasAgreedToPolicies(
+                                            event.target.checked
+                                        )
+                                    }
+                                    className="mt-0.5 h-4 w-4 cursor-pointer rounded border-border/70 accent-primary"
+                                />
+                                <span className="text-sm text-foreground">
+                                    I agree to Terms and Privacy Policy.
+                                </span>
+                            </label>
+                            <FieldDescription>
+                                You must agree before creating account.
+                            </FieldDescription>
+                        </Field>
                     </>
                 ) : null}
 
@@ -941,7 +972,11 @@ export function SignupForm({
                     <Button
                         className="flex-1 cursor-pointer"
                         type="submit"
-                        disabled={isLoading || isValidatingLocation}
+                        disabled={
+                            isLoading ||
+                            isValidatingLocation ||
+                            (step === 3 && !hasAgreedToPolicies)
+                        }
                     >
                         {isValidatingLocation
                             ? "Validating location..."
