@@ -26,11 +26,54 @@ export default function SignupPage() {
         <ModeToggle />
       </div>
 
-      {/* Subtle grid */}
-      <div className="fixed inset-0 opacity-[0.03] pointer-events-none" style={{
-        backgroundImage: "linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)",
-        backgroundSize: "40px 40px",
-      }} />
+      {/* Dashed Bottom Fade Grid */}
+            <div
+                className="fixed inset-0 z-0 pointer-events-none"
+                style={{
+                backgroundImage: `
+                    linear-gradient(to right, rgba(182, 149, 74, 0.15) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(182, 149, 74, 0.15) 1px, transparent 1px)
+                `,
+                backgroundSize: "20px 20px",
+                backgroundPosition: "0 0, 0 0",
+                maskImage: `
+                    repeating-linear-gradient(
+                        to right,
+                        black 0px,
+                        black 3px,
+                        transparent 3px,
+                        transparent 8px
+                        ),
+                        repeating-linear-gradient(
+                        to bottom,
+                        black 0px,
+                        black 3px,
+                        transparent 3px,
+                        transparent 8px
+                        ),
+                        radial-gradient(ellipse 100% 80% at 50% 100%, #000 50%, transparent 90%)
+                `,
+                WebkitMaskImage: `
+                    repeating-linear-gradient(
+                        to right,
+                        black 0px,
+                        black 3px,
+                        transparent 3px,
+                        transparent 8px
+                        ),
+                        repeating-linear-gradient(
+                        to bottom,
+                        black 0px,
+                        black 3px,
+                        transparent 3px,
+                        transparent 8px
+                        ),
+                        radial-gradient(ellipse 100% 80% at 50% 100%, #000 50%, transparent 90%)
+                `,
+                maskComposite: "intersect",
+                WebkitMaskComposite: "source-in",
+                }}
+            />
 
       <div className="relative z-10 w-full max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-start px-6 py-12">
 

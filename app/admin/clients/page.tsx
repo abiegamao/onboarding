@@ -34,10 +34,10 @@ const PHASE_LABELS: Record<string, string> = {
 }
 
 const PHASE_COLORS: Record<number, string> = {
-  1: "bg-indigo-500/10 text-indigo-500",
-  2: "bg-purple-500/10 text-purple-500",
-  3: "bg-violet-500/10 text-violet-500",
-  4: "bg-fuchsia-500/10 text-fuchsia-500",
+  1: "bg-[#f1ddb0]/5 text-[#f1ddb0] border border-[#f1ddb0]/20",
+  2: "bg-[#d6b56c]/5 text-[#d6b56c] border border-[#d6b56c]/20",
+  3: "bg-[#b6954a]/10 text-[#b6954a] border border-[#b6954a]/20",
+  4: "bg-[#806b38]/15 text-[#806b38] border border-[#806b38]/30",
 }
 
 const PAGE_SIZES = [10, 25, 50]
@@ -77,15 +77,15 @@ function SkeletonRow() {
   return (
     <div className="grid grid-cols-[1fr_200px_160px_160px] items-center px-6 py-4">
       <div className="flex items-center gap-3">
-        <div className="h-9 w-9 rounded-full bg-border/40 animate-pulse shrink-0" />
+        <div className="h-9 w-9 rounded-full bg-[#b6954a]/10 animate-pulse shrink-0" />
         <div className="space-y-1.5">
-          <div className="h-3 w-28 rounded bg-border/40 animate-pulse" />
-          <div className="h-2.5 w-36 rounded bg-border/30 animate-pulse" />
+          <div className="h-3 w-28 rounded bg-[#b6954a]/10 animate-pulse" />
+          <div className="h-2.5 w-36 rounded bg-[#b6954a]/5 animate-pulse" />
         </div>
       </div>
-      <div className="h-5 w-28 rounded-full bg-border/40 animate-pulse" />
-      <div className="h-2 w-24 rounded-full bg-border/40 animate-pulse" />
-      <div className="h-3 w-24 rounded bg-border/30 animate-pulse" />
+      <div className="h-5 w-28 rounded-full bg-[#b6954a]/10 animate-pulse" />
+      <div className="h-2 w-24 rounded-full bg-[#b6954a]/10 animate-pulse" />
+      <div className="h-3 w-24 rounded bg-[#b6954a]/5 animate-pulse" />
     </div>
   )
 }
@@ -169,9 +169,9 @@ export default function ClientsPage() {
 
   return (
     <div className="space-y-4">
-      <Card className="rounded-2xl border border-border/50 bg-card shadow-sm">
+      <Card className="rounded-2xl border border-[#b6954a]/15 bg-card shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
         {/* Filters */}
-        <div className="flex flex-wrap items-center gap-3 border-b border-border/40 px-6 py-4">
+        <div className="flex flex-wrap items-center gap-3 border-b border-[#b6954a]/10 bg-muted/10 px-6 py-4">
           {/* Search */}
           <div className="relative flex-1 min-w-48">
             <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground/50" />
@@ -180,15 +180,15 @@ export default function ClientsPage() {
               placeholder="Search name or email…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-8 w-full rounded-lg border border-border/50 bg-background pl-8 pr-3 text-xs placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-primary/50"
+              className="h-8 w-full rounded-lg border border-[#b6954a]/20 bg-background pl-8 pr-3 text-xs text-[#b6954a] placeholder:text-muted-foreground/40 focus:outline-none focus:border-[#b6954a]/40 focus:ring-1 focus:ring-[#b6954a]/30 transition-all"
             />
           </div>
 
           {/* Phase filter */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className={`flex h-8 items-center gap-1.5 rounded-lg border px-3 text-xs transition-colors ${
-                phase ? "border-primary/40 bg-primary/8 text-primary" : "border-border/50 bg-background text-muted-foreground hover:text-foreground"
+              <button className={`flex h-8 items-center gap-1.5 rounded-lg border px-3 text-xs transition-all ${
+                phase ? "border-[#b6954a]/40 bg-[#b6954a]/10 text-[#b6954a]" : "border-[#b6954a]/20 bg-background text-muted-foreground hover:text-foreground hover:border-[#b6954a]/40 hover:bg-[#b6954a]/5"
               }`}>
                 {phase ? PHASE_LABELS[phase] : "All phases"}
                 <ChevronDown className="h-3 w-3 opacity-60" />
@@ -210,8 +210,8 @@ export default function ClientsPage() {
           {/* Sort */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className={`flex h-8 items-center gap-1.5 rounded-lg border px-3 text-xs transition-colors ${
-                sortField ? "border-primary/40 bg-primary/8 text-primary" : "border-border/50 bg-background text-muted-foreground hover:text-foreground"
+              <button className={`flex h-8 items-center gap-1.5 rounded-lg border px-3 text-xs transition-all ${
+                sortField ? "border-[#b6954a]/40 bg-[#b6954a]/10 text-[#b6954a]" : "border-[#b6954a]/20 bg-background text-muted-foreground hover:text-foreground hover:border-[#b6954a]/40 hover:bg-[#b6954a]/5"
               }`}>
                 <ArrowUpDown className="h-3 w-3" />
                 {activeSort?.label ?? "Sort"}
@@ -243,7 +243,7 @@ export default function ClientsPage() {
             className={`flex h-8 items-center gap-1.5 rounded-lg border px-3 text-xs transition-colors ${
               staleOnly
                 ? "border-amber-500/40 bg-amber-500/10 text-amber-500"
-                : "border-border/50 bg-background text-muted-foreground hover:text-foreground"
+                : "border-[#b6954a]/20 bg-background text-muted-foreground hover:text-foreground hover:border-[#b6954a]/40 hover:bg-[#b6954a]/5"
             }`}
           >
             <AlertTriangle className="h-3 w-3" />
@@ -253,7 +253,7 @@ export default function ClientsPage() {
           {/* Page size */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex h-8 items-center gap-1.5 rounded-lg border border-border/50 bg-background px-3 text-xs text-muted-foreground hover:text-foreground transition-colors">
+              <button className="flex h-8 items-center gap-1.5 rounded-lg border border-[#b6954a]/20 bg-background px-3 text-xs text-muted-foreground hover:text-foreground hover:border-[#b6954a]/40 hover:bg-[#b6954a]/5 transition-all">
                 {limit} / page
                 <ChevronDown className="h-3 w-3 opacity-60" />
               </button>
@@ -269,7 +269,7 @@ export default function ClientsPage() {
         </div>
 
         {/* Column headers */}
-        <div className="hidden grid-cols-[1fr_200px_160px_160px] items-center border-b border-border/30 px-6 py-2 sm:grid">
+        <div className="hidden grid-cols-[1fr_200px_160px_160px] items-center border-b border-[#b6954a]/10 bg-muted/5 px-6 py-2 sm:grid">
           <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">Client</span>
           <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">Phase</span>
           <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">Progress</span>
@@ -277,7 +277,7 @@ export default function ClientsPage() {
         </div>
 
         {/* Table */}
-        <div className="divide-y divide-border/30">
+        <div className="divide-y divide-[#b6954a]/10">
           {loading ? (
             Array.from({ length: limit > 10 ? 8 : 5 }).map((_, i) => <SkeletonRow key={i} />)
           ) : clients.length === 0 ? (
@@ -287,11 +287,11 @@ export default function ClientsPage() {
               <Link
                 key={client.id}
                 href={`/admin/clients/${client.id}`}
-                className="grid grid-cols-[1fr_200px_160px_160px] items-center px-6 py-4 transition-colors hover:bg-primary/3"
+                className="grid grid-cols-[1fr_200px_160px_160px] items-center px-6 py-4 transition-all hover:bg-[#b6954a]/[0.02] group"
               >
                 {/* Avatar + name */}
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold uppercase text-primary">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#b6954a]/10 text-xs font-bold uppercase text-[#b6954a] ring-1 ring-[#b6954a]/20 group-hover:bg-[#b6954a]/20 group-hover:scale-105 transition-all">
                     {client.firstName[0]}{client.lastName[0]}
                   </div>
                   <div className="min-w-0">
@@ -305,7 +305,7 @@ export default function ClientsPage() {
                 {/* Phase + stale */}
                 <div className="flex items-center gap-2">
                   {client.isCompleted ? (
-                    <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-500">
+                    <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-500 border border-emerald-500/20">
                       <CheckCircle2 className="h-3 w-3" />
                       Completed
                     </span>
@@ -324,9 +324,9 @@ export default function ClientsPage() {
 
                 {/* Progress bar */}
                 <div className="flex items-center gap-2 pr-4">
-                  <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-border/50">
+                  <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[#b6954a]/10 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)]">
                     <div
-                      className={`h-full rounded-full ${client.isCompleted ? "bg-emerald-500" : "bg-primary"}`}
+                      className={`h-full rounded-full ${client.isCompleted ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]" : "bg-gradient-to-r from-[#b6954a] to-[#d6b56c] shadow-[0_0_8px_rgba(182,149,74,0.3)]"}`}
                       style={{ width: `${client.progress}%` }}
                     />
                   </div>
@@ -343,7 +343,7 @@ export default function ClientsPage() {
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between border-t border-border/40 px-6 py-3">
+        <div className="flex items-center justify-between border-t border-[#b6954a]/10 bg-muted/10 px-6 py-3">
           <span className="font-mono text-[10px] text-muted-foreground/50">
             {pagination && pagination.total > 0
               ? `Showing ${start}–${end} of ${pagination.total}`
@@ -353,7 +353,7 @@ export default function ClientsPage() {
             <Button
               variant="outline"
               size="sm"
-              className="h-7 w-7 rounded-lg border-border/50 p-0"
+              className="h-7 w-7 rounded-lg border-[#b6954a]/20 bg-transparent text-muted-foreground hover:bg-[#b6954a]/10 hover:text-[#b6954a] hover:border-[#b6954a]/40 p-0 disabled:opacity-30 disabled:border-[#b6954a]/10 transition-all"
               disabled={page <= 1 || loading}
               onClick={() => setPage((p) => p - 1)}
             >
@@ -365,7 +365,7 @@ export default function ClientsPage() {
             <Button
               variant="outline"
               size="sm"
-              className="h-7 w-7 rounded-lg border-border/50 p-0"
+              className="h-7 w-7 rounded-lg border-[#b6954a]/20 bg-transparent text-muted-foreground hover:bg-[#b6954a]/10 hover:text-[#b6954a] hover:border-[#b6954a]/40 p-0 disabled:opacity-30 disabled:border-[#b6954a]/10 transition-all"
               disabled={!pagination || page >= pagination.totalPages || loading}
               onClick={() => setPage((p) => p + 1)}
             >

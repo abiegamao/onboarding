@@ -110,7 +110,57 @@ export default async function DashboardPage() {
         const nextStepName = stepNames[status.currentStep] || "Next Assessment"
 
         return (
-            <div className="container mx-auto max-w-7xl animate-in p-4 duration-700 fade-in slide-in-from-bottom-4 sm:p-6 lg:p-8">
+            <>
+            {/* Dashed Bottom Fade Grid */}
+            <div
+                className="fixed inset-0 z-0 pointer-events-none"
+                style={{
+                backgroundImage: `
+                    linear-gradient(to right, rgba(182, 149, 74, 0.15) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(182, 149, 74, 0.15) 1px, transparent 1px)
+                `,
+                backgroundSize: "20px 20px",
+                backgroundPosition: "0 0, 0 0",
+                maskImage: `
+                    repeating-linear-gradient(
+                        to right,
+                        black 0px,
+                        black 3px,
+                        transparent 3px,
+                        transparent 8px
+                        ),
+                        repeating-linear-gradient(
+                        to bottom,
+                        black 0px,
+                        black 3px,
+                        transparent 3px,
+                        transparent 8px
+                        ),
+                        radial-gradient(ellipse 100% 80% at 50% 100%, #000 50%, transparent 90%)
+                `,
+                WebkitMaskImage: `
+                    repeating-linear-gradient(
+                        to right,
+                        black 0px,
+                        black 3px,
+                        transparent 3px,
+                        transparent 8px
+                        ),
+                        repeating-linear-gradient(
+                        to bottom,
+                        black 0px,
+                        black 3px,
+                        transparent 3px,
+                        transparent 8px
+                        ),
+                        radial-gradient(ellipse 100% 80% at 50% 100%, #000 50%, transparent 90%)
+                `,
+                maskComposite: "intersect",
+                WebkitMaskComposite: "source-in",
+                }}
+            />
+
+            <div className="relative z-10 container mx-auto max-w-7xl animate-in p-4 duration-700 fade-in slide-in-from-bottom-4 sm:p-6 lg:p-8">
                 <div className="flex flex-col space-y-8">
                     {/* Welcome Section */}
                     <div className="flex flex-col space-y-2">
@@ -325,6 +375,7 @@ export default async function DashboardPage() {
                     </div>
                 </div>
             </div>
+            </>
         )
     } catch (error: any) {
         if (error.digest?.startsWith("NEXT_REDIRECT")) throw error

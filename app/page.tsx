@@ -48,7 +48,6 @@ export default function Page() {
         <div className="relative min-h-screen bg-background overflow-x-hidden font-sans text-foreground">
             {/* Global animations */}
             <style>{`
-                @keyframes glow { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.08); } }
                 @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
                 @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
                 @keyframes pulseLine { 0%, 100% { opacity: 0.12; } 50% { opacity: 0.35; } }
@@ -64,26 +63,66 @@ export default function Page() {
                 .phase-card:nth-child(3) { animation-delay: 0.4s; }
                 .phase-card:nth-child(4) { animation-delay: 0.55s; }
             `}</style>
+            {/* Full-Screen Ambient Gold Glare Animation */}
+            {/* <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+                <div 
+                    className="absolute inset-[-100%] opacity-40 mix-blend-screen dark:opacity-20"
+                    style={{
+                        background: "conic-gradient(from 90deg at 50% 50%, transparent 0%, rgba(182, 149, 74, 0) 30%, rgba(182, 149, 74, 0.35) 50%, rgba(182, 149, 74, 0) 70%, transparent 100%)",
+                        filter: "blur(100px)",
+                        animation: "spin 20s linear infinite",
+                    }} 
+                />
+            </div> */}
 
-            {/* Subtle grid */}
-            <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.04]" style={{
-                backgroundImage: "linear-gradient(var(--foreground) 1px, transparent 1px), linear-gradient(90deg, var(--foreground) 1px, transparent 1px)",
-                backgroundSize: "48px 48px",
-            }} />
-
-            {/* Hero glow orbs */}
-            <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[800px] h-[600px] rounded-full pointer-events-none" style={{
-                background: "radial-gradient(circle, var(--primary) 0%, transparent 70%)",
-                opacity: 0.08,
-                filter: "blur(120px)",
-                animation: "glow 8s ease-in-out infinite",
-            }} />
-            <div className="absolute top-[400px] right-[-200px] w-[500px] h-[500px] rounded-full pointer-events-none" style={{
-                background: "radial-gradient(circle, var(--primary) 0%, transparent 70%)",
-                opacity: 0.05,
-                filter: "blur(100px)",
-                animation: "glow 10s ease-in-out infinite 3s",
-            }} />
+            {/* Dashed Bottom Fade Grid */}
+            <div
+                className="fixed inset-0 z-0 pointer-events-none"
+                style={{
+                backgroundImage: `
+                    linear-gradient(to right, rgba(182, 149, 74, 0.15) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(182, 149, 74, 0.15) 1px, transparent 1px)
+                `,
+                backgroundSize: "20px 20px",
+                backgroundPosition: "0 0, 0 0",
+                maskImage: `
+                    repeating-linear-gradient(
+                        to right,
+                        black 0px,
+                        black 3px,
+                        transparent 3px,
+                        transparent 8px
+                        ),
+                        repeating-linear-gradient(
+                        to bottom,
+                        black 0px,
+                        black 3px,
+                        transparent 3px,
+                        transparent 8px
+                        ),
+                        radial-gradient(ellipse 100% 80% at 50% 100%, #000 50%, transparent 90%)
+                `,
+                WebkitMaskImage: `
+                    repeating-linear-gradient(
+                        to right,
+                        black 0px,
+                        black 3px,
+                        transparent 3px,
+                        transparent 8px
+                        ),
+                        repeating-linear-gradient(
+                        to bottom,
+                        black 0px,
+                        black 3px,
+                        transparent 3px,
+                        transparent 8px
+                        ),
+                        radial-gradient(ellipse 100% 80% at 50% 100%, #000 50%, transparent 90%)
+                `,
+                maskComposite: "intersect",
+                WebkitMaskComposite: "source-in",
+                }}
+            />
 
             {/* Navigation */}
             <LandingNav />
@@ -92,17 +131,7 @@ export default function Page() {
 
                 {/* ── Hero ── */}
                 <section className="text-center max-w-4xl mx-auto space-y-8">
-                    {/* Shimmer badge */}
-                    <div className="fade-up fade-up-1 inline-flex items-center gap-2 px-4 py-2 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest" style={{
-                        backgroundImage: "linear-gradient(90deg, var(--primary), transparent, var(--primary))",
-                        backgroundSize: "200% 100%",
-                        animation: "shimmer 4s linear infinite",
-                        opacity: 0.15,
-                        position: "absolute",
-                        inset: 0,
-                        borderRadius: "inherit",
-                        pointerEvents: "none",
-                    }} />
+
                     <div className="fade-up fade-up-1 relative inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 text-[10px] md:text-xs font-bold text-primary uppercase tracking-widest overflow-hidden">
                         <div className="absolute inset-0 rounded-full" style={{
                             backgroundImage: "linear-gradient(90deg, transparent, var(--primary), transparent)",
@@ -320,11 +349,6 @@ export default function Page() {
                             animation: "glow 6s ease-in-out infinite",
                         }} />
 
-                        {/* Grid */}
-                        <div className="absolute inset-0 opacity-[0.03]" style={{
-                            backgroundImage: "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
-                            backgroundSize: "40px 40px",
-                        }} />
 
                         <div className="relative z-10 space-y-6">
                             <h2 className="text-3xl md:text-6xl font-bold tracking-tighter leading-tight text-white">
@@ -354,7 +378,7 @@ export default function Page() {
                 </section>
             </main>
 
-            <footer className="relative z-10 px-8 py-12 border-t border-border/30 text-center text-muted-foreground text-sm">
+            <footer className="relative z-10 px-8 py-12 text-center text-muted-foreground text-sm">
                 <p>&copy; {new Date().getFullYear()} Minesha. All rights reserved.</p>
                 <div className="flex items-center justify-center gap-6 mt-4">
                     <Link href="#" className="hover:text-primary transition-colors">Terms</Link>
