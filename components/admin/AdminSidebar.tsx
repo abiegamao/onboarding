@@ -43,16 +43,13 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                 <div className="absolute inset-0 bg-gradient-to-r from-[#b6954a]/10 to-transparent pointer-events-none" />
                 <div className="flex items-center gap-3 relative z-10">
                     <img
-                        src="/assets/logo.png"
+                        src="/assets/pdl-logo.png"
                         alt="Logo"
-                        className="h-8 w-auto object-contain brightness-0 invert"
+                        className="h-12 w-auto object-contain"
                     />
                     <div className="flex flex-col leading-tight">
                         <span className="text-xs font-bold tracking-widest text-[#f4ead8] uppercase">
-                            PDL
-                        </span>
-                        <span className="text-[10px] font-mono tracking-[0.2em] text-[#d6b56c] uppercase">
-                            Admin
+                            Peace-Driven Leadership
                         </span>
                     </div>
                 </div>
