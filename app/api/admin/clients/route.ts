@@ -44,6 +44,9 @@ export async function GET(req: NextRequest) {
     profileQuery["status.updatedAt"] = { $lt: staleThreshold }
   }
 
+  const sortField = searchParams.get("sortField") || ""
+  const sortDir = searchParams.get("sortDir") === "desc" ? -1 : 1
+
   const total = await OnboardingProfile.countDocuments(profileQuery)
   const profiles = await OnboardingProfile.find(profileQuery)
     .select("userId status")
@@ -53,7 +56,7 @@ export async function GET(req: NextRequest) {
 
   const userMap = Object.fromEntries(allUsers.map((u) => [u._id.toString(), u]))
 
-  const clients = profiles.map((p) => {
+  let clients = profiles.map((p) => {
     const user = userMap[p.userId.toString()]
     const stepIdx = STEPS.indexOf(p.status.currentStep)
     const progress = p.status.isCompleted ? 100 : Math.round((stepIdx / STEPS.length) * 100)
@@ -76,6 +79,21 @@ export async function GET(req: NextRequest) {
       joinedAt: user?.createdAt || null,
     }
   })
+
+  if (sortField) {
+    clients.sort((a, b) => {
+      let av: string | number | null = null
+      let bv: string | number | null = null
+      if (sortField === "name") { av = `${a.firstName} ${a.lastName}`; bv = `${b.firstName} ${b.lastName}` }
+      else if (sortField === "phase") { av = a.currentPhase; bv = b.currentPhase }
+      else if (sortField === "progress") { av = a.progress; bv = b.progress }
+      else if (sortField === "lastActive") { av = a.lastActive ? String(a.lastActive) : ""; bv = b.lastActive ? String(b.lastActive) : "" }
+      if (av === null || bv === null) return 0
+      if (av < bv) return -1 * sortDir
+      if (av > bv) return 1 * sortDir
+      return 0
+    })
+  }
 
   return NextResponse.json({
     clients,
