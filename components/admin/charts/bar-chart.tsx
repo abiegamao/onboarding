@@ -1,13 +1,11 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
 
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
@@ -31,7 +29,7 @@ const funnelConfig = {
 export function StepFunnelChart({ data, loading }: { data: { step: string; count: number }[]; loading?: boolean }) {
     return (
         <Card className="flex h-full flex-col rounded-2xl border border-[#b6954a]/15 bg-card shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-            <CardHeader className="pb-2">
+            <CardHeader className="pb-2 shrink-0">
                 <div className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-[#b6954a]/50"></span>
                     <CardTitle className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground/60 font-normal">
@@ -42,7 +40,7 @@ export function StepFunnelChart({ data, loading }: { data: { step: string; count
                     Track client progression and identify drop-off points in the onboarding workflow.
                 </CardDescription>
             </CardHeader>
-            <CardContent className="flex-1 min-h-[300px] overflow-y-auto pt-4 relative">
+            <CardContent className="relative flex-1 min-h-0 pt-4">
                 {loading ? (
                     <div className="absolute inset-0 flex items-center justify-center text-sm text-[#b6954a]/50 animate-pulse font-mono tracking-widest uppercase">
                         Loading…
@@ -54,7 +52,8 @@ export function StepFunnelChart({ data, loading }: { data: { step: string; count
                         data={data}
                         layout="vertical"
                         margin={{ right: 16 }}
-                        barCategoryGap="20%"
+                        barCategoryGap="6%"
+                        barSize={50}
                     >
                         <CartesianGrid horizontal={false} strokeDasharray="3 3" stroke="var(--border)" strokeOpacity={0.5} />
                         <YAxis
@@ -66,122 +65,29 @@ export function StepFunnelChart({ data, loading }: { data: { step: string; count
                         />
                         <XAxis dataKey="count" type="number" hide />
                         <ChartTooltip
-                            cursor={{ fill: 'rgba(182,149,74,0.05)' }}
+                            cursor={{ fill: "rgba(182,149,74,0.05)" }}
                             content={<ChartTooltipContent indicator="line" />}
                         />
-                        <Bar dataKey="count" fill="var(--color-count)" radius={6}>
+                        <Bar dataKey="count" fill="var(--color-count)" radius={4}>
                             <LabelList
                                 dataKey="step"
                                 position="insideLeft"
-                                offset={12}
+                                offset={10}
                                 className="fill-(--color-label) font-medium"
-                                fontSize={12}
+                                fontSize={11}
                             />
                             <LabelList
                                 dataKey="count"
                                 position="right"
-                                offset={12}
+                                offset={10}
                                 className="fill-foreground font-bold"
-                                fontSize={12}
+                                fontSize={11}
                             />
                         </Bar>
                     </BarChart>
                 </ChartContainer>
                 )}
             </CardContent>
-        </Card>
-    )
-}
-
-export const description = "A bar chart with a custom label"
-
-const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-]
-
-const chartConfig = {
-    desktop: {
-        label: "Desktop",
-        color: "var(--chart-2)",
-    },
-    mobile: {
-        label: "Mobile",
-        color: "var(--chart-2)",
-    },
-    label: {
-        color: "var(--background)",
-    },
-} satisfies ChartConfig
-
-export function ChartBarLabelCustom() {
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Bar Chart - Custom Label</CardTitle>
-                <CardDescription>January - June 2024</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <ChartContainer config={chartConfig}>
-                    <BarChart
-                        accessibilityLayer
-                        data={chartData}
-                        layout="vertical"
-                        margin={{
-                            right: 16,
-                        }}
-                    >
-                        <CartesianGrid horizontal={false} />
-                        <YAxis
-                            dataKey="month"
-                            type="category"
-                            tickLine={false}
-                            tickMargin={10}
-                            axisLine={false}
-                            tickFormatter={(value) => value.slice(0, 3)}
-                            hide
-                        />
-                        <XAxis dataKey="desktop" type="number" hide />
-                        <ChartTooltip
-                            cursor={false}
-                            content={<ChartTooltipContent indicator="line" />}
-                        />
-                        <Bar
-                            dataKey="desktop"
-                            fill="var(--color-desktop)"
-                            radius={4}
-                        >
-                            <LabelList
-                                dataKey="month"
-                                position="insideLeft"
-                                offset={8}
-                                className="fill-(--color-label)"
-                                fontSize={12}
-                            />
-                            <LabelList
-                                dataKey="desktop"
-                                position="right"
-                                offset={8}
-                                className="fill-foreground"
-                                fontSize={12}
-                            />
-                        </Bar>
-                    </BarChart>
-                </ChartContainer>
-            </CardContent>
-            <CardFooter className="flex-col items-start gap-2 text-sm">
-                <div className="flex gap-2 leading-none font-medium">
-                    Trending up by 5.2% this month{" "}
-                    <TrendingUp className="h-4 w-4" />
-                </div>
-                <div className="leading-none text-muted-foreground">
-                    Showing total visitors for the last 6 months
-                </div>
-            </CardFooter>
         </Card>
     )
 }

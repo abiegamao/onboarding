@@ -27,7 +27,15 @@ export interface IOnboardingProfile extends Document {
             uncompromisableStandards?: string
         }
         triage: {
-            pdlLeaderScore?: string
+            selfCare?: { q1?: string; q2?: string; q3?: string; q4?: string; q5?: string }
+            wealthCreation?: { q1?: string; q2?: string; q3?: string; q4?: string; q5?: string }
+            literacy?: { q1?: string; q2?: string; q3?: string; q4?: string; q5?: string }
+            actualization?: { q1?: string; q2?: string; q3?: string; q4?: string; q5?: string }
+            succession?: { q1?: string; q2?: string; q3?: string; q4?: string; q5?: string }
+            outreach?: { q1?: string; q2?: string; q3?: string; q4?: string; q5?: string }
+            relationships?: { q1?: string; q2?: string; q3?: string; q4?: string; q5?: string }
+            health?: { q1?: string; q2?: string; q3?: string; q4?: string; q5?: string }
+            openReflection?: { q1?: string }
             neurodiversity?: string
             internalWiring?: string
             disc?: string
@@ -102,7 +110,15 @@ const OnboardingProfileSchema = new Schema<IOnboardingProfile>(
                 uncompromisableStandards: String,
             },
             triage: {
-                pdlLeaderScore: String,
+                selfCare: { q1: String, q2: String, q3: String, q4: String, q5: String },
+                wealthCreation: { q1: String, q2: String, q3: String, q4: String, q5: String },
+                literacy: { q1: String, q2: String, q3: String, q4: String, q5: String },
+                actualization: { q1: String, q2: String, q3: String, q4: String, q5: String },
+                succession: { q1: String, q2: String, q3: String, q4: String, q5: String },
+                outreach: { q1: String, q2: String, q3: String, q4: String, q5: String },
+                relationships: { q1: String, q2: String, q3: String, q4: String, q5: String },
+                health: { q1: String, q2: String, q3: String, q4: String, q5: String },
+                openReflection: { q1: String },
                 neurodiversity: String,
                 internalWiring: String,
                 disc: String,

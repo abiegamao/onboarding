@@ -37,22 +37,12 @@ export default async function OnboardingLayout({
     }
 
     const allSteps = [
-        "1A",
-        "1B",
-        "1C",
-        "1D",
-        "1E",
-        "2A",
-        "2B",
-        "2C",
-        "3A",
-        "3B",
-        "3C",
-        "3D",
-        "3E",
-        "4A",
-        "4B",
-        "4C",
+        "1A", "1B",
+        "1C-1", "1C-2", "1C-3", "1C-4", "1C-5", "1C-6", "1C-7", "1C-8", "1C-9",
+        "1D", "1E",
+        "2A", "2B", "2C",
+        "3A", "3B", "3C", "3D", "3E",
+        "4A", "4B", "4C",
     ]
     const currentStepIndex = allSteps.indexOf(status.currentStep)
     const progressValue = status.isCompleted

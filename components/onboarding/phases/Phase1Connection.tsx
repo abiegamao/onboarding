@@ -1,7 +1,8 @@
 "use client"
-import { Play, ArrowRight, ShieldCheck, Heart, Sparkles } from "lucide-react"
+import { ArrowRight, ShieldCheck, Heart, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { LeadershipAssessment } from "@/components/onboarding/LeadershipAssessment"
+import { TriageDomainForm } from "@/components/onboarding/TriageDomainForm"
+import { STEP_TO_DOMAIN } from "@/lib/triageConfig"
 
 interface Phase1Props {
     currentStep: string
@@ -293,131 +294,21 @@ export function Phase1Connection({
                 </div>
             )}
 
-            {currentStep === "1C" && (
-                <div className="max-w-4xl animate-in space-y-10 duration-700 fade-in">
-                    <div className="grid gap-8">
-                        {/* Mind */}
-                        <div className="space-y-6 rounded-3xl border border-primary/10 bg-primary/5 p-6">
-                            <div className="flex items-center gap-3">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20">
-                                    <Sparkles className="h-6 w-6 text-primary" />
-                                </div>
-                                <h3 className="font-serif text-xl font-bold">
-                                    Mind (The Wiring)
-                                </h3>
-                            </div>
-
-                            <div className="space-y-6">
-                                {/* PDL Score ~ Embedded Assessment */}
-                                <div className="border-b border-primary/10 pb-6">
-                                    <LeadershipAssessment
-                                        value={formData.triage_pdl || ""}
-                                        onChange={(score) =>
-                                            setFormData({
-                                                ...formData,
-                                                triage_pdl: score,
-                                            })
-                                        }
-                                    />
-                                </div>
-
-                                {/* Neurodiversity */}
-                                <div className="flex flex-col gap-6 border-b border-primary/10 pb-6 md:flex-row md:items-end">
-                                    <div className="flex-1 space-y-3">
-                                        <p className="text-sm font-bold tracking-wide uppercase">
-                                            High Functioning Neurodiversity
-                                        </p>
-                                        <a
-                                            href="https://exceptionalindividuals.com/neurodiversity/"
-                                            target="_blank"
-                                            className="inline-flex items-center text-sm font-medium text-primary hover:underline"
-                                        >
-                                            Take Neurodiversity Test{" "}
-                                            <ArrowRight className="ml-1 h-3 w-3" />
-                                        </a>
-                                    </div>
-                                    <div className="w-full md:w-48">
-                                        <input
-                                            type="text"
-                                            value={formData.triage_neuro}
-                                            onChange={(e) =>
-                                                setFormData({
-                                                    ...formData,
-                                                    triage_neuro:
-                                                        e.target.value,
-                                                })
-                                            }
-                                            placeholder="Result Summary"
-                                            className="w-full rounded-xl border-2 border-border/50 bg-background p-3 outline-none focus:ring-2 focus:ring-primary/20"
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Internal Wiring */}
-                                <div className="space-y-3">
-                                    <p className="text-sm font-bold tracking-wide uppercase">
-                                        Internal Wiring (CliftonStrengths /
-                                        Human Design)
-                                    </p>
-                                    <input
-                                        type="text"
-                                        value={formData.triage_wiring}
-                                        onChange={(e) =>
-                                            setFormData({
-                                                ...formData,
-                                                triage_wiring: e.target.value,
-                                            })
-                                        }
-                                        placeholder="Enter your strengths or design profile..."
-                                        className="w-full rounded-xl border-2 border-border/50 bg-background p-3 outline-none focus:ring-2 focus:ring-primary/20"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Body */}
-                        <div className="space-y-6 rounded-3xl border border-border/50 bg-secondary/30 p-6">
-                            <div className="flex items-center gap-3">
-                                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary/50">
-                                    <Heart className="h-6 w-6 text-primary" />
-                                </div>
-                                <h3 className="font-serif text-xl font-bold">
-                                    Body (The Interaction)
-                                </h3>
-                            </div>
-
-                            <div className="flex flex-col gap-6 md:flex-row md:items-end">
-                                <div className="flex-1 space-y-3">
-                                    <p className="text-sm font-bold tracking-wide uppercase">
-                                        DiSC Assessment
-                                    </p>
-                                    <a
-                                        href="https://discpersonalitytesting.com/free-disc-test/"
-                                        target="_blank"
-                                        className="inline-flex items-center text-sm font-medium text-primary hover:underline"
-                                    >
-                                        Start Free DiSC Test{" "}
-                                        <ArrowRight className="ml-1 h-3 w-3" />
-                                    </a>
-                                </div>
-                                <div className="w-full md:w-48">
-                                    <input
-                                        type="text"
-                                        value={formData.triage_disc}
-                                        onChange={(e) =>
-                                            setFormData({
-                                                ...formData,
-                                                triage_disc: e.target.value,
-                                            })
-                                        }
-                                        placeholder="Your Result"
-                                        className="w-full rounded-xl border-2 border-border/50 bg-background p-3 outline-none focus:ring-2 focus:ring-primary/20"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            {STEP_TO_DOMAIN[currentStep] && (
+                <TriageDomainForm
+                    title={STEP_TO_DOMAIN[currentStep].title}
+                    questions={STEP_TO_DOMAIN[currentStep].questions}
+                    answers={formData[`triage_${STEP_TO_DOMAIN[currentStep].key}`] || {}}
+                    onChange={(q, val) =>
+                        setFormData({
+                            ...formData,
+                            [`triage_${STEP_TO_DOMAIN[currentStep].key}`]: {
+                                ...formData[`triage_${STEP_TO_DOMAIN[currentStep].key}`],
+                                [q]: val,
+                            },
+                        })
+                    }
+                />
             )}
 
             {currentStep === "1D" && (

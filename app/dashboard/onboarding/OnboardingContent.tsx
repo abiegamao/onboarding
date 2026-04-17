@@ -7,6 +7,7 @@ import { Phase1Connection } from "@/components/onboarding/phases/Phase1Connectio
 import { Phase2Awareness } from "@/components/onboarding/phases/Phase2Awareness"
 import { Phase3Stabilization } from "@/components/onboarding/phases/Phase3Stabilization"
 import { Phase4Activation } from "@/components/onboarding/phases/Phase4Activation"
+import { TRIAGE_DOMAINS, STEP_TO_DOMAIN } from "@/lib/triageConfig"
 
 
 function splitListInput(value: string) {
@@ -78,13 +79,65 @@ export default function OnboardingContent() {
                         getting_uncompromisableStandards:
                             data.connection?.gettingToKnowYou
                                 ?.uncompromisableStandards || "",
-                        triage_pdl:
-                            data.connection?.triage?.pdlLeaderScore || "",
-                        triage_neuro:
-                            data.connection?.triage?.neurodiversity || "",
-                        triage_wiring:
-                            data.connection?.triage?.internalWiring || "",
-                        triage_disc: data.connection?.triage?.disc || "",
+                        triage_selfCare: {
+                            q1: data.connection?.triage?.selfCare?.q1 || "",
+                            q2: data.connection?.triage?.selfCare?.q2 || "",
+                            q3: data.connection?.triage?.selfCare?.q3 || "",
+                            q4: data.connection?.triage?.selfCare?.q4 || "",
+                            q5: data.connection?.triage?.selfCare?.q5 || "",
+                        },
+                        triage_wealthCreation: {
+                            q1: data.connection?.triage?.wealthCreation?.q1 || "",
+                            q2: data.connection?.triage?.wealthCreation?.q2 || "",
+                            q3: data.connection?.triage?.wealthCreation?.q3 || "",
+                            q4: data.connection?.triage?.wealthCreation?.q4 || "",
+                            q5: data.connection?.triage?.wealthCreation?.q5 || "",
+                        },
+                        triage_literacy: {
+                            q1: data.connection?.triage?.literacy?.q1 || "",
+                            q2: data.connection?.triage?.literacy?.q2 || "",
+                            q3: data.connection?.triage?.literacy?.q3 || "",
+                            q4: data.connection?.triage?.literacy?.q4 || "",
+                            q5: data.connection?.triage?.literacy?.q5 || "",
+                        },
+                        triage_actualization: {
+                            q1: data.connection?.triage?.actualization?.q1 || "",
+                            q2: data.connection?.triage?.actualization?.q2 || "",
+                            q3: data.connection?.triage?.actualization?.q3 || "",
+                            q4: data.connection?.triage?.actualization?.q4 || "",
+                            q5: data.connection?.triage?.actualization?.q5 || "",
+                        },
+                        triage_succession: {
+                            q1: data.connection?.triage?.succession?.q1 || "",
+                            q2: data.connection?.triage?.succession?.q2 || "",
+                            q3: data.connection?.triage?.succession?.q3 || "",
+                            q4: data.connection?.triage?.succession?.q4 || "",
+                            q5: data.connection?.triage?.succession?.q5 || "",
+                        },
+                        triage_outreach: {
+                            q1: data.connection?.triage?.outreach?.q1 || "",
+                            q2: data.connection?.triage?.outreach?.q2 || "",
+                            q3: data.connection?.triage?.outreach?.q3 || "",
+                            q4: data.connection?.triage?.outreach?.q4 || "",
+                            q5: data.connection?.triage?.outreach?.q5 || "",
+                        },
+                        triage_relationships: {
+                            q1: data.connection?.triage?.relationships?.q1 || "",
+                            q2: data.connection?.triage?.relationships?.q2 || "",
+                            q3: data.connection?.triage?.relationships?.q3 || "",
+                            q4: data.connection?.triage?.relationships?.q4 || "",
+                            q5: data.connection?.triage?.relationships?.q5 || "",
+                        },
+                        triage_health: {
+                            q1: data.connection?.triage?.health?.q1 || "",
+                            q2: data.connection?.triage?.health?.q2 || "",
+                            q3: data.connection?.triage?.health?.q3 || "",
+                            q4: data.connection?.triage?.health?.q4 || "",
+                            q5: data.connection?.triage?.health?.q5 || "",
+                        },
+                        triage_openReflection: {
+                            q1: data.connection?.triage?.openReflection?.q1 || "",
+                        },
                         open_share: data.connection?.openShare || "",
                         culture_takeaways:
                             data.connection?.cultureTakeaways || "",
@@ -161,14 +214,14 @@ export default function OnboardingContent() {
                 dataToSave[
                     "connection.gettingToKnowYou.uncompromisableStandards"
                 ] = formData.getting_uncompromisableStandards
-            } else if (nextStep === "1C") {
-                dataToSave["connection.triage.pdlLeaderScore"] =
-                    formData.triage_pdl
-                dataToSave["connection.triage.neurodiversity"] =
-                    formData.triage_neuro
-                dataToSave["connection.triage.internalWiring"] =
-                    formData.triage_wiring
-                dataToSave["connection.triage.disc"] = formData.triage_disc
+            } else if (nextStep.startsWith("1C-")) {
+                const domain = STEP_TO_DOMAIN[nextStep]
+                if (domain) {
+                    const answers = formData[`triage_${domain.key}`] || {}
+                    Object.entries(answers).forEach(([q, v]) => {
+                        dataToSave[`connection.triage.${domain.key}.${q}`] = v
+                    })
+                }
             } else if (nextStep === "1D") {
                 dataToSave["connection.openShare"] = formData.open_share
             } else if (nextStep === "1E") {
@@ -207,8 +260,11 @@ export default function OnboardingContent() {
 
             // Advance step
             if (nextStep === "1A") nextStep = "1B"
-            else if (nextStep === "1B") nextStep = "1C"
-            else if (nextStep === "1C") nextStep = "1D"
+            else if (nextStep === "1B") nextStep = "1C-1"
+            else if (nextStep.startsWith("1C-")) {
+                const idx = TRIAGE_DOMAINS.findIndex((d) => d.stepId === nextStep)
+                nextStep = idx < TRIAGE_DOMAINS.length - 1 ? TRIAGE_DOMAINS[idx + 1].stepId : "1D"
+            }
             else if (nextStep === "1D") nextStep = "1E"
             else if (nextStep === "1E") nextStep = "1F"
             else if (nextStep === "1F") {
@@ -303,14 +359,14 @@ export default function OnboardingContent() {
                 dataToSave[
                     "connection.gettingToKnowYou.uncompromisableStandards"
                 ] = formData.getting_uncompromisableStandards
-            } else if (currentStep === "1C") {
-                dataToSave["connection.triage.pdlLeaderScore"] =
-                    formData.triage_pdl
-                dataToSave["connection.triage.neurodiversity"] =
-                    formData.triage_neuro
-                dataToSave["connection.triage.internalWiring"] =
-                    formData.triage_wiring
-                dataToSave["connection.triage.disc"] = formData.triage_disc
+            } else if (currentStep.startsWith("1C-")) {
+                const domain = STEP_TO_DOMAIN[currentStep]
+                if (domain) {
+                    const answers = formData[`triage_${domain.key}`] || {}
+                    Object.entries(answers).forEach(([q, v]) => {
+                        dataToSave[`connection.triage.${domain.key}.${q}`] = v
+                    })
+                }
             } else if (currentStep === "1D") {
                 dataToSave["connection.openShare"] = formData.open_share
             } else if (currentStep === "1E") {
@@ -366,8 +422,12 @@ export default function OnboardingContent() {
             let prevStep = status?.currentStep || "1A"
 
             if (prevStep === "1B") prevStep = "1A"
-            else if (prevStep === "1C") prevStep = "1B"
-            else if (prevStep === "1D") prevStep = "1C"
+            else if (prevStep === "1C-1") prevStep = "1B"
+            else if (prevStep.startsWith("1C-")) {
+                const idx = TRIAGE_DOMAINS.findIndex((d) => d.stepId === prevStep)
+                prevStep = idx > 0 ? TRIAGE_DOMAINS[idx - 1].stepId : "1B"
+            }
+            else if (prevStep === "1D") prevStep = "1C-9"
             else if (prevStep === "1E") prevStep = "1D"
             else if (prevStep === "1F") prevStep = "1E"
             else if (prevStep === "2A") {
@@ -459,13 +519,13 @@ export default function OnboardingContent() {
                     </>
                 )}
 
-                {currentStep === "1C" && (
+                {STEP_TO_DOMAIN[currentStep] && (
                     <>
                         <h1 className="font-serif text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
                             Your Leadership Triage
                         </h1>
                         <p className="text-xl font-medium text-muted-foreground italic">
-                            "Mapping your Mind, Body, and Divine Identity."
+                            {STEP_TO_DOMAIN[currentStep].title}
                         </p>
                     </>
                 )}
@@ -686,8 +746,14 @@ export default function OnboardingContent() {
                                 <>
                                     {currentStep === "1A" &&
                                         "Getting to Know You"}
-                                    {currentStep === "1B" && "Your Triage"}
-                                    {currentStep === "1C" && "Open Share"}
+                                    {currentStep === "1B" && "Self-Care — Triage"}
+                                    {currentStep.startsWith("1C-") && (() => {
+                                        const idx = TRIAGE_DOMAINS.findIndex((d) => d.stepId === currentStep)
+                                        const next = TRIAGE_DOMAINS[idx + 1]
+                                        return next
+                                            ? next.title.split(" | ")[0].replace(/^[IVX]+\.\s+/, "") + " — Triage"
+                                            : "Open Share"
+                                    })()}
                                     {currentStep === "1D" &&
                                         "Getting to Know Us"}
                                     {currentStep === "1E" &&

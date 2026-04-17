@@ -3,15 +3,8 @@
 import { useEffect, useRef, useState, type RefObject } from "react"
 import { useParams } from "next/navigation"
 import Link from "next/link"
-import {
-  RadarChart,
-  Radar,
-  PolarGrid,
-  PolarAngleAxis,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts"
 import { Card } from "@/components/ui/card"
+import { TRIAGE_DOMAINS } from "@/lib/triageConfig"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
@@ -26,20 +19,25 @@ import {
   Calendar,
 } from "lucide-react"
 
-const STEPS = ["1A","1B","1C","1D","1E","1F","2A","2B","2C","3A","3B","3C","3D","3E","4A","4B","4C"]
+const STEPS = ["1A","1B","1C-1","1C-2","1C-3","1C-4","1C-5","1C-6","1C-7","1C-8","1C-9","1D","1E","1F","2A","2B","2C","3A","3B","3C","3D","3E","4A","4B","4C"]
 const STALE_DAYS = 7
 
 const PHASES = [
-  { id: 1, name: "Connection",    steps: ["1A","1B","1C","1D","1E","1F"] },
+  { id: 1, name: "Connection",    steps: ["1A","1B","1C-1","1C-2","1C-3","1C-4","1C-5","1C-6","1C-7","1C-8","1C-9","1D","1E","1F"] },
   { id: 2, name: "Awareness",     steps: ["2A","2B","2C"] },
   { id: 3, name: "Stabilization", steps: ["3A","3B","3C","3D","3E"] },
   { id: 4, name: "Activation",    steps: ["4A","4B","4C"] },
 ]
 
 const STEP_LABELS: Record<string, string> = {
-  "1A": "Foundation Video",    "1B": "Getting to Know You",
-  "1C": "Leadership Triage",   "1D": "Open Share",
-  "1E": "Culture Takeaways",   "1F": "Schedule Orientation",
+  "1A": "Foundation Video",        "1B": "Getting to Know You",
+  "1C-1": "Triage: Self-Care",     "1C-2": "Triage: Wealth Creation",
+  "1C-3": "Triage: Literacy",      "1C-4": "Triage: Actualization",
+  "1C-5": "Triage: Succession",    "1C-6": "Triage: Outreach",
+  "1C-7": "Triage: Relationships", "1C-8": "Triage: Health",
+  "1C-9": "Triage: Open Reflection",
+  "1D": "Open Share",              "1E": "Culture Takeaways",
+  "1F": "Schedule Orientation",
   "2A": "360° Feedback",       "2B": "Growth Inputs",
   "2C": "Evening Pulse",       "3A": "Vision Activation",
   "3B": "Vision Statements",   "3C": "Ideal Day Narrative",
@@ -230,17 +228,6 @@ function TimelineSidebar({
   )
 }
 
-function parseLeaderScore(raw?: unknown): { question: string; score: number }[] | null {
-  if (!raw) return null
-  try {
-    const parsed = typeof raw === "string" ? JSON.parse(raw) : raw
-    if (!parsed?.answers) return null
-    return Object.entries(parsed.answers as Record<string, number>).map(([q, score]) => ({
-      question: `Q${q.replace("q", "")}`,
-      score,
-    }))
-  } catch { return null }
-}
 
 export default function ClientDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -323,7 +310,6 @@ export default function ClientDetailPage() {
   const awareness = profile?.awareness || {}
   const stabilization = profile?.stabilization || {}
   const activation = profile?.activation || {}
-  const leaderScoreData = parseLeaderScore(triage.pdlLeaderScore)
 
   return (
     <div className="space-y-6">
@@ -501,24 +487,24 @@ export default function ClientDetailPage() {
 
               <div>
                 <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground/40">Leadership Triage</p>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <Field label="Neurodiversity" value={triage.neurodiversity as string} />
-                  <Field label="Internal Wiring" value={triage.internalWiring as string} />
-                  <Field label="DISC Profile" value={triage.disc as string} />
+                <div className="space-y-6">
+                  {TRIAGE_DOMAINS.map((domain) => {
+                    const domainData = (triage as Record<string, Record<string, string>>)[domain.key]
+                    if (!domainData || domain.questions.every((q) => !domainData[q.key])) return null
+                    return (
+                      <div key={domain.key}>
+                        <p className="mb-2 text-xs font-bold text-primary">{domain.title}</p>
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                          {domain.questions.map((q) =>
+                            domainData[q.key] ? (
+                              <Field key={q.key} label={q.text} value={domainData[q.key]} />
+                            ) : null
+                          )}
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
-                {leaderScoreData && leaderScoreData.length > 0 && (
-                  <div className="mt-4">
-                    <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground/40">PDL Leadership Score</p>
-                    <ResponsiveContainer width="100%" height={240}>
-                      <RadarChart data={leaderScoreData}>
-                        <PolarGrid stroke="#b6954a" strokeOpacity={0.2} />
-                        <PolarAngleAxis dataKey="question" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} />
-                        <Radar dataKey="score" stroke="#b6954a" fill="#b6954a" fillOpacity={0.2} dot={{ r: 3, fill: "#b6954a" }} />
-                        <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid rgba(182,149,74,0.3)", borderRadius: 8, fontSize: 12, boxShadow: "0 8px 30px rgba(0,0,0,0.12)" }} />
-                      </RadarChart>
-                    </ResponsiveContainer>
-                  </div>
-                )}
               </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

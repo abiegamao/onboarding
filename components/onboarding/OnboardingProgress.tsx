@@ -10,7 +10,12 @@ const PHASE_META = [
 ]
 
 const STEP_LABELS: Record<string, string> = {
-  "1A": "Foundation Video", "1B": "Getting to Know You", "1C": "Your Triage",
+  "1A": "Foundation Video", "1B": "Getting to Know You",
+  "1C-1": "Triage: Self-Care", "1C-2": "Triage: Wealth Creation",
+  "1C-3": "Triage: Literacy", "1C-4": "Triage: Actualization",
+  "1C-5": "Triage: Succession", "1C-6": "Triage: Outreach",
+  "1C-7": "Triage: Relationships", "1C-8": "Triage: Health",
+  "1C-9": "Triage: Open Reflection",
   "1D": "Open Share", "1E": "Getting to Know Us", "1F": "Schedule Orientation",
   "2A": "360 Evaluation", "2B": "Growth Inputs", "2C": "Evening Pulse",
   "3A": "Vision Activation", "3B": "Vision Statements", "3C": "Ideal Day Narrative",
