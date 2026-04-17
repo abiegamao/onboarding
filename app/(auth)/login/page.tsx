@@ -1,5 +1,4 @@
-"use client"
-
+import { Suspense } from "react"
 import { LoginForm } from "@/components/login-form"
 import { ModeToggle } from "@/components/mode-toggle"
 import { Heart, Brain, Compass, Rocket } from "lucide-react"
@@ -153,7 +152,13 @@ export default function LoginPage() {
             </a>
           </div>
           <div className="w-full">
-            <LoginForm />
+            <Suspense fallback={
+              <div className="flex min-h-[200px] items-center justify-center">
+                <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+              </div>
+            }>
+              <LoginForm />
+            </Suspense>
           </div>
 
           {/* Mobile journey */}

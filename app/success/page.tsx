@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { Sparkles, ArrowRight, Heart, Play, Crown, Shield } from "lucide-react"
+import { Sparkles, ArrowRight, Heart, Shield } from "lucide-react"
+import Lottie from "lottie-react"
+import welcomeLottie from "@/public/assets/welcome-lottie.json"
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 import { toast } from "sonner"
 import { VideoPlayer } from "@/components/marketing/video-player"
@@ -46,19 +48,17 @@ export default function SuccessPage() {
             @keyframes welcomeFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
             @keyframes welcomeRing { 0% { transform: scale(0.8); opacity: 0; } 50% { opacity: 0.3; } 100% { transform: scale(1.6); opacity: 0; } }
           `}</style>
-          <div className="relative mx-auto w-48 h-48 flex items-center justify-center">
+          <div className="relative mx-auto w-48 h-48 md:w-80 md:h-80 flex items-center justify-center">
             <div className="absolute inset-0 rounded-full blur-3xl pointer-events-none" style={{
               background: "radial-gradient(circle, rgba(182,149,74,0.3) 0%, transparent 70%)",
               animation: "welcomeGlow 4s ease-in-out infinite",
             }} />
             <div className="absolute inset-0 rounded-full border border-primary/20" style={{ animation: "welcomeRing 3s ease-out infinite" }} />
             <div className="absolute inset-0 rounded-full border border-primary/15" style={{ animation: "welcomeRing 3s ease-out infinite 1s" }} />
-            <div className="relative w-32 h-32 rounded-full flex items-center justify-center" style={{
-              backgroundImage: "linear-gradient(135deg, var(--primary), var(--accent-foreground, #d4b483))",
-              boxShadow: "0 8px 40px rgba(182,149,74,0.3)",
+            <div className="relative w-48 h-48 md:w-80 md:h-80 flex items-center justify-center" style={{
               animation: "welcomeFloat 4s ease-in-out infinite",
             }}>
-              <Crown size={48} className="text-primary-foreground" />
+              <Lottie animationData={welcomeLottie} loop autoplay className="w-full h-full" />
             </div>
             <Shield size={20} className="text-primary/40 absolute -top-2 -right-2" style={{ animation: "welcomeFloat 3s ease-in-out infinite 0.5s" }} />
             <Heart size={16} className="text-primary/30 absolute -bottom-1 -left-3" style={{ animation: "welcomeFloat 3.5s ease-in-out infinite 1s" }} />
