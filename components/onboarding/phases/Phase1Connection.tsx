@@ -298,12 +298,17 @@ export function Phase1Connection({
                 <TriageDomainForm
                     title={STEP_TO_DOMAIN[currentStep].title}
                     questions={STEP_TO_DOMAIN[currentStep].questions}
-                    answers={formData[`triage_${STEP_TO_DOMAIN[currentStep].key}`] || {}}
+                    answers={
+                        formData[`triage_${STEP_TO_DOMAIN[currentStep].key}`] ||
+                        {}
+                    }
                     onChange={(q, val) =>
                         setFormData({
                             ...formData,
                             [`triage_${STEP_TO_DOMAIN[currentStep].key}`]: {
-                                ...formData[`triage_${STEP_TO_DOMAIN[currentStep].key}`],
+                                ...formData[
+                                    `triage_${STEP_TO_DOMAIN[currentStep].key}`
+                                ],
                                 [q]: val,
                             },
                         })

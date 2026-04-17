@@ -21,11 +21,11 @@ import {
 
 const phaseConfig = {
     clients: { label: "Clients" },
-    connection:    { label: "Connection",    color: "#f1ddb0" },
-    awareness:     { label: "Awareness",     color: "#d6b56c" },
+    connection: { label: "Connection", color: "#f1ddb0" },
+    awareness: { label: "Awareness", color: "#d6b56c" },
     stabilization: { label: "Stabilization", color: "#b6954a" },
-    activation:    { label: "Activation",    color: "#806b38" },
-    completed:     { label: "Completed",     color: "#10b981" },
+    activation: { label: "Activation", color: "#806b38" },
+    completed: { label: "Completed", color: "#10b981" },
 } satisfies ChartConfig
 
 export function PhaseDistributionChart({
@@ -42,48 +42,80 @@ export function PhaseDistributionChart({
         fill: `var(--color-${d.phase.toLowerCase()})`,
     }))
 
-    const total = React.useMemo(() => data.reduce((acc, d) => acc + d.count, 0), [data])
+    const total = React.useMemo(
+        () => data.reduce((acc, d) => acc + d.count, 0),
+        [data]
+    )
 
     return (
         <Card className="rounded-2xl border border-[#b6954a]/15 bg-card shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
             <CardHeader className="pb-2">
                 <div className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-[#b6954a]/50"></span>
-                    <CardTitle className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground/60 font-normal">
+                    <CardTitle className="font-mono text-[10px] font-normal tracking-[0.25em] text-muted-foreground/60 uppercase">
                         Phase Distribution
                     </CardTitle>
                 </div>
-                <CardDescription className="text-xs mt-1.5 text-muted-foreground/70">
-                    Breakdown of current active clients grouped by their primary engagement phase.
+                <CardDescription className="mt-1.5 text-xs text-muted-foreground/70">
+                    Breakdown of current active clients grouped by their primary
+                    engagement phase.
                 </CardDescription>
             </CardHeader>
-            <CardContent className="flex-1 pb-0 relative pt-4">
+            <CardContent className="relative flex-1 pt-4 pb-0">
                 {loading ? (
-                    <div className="absolute inset-0 flex items-center justify-center text-sm text-[#b6954a]/50 animate-pulse font-mono tracking-widest uppercase">
+                    <div className="absolute inset-0 flex animate-pulse items-center justify-center font-mono text-sm tracking-widest text-[#b6954a]/50 uppercase">
                         Loading…
                     </div>
                 ) : (
-                    <ChartContainer config={phaseConfig} className="mx-auto aspect-square max-h-[250px]">
+                    <ChartContainer
+                        config={phaseConfig}
+                        className="mx-auto aspect-square max-h-[250px]"
+                    >
                         <PieChart>
-                            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                            <Pie 
-                                data={chartData} 
-                                dataKey="clients" 
-                                nameKey="phase" 
-                                innerRadius={65} 
-                                strokeWidth={4} 
+                            <ChartTooltip
+                                cursor={false}
+                                content={<ChartTooltipContent hideLabel />}
+                            />
+                            <Pie
+                                data={chartData}
+                                dataKey="clients"
+                                nameKey="phase"
+                                innerRadius={65}
+                                strokeWidth={4}
                                 stroke="var(--background)"
-                                style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.1))' }}
+                                style={{
+                                    filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.1))",
+                                }}
                             >
                                 <Label
                                     content={({ viewBox }) => {
-                                        if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                                        if (
+                                            viewBox &&
+                                            "cx" in viewBox &&
+                                            "cy" in viewBox
+                                        ) {
                                             return (
-                                                <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
-                                                    <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-4xl font-extrabold tracking-tighter drop-shadow-sm">
+                                                <text
+                                                    x={viewBox.cx}
+                                                    y={viewBox.cy}
+                                                    textAnchor="middle"
+                                                    dominantBaseline="middle"
+                                                >
+                                                    <tspan
+                                                        x={viewBox.cx}
+                                                        y={viewBox.cy}
+                                                        className="fill-foreground text-4xl font-extrabold tracking-tighter drop-shadow-sm"
+                                                    >
                                                         {total}
                                                     </tspan>
-                                                    <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-muted-foreground text-xs uppercase tracking-wider font-semibold">
+                                                    <tspan
+                                                        x={viewBox.cx}
+                                                        y={
+                                                            (viewBox.cy || 0) +
+                                                            24
+                                                        }
+                                                        className="fill-muted-foreground text-xs font-semibold tracking-wider uppercase"
+                                                    >
                                                         Clients
                                                     </tspan>
                                                 </text>
@@ -98,13 +130,25 @@ export function PhaseDistributionChart({
             </CardContent>
             <CardFooter className="flex-wrap justify-center gap-x-5 gap-y-2 pt-6 pb-6">
                 {data.map((d) => (
-                    <span key={d.phase} className="flex items-center gap-2 text-xs font-medium text-muted-foreground/90 transition-colors hover:text-foreground">
+                    <span
+                        key={d.phase}
+                        className="flex items-center gap-2 text-xs font-medium text-muted-foreground/90 transition-colors hover:text-foreground"
+                    >
                         <span
                             className="inline-block h-2.5 w-2.5 rounded-full shadow-[inset_0_1px_3px_rgba(0,0,0,0.1)]"
-                            style={{ background: (phaseConfig as Record<string, { color?: string }>)[d.phase.toLowerCase()]?.color }}
+                            style={{
+                                background: (
+                                    phaseConfig as Record<
+                                        string,
+                                        { color?: string }
+                                    >
+                                )[d.phase.toLowerCase()]?.color,
+                            }}
                         />
                         {d.phase}
-                        <span className="text-foreground/80 font-bold ml-0.5">{d.count}</span>
+                        <span className="ml-0.5 font-bold text-foreground/80">
+                            {d.count}
+                        </span>
                     </span>
                 ))}
             </CardFooter>

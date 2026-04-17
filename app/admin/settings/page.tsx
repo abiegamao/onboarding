@@ -44,24 +44,48 @@ interface CurrentUser {
     role: string
 }
 
-function SectionHeader({ icon: Icon, title, description }: { icon: React.ElementType; title: string; description: string }) {
+function SectionHeader({
+    icon: Icon,
+    title,
+    description,
+}: {
+    icon: React.ElementType
+    title: string
+    description: string
+}) {
     return (
-        <div className="flex items-start gap-4 pb-6 border-b border-[#b6954a]/15">
+        <div className="flex items-start gap-4 border-b border-[#b6954a]/15 pb-6">
             <div className="rounded-xl bg-gradient-to-br from-[#b6954a]/15 to-[#b6954a]/5 p-3 ring-1 ring-[#b6954a]/10">
                 <Icon className="h-5 w-5 text-[#b6954a]" />
             </div>
             <div>
-                <h2 className="text-base font-semibold text-foreground">{title}</h2>
-                <p className="text-sm text-muted-foreground mt-0.5">{description}</p>
+                <h2 className="text-base font-semibold text-foreground">
+                    {title}
+                </h2>
+                <p className="mt-0.5 text-sm text-muted-foreground">
+                    {description}
+                </p>
             </div>
         </div>
     )
 }
 
-function StatusMessage({ type, message }: { type: "success" | "error"; message: string }) {
+function StatusMessage({
+    type,
+    message,
+}: {
+    type: "success" | "error"
+    message: string
+}) {
     return (
-        <div className={`flex items-center gap-2 rounded-lg px-4 py-3 text-sm ${type === "success" ? "bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20" : "bg-red-500/10 text-red-400 ring-1 ring-red-500/20"}`}>
-            {type === "success" ? <Check className="h-4 w-4 shrink-0" /> : <AlertCircle className="h-4 w-4 shrink-0" />}
+        <div
+            className={`flex items-center gap-2 rounded-lg px-4 py-3 text-sm ${type === "success" ? "bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20" : "bg-red-500/10 text-red-400 ring-1 ring-red-500/20"}`}
+        >
+            {type === "success" ? (
+                <Check className="h-4 w-4 shrink-0" />
+            ) : (
+                <AlertCircle className="h-4 w-4 shrink-0" />
+            )}
             {message}
         </div>
     )
@@ -72,7 +96,10 @@ function AccountTab({ user }: { user: CurrentUser | null }) {
     const [lastName, setLastName] = useState(user?.lastName ?? "")
     const [email, setEmail] = useState(user?.email ?? "")
     const [loading, setLoading] = useState(false)
-    const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null)
+    const [status, setStatus] = useState<{
+        type: "success" | "error"
+        message: string
+    } | null>(null)
 
     useEffect(() => {
         if (user) {
@@ -94,9 +121,15 @@ function AccountTab({ user }: { user: CurrentUser | null }) {
             })
             const data = await res.json()
             if (!res.ok) {
-                setStatus({ type: "error", message: data.error ?? "Failed to update profile" })
+                setStatus({
+                    type: "error",
+                    message: data.error ?? "Failed to update profile",
+                })
             } else {
-                setStatus({ type: "success", message: "Profile updated successfully" })
+                setStatus({
+                    type: "success",
+                    message: "Profile updated successfully",
+                })
             }
         } catch {
             setStatus({ type: "error", message: "Network error" })
@@ -107,11 +140,18 @@ function AccountTab({ user }: { user: CurrentUser | null }) {
 
     return (
         <Card className="rounded-2xl border border-[#b6954a]/20 bg-card p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-            <SectionHeader icon={User} title="Account Information" description="Update your name and email address" />
+            <SectionHeader
+                icon={User}
+                title="Account Information"
+                description="Update your name and email address"
+            />
             <form onSubmit={handleSave} className="mt-6 space-y-5">
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                        <Label htmlFor="firstName" className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
+                        <Label
+                            htmlFor="firstName"
+                            className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/70 uppercase"
+                        >
                             First Name
                         </Label>
                         <Input
@@ -123,7 +163,10 @@ function AccountTab({ user }: { user: CurrentUser | null }) {
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="lastName" className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
+                        <Label
+                            htmlFor="lastName"
+                            className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/70 uppercase"
+                        >
                             Last Name
                         </Label>
                         <Input
@@ -136,7 +179,10 @@ function AccountTab({ user }: { user: CurrentUser | null }) {
                     </div>
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="email" className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
+                    <Label
+                        htmlFor="email"
+                        className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/70 uppercase"
+                    >
                         Email Address
                     </Label>
                     <Input
@@ -148,15 +194,26 @@ function AccountTab({ user }: { user: CurrentUser | null }) {
                         required
                     />
                 </div>
-                {status && <StatusMessage type={status.type} message={status.message} />}
+                {status && (
+                    <StatusMessage
+                        type={status.type}
+                        message={status.message}
+                    />
+                )}
                 <div className="flex justify-end pt-2">
                     <Button
                         type="submit"
                         disabled={loading}
                         className="bg-[#b6954a] text-white hover:bg-[#d6b56c] disabled:opacity-50"
                     >
-                        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
-                        <span className="ml-2">{loading ? "Saving…" : "Save Changes"}</span>
+                        {loading ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                            <Check className="h-4 w-4" />
+                        )}
+                        <span className="ml-2">
+                            {loading ? "Saving…" : "Save Changes"}
+                        </span>
                     </Button>
                 </div>
             </form>
@@ -171,7 +228,10 @@ function SecurityTab() {
     const [showCurrent, setShowCurrent] = useState(false)
     const [showNew, setShowNew] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null)
+    const [status, setStatus] = useState<{
+        type: "success" | "error"
+        message: string
+    } | null>(null)
 
     async function handleSave(e: React.FormEvent) {
         e.preventDefault()
@@ -189,9 +249,15 @@ function SecurityTab() {
             })
             const data = await res.json()
             if (!res.ok) {
-                setStatus({ type: "error", message: data.error ?? "Failed to update password" })
+                setStatus({
+                    type: "error",
+                    message: data.error ?? "Failed to update password",
+                })
             } else {
-                setStatus({ type: "success", message: "Password updated successfully" })
+                setStatus({
+                    type: "success",
+                    message: "Password updated successfully",
+                })
                 setCurrentPassword("")
                 setNewPassword("")
                 setConfirmPassword("")
@@ -205,10 +271,17 @@ function SecurityTab() {
 
     return (
         <Card className="rounded-2xl border border-[#b6954a]/20 bg-card p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-            <SectionHeader icon={Lock} title="Security" description="Change your account password" />
+            <SectionHeader
+                icon={Lock}
+                title="Security"
+                description="Change your account password"
+            />
             <form onSubmit={handleSave} className="mt-6 space-y-5">
                 <div className="space-y-2">
-                    <Label htmlFor="currentPassword" className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
+                    <Label
+                        htmlFor="currentPassword"
+                        className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/70 uppercase"
+                    >
                         Current Password
                     </Label>
                     <div className="relative">
@@ -223,14 +296,21 @@ function SecurityTab() {
                         <button
                             type="button"
                             onClick={() => setShowCurrent((v) => !v)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-muted-foreground"
+                            className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground/50 hover:text-muted-foreground"
                         >
-                            {showCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                            {showCurrent ? (
+                                <EyeOff className="h-4 w-4" />
+                            ) : (
+                                <Eye className="h-4 w-4" />
+                            )}
                         </button>
                     </div>
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="newPassword" className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
+                    <Label
+                        htmlFor="newPassword"
+                        className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/70 uppercase"
+                    >
                         New Password
                     </Label>
                     <div className="relative">
@@ -246,15 +326,24 @@ function SecurityTab() {
                         <button
                             type="button"
                             onClick={() => setShowNew((v) => !v)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-muted-foreground"
+                            className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground/50 hover:text-muted-foreground"
                         >
-                            {showNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                            {showNew ? (
+                                <EyeOff className="h-4 w-4" />
+                            ) : (
+                                <Eye className="h-4 w-4" />
+                            )}
                         </button>
                     </div>
-                    <p className="text-xs text-muted-foreground/50">Minimum 8 characters</p>
+                    <p className="text-xs text-muted-foreground/50">
+                        Minimum 8 characters
+                    </p>
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="confirmPassword" className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
+                    <Label
+                        htmlFor="confirmPassword"
+                        className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/70 uppercase"
+                    >
                         Confirm New Password
                     </Label>
                     <Input
@@ -266,15 +355,26 @@ function SecurityTab() {
                         required
                     />
                 </div>
-                {status && <StatusMessage type={status.type} message={status.message} />}
+                {status && (
+                    <StatusMessage
+                        type={status.type}
+                        message={status.message}
+                    />
+                )}
                 <div className="flex justify-end pt-2">
                     <Button
                         type="submit"
                         disabled={loading}
                         className="bg-[#b6954a] text-white hover:bg-[#d6b56c] disabled:opacity-50"
                     >
-                        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
-                        <span className="ml-2">{loading ? "Updating…" : "Update Password"}</span>
+                        {loading ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                            <Lock className="h-4 w-4" />
+                        )}
+                        <span className="ml-2">
+                            {loading ? "Updating…" : "Update Password"}
+                        </span>
                     </Button>
                 </div>
             </form>
@@ -296,7 +396,10 @@ function CreateAdminDialog({
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [creating, setCreating] = useState(false)
-    const [formStatus, setFormStatus] = useState<{ type: "success" | "error"; message: string } | null>(null)
+    const [formStatus, setFormStatus] = useState<{
+        type: "success" | "error"
+        message: string
+    } | null>(null)
 
     function reset() {
         setFirstName("")
@@ -323,7 +426,10 @@ function CreateAdminDialog({
             })
             const data = await res.json()
             if (!res.ok) {
-                setFormStatus({ type: "error", message: data.error ?? "Failed to create admin" })
+                setFormStatus({
+                    type: "error",
+                    message: data.error ?? "Failed to create admin",
+                })
             } else {
                 reset()
                 onOpenChange(false)
@@ -345,10 +451,16 @@ function CreateAdminDialog({
                         New Admin
                     </DialogTitle>
                 </DialogHeader>
-                <form id="create-admin-form" onSubmit={handleCreate} className="space-y-4">
+                <form
+                    id="create-admin-form"
+                    onSubmit={handleCreate}
+                    className="space-y-4"
+                >
                     <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-2">
-                            <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">First Name</Label>
+                            <Label className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/70 uppercase">
+                                First Name
+                            </Label>
                             <Input
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
@@ -357,7 +469,9 @@ function CreateAdminDialog({
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">Last Name</Label>
+                            <Label className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/70 uppercase">
+                                Last Name
+                            </Label>
                             <Input
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
@@ -367,7 +481,9 @@ function CreateAdminDialog({
                         </div>
                     </div>
                     <div className="space-y-2">
-                        <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">Email</Label>
+                        <Label className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/70 uppercase">
+                            Email
+                        </Label>
                         <Input
                             type="email"
                             value={email}
@@ -377,7 +493,9 @@ function CreateAdminDialog({
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">Password</Label>
+                        <Label className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground/70 uppercase">
+                            Password
+                        </Label>
                         <Input
                             type="password"
                             value={password}
@@ -386,9 +504,16 @@ function CreateAdminDialog({
                             minLength={8}
                             required
                         />
-                        <p className="text-xs text-muted-foreground/50">Minimum 8 characters</p>
+                        <p className="text-xs text-muted-foreground/50">
+                            Minimum 8 characters
+                        </p>
                     </div>
-                    {formStatus && <StatusMessage type={formStatus.type} message={formStatus.message} />}
+                    {formStatus && (
+                        <StatusMessage
+                            type={formStatus.type}
+                            message={formStatus.message}
+                        />
+                    )}
                 </form>
                 <DialogFooter>
                     <Button
@@ -397,8 +522,14 @@ function CreateAdminDialog({
                         disabled={creating}
                         className="bg-[#b6954a] text-white hover:bg-[#d6b56c] disabled:opacity-50"
                     >
-                        {creating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
-                        <span className="ml-2">{creating ? "Creating…" : "Create Admin"}</span>
+                        {creating ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                            <Plus className="h-4 w-4" />
+                        )}
+                        <span className="ml-2">
+                            {creating ? "Creating…" : "Create Admin"}
+                        </span>
                     </Button>
                 </DialogFooter>
             </DialogContent>
@@ -428,12 +559,16 @@ function MembersTab({ currentUserId }: { currentUserId: string }) {
         }
     }
 
-    useEffect(() => { loadMembers() }, [])
+    useEffect(() => {
+        loadMembers()
+    }, [])
 
     async function handleDelete(id: string) {
         setDeleting(id)
         try {
-            const res = await fetch(`/api/admin/members/${id}`, { method: "DELETE" })
+            const res = await fetch(`/api/admin/members/${id}`, {
+                method: "DELETE",
+            })
             const data = await res.json()
             if (!res.ok) {
                 alert(data.error ?? "Failed to remove admin")
@@ -455,14 +590,18 @@ function MembersTab({ currentUserId }: { currentUserId: string }) {
                 onCreated={loadMembers}
             />
             <Card className="rounded-2xl border border-[#b6954a]/20 bg-card p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-                <div className="flex items-center justify-between pb-6 border-b border-[#b6954a]/15">
+                <div className="flex items-center justify-between border-b border-[#b6954a]/15 pb-6">
                     <div className="flex items-start gap-4">
                         <div className="rounded-xl bg-gradient-to-br from-[#b6954a]/15 to-[#b6954a]/5 p-3 ring-1 ring-[#b6954a]/10">
                             <Users className="h-5 w-5 text-[#b6954a]" />
                         </div>
                         <div>
-                            <h2 className="text-base font-semibold text-foreground">Admin Members</h2>
-                            <p className="text-sm text-muted-foreground mt-0.5">Manage admin accounts</p>
+                            <h2 className="text-base font-semibold text-foreground">
+                                Admin Members
+                            </h2>
+                            <p className="mt-0.5 text-sm text-muted-foreground">
+                                Manage admin accounts
+                            </p>
                         </div>
                     </div>
                     <Button
@@ -483,41 +622,48 @@ function MembersTab({ currentUserId }: { currentUserId: string }) {
                     ) : listError ? (
                         <StatusMessage type="error" message={listError} />
                     ) : members.length === 0 ? (
-                        <p className="text-center py-8 text-sm text-muted-foreground">No admin members found</p>
+                        <p className="py-8 text-center text-sm text-muted-foreground">
+                            No admin members found
+                        </p>
                     ) : (
                         members.map((m) => (
                             <div
                                 key={m._id}
-                                className="flex items-center justify-between rounded-xl border border-[#b6954a]/10 bg-background/30 px-4 py-3 group hover:border-[#b6954a]/20 transition-colors"
+                                className="group flex items-center justify-between rounded-xl border border-[#b6954a]/10 bg-background/30 px-4 py-3 transition-colors hover:border-[#b6954a]/20"
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#b6954a]/20 to-[#b6954a]/5 ring-1 ring-[#b6954a]/15 shrink-0">
+                                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#b6954a]/20 to-[#b6954a]/5 ring-1 ring-[#b6954a]/15">
                                         <span className="text-xs font-bold text-[#d6b56c]">
-                                            {m.firstName[0]}{m.lastName[0]}
+                                            {m.firstName[0]}
+                                            {m.lastName[0]}
                                         </span>
                                     </div>
                                     <div>
                                         <p className="text-sm font-medium text-foreground">
                                             {m.firstName} {m.lastName}
                                             {m._id === currentUserId && (
-                                                <span className="ml-2 rounded-full bg-[#b6954a]/15 px-2 py-0.5 text-[10px] font-mono uppercase tracking-wider text-[#b6954a]">
+                                                <span className="ml-2 rounded-full bg-[#b6954a]/15 px-2 py-0.5 font-mono text-[10px] tracking-wider text-[#b6954a] uppercase">
                                                     You
                                                 </span>
                                             )}
                                         </p>
-                                        <p className="text-xs text-muted-foreground">{m.email}</p>
+                                        <p className="text-xs text-muted-foreground">
+                                            {m.email}
+                                        </p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <div className="flex items-center gap-1.5 rounded-full bg-[#b6954a]/10 px-2.5 py-1 ring-1 ring-[#b6954a]/15">
                                         <Shield className="h-3 w-3 text-[#b6954a]" />
-                                        <span className="font-mono text-[9px] uppercase tracking-wider text-[#b6954a]">Admin</span>
+                                        <span className="font-mono text-[9px] tracking-wider text-[#b6954a] uppercase">
+                                            Admin
+                                        </span>
                                     </div>
                                     {m._id !== currentUserId && (
                                         <button
                                             onClick={() => handleDelete(m._id)}
                                             disabled={deleting === m._id}
-                                            className="rounded-lg p-1.5 text-muted-foreground/40 hover:bg-red-500/10 hover:text-red-400 transition-colors disabled:opacity-50"
+                                            className="rounded-lg p-1.5 text-muted-foreground/40 transition-colors hover:bg-red-500/10 hover:text-red-400 disabled:opacity-50"
                                             title="Remove admin"
                                         >
                                             {deleting === m._id ? (
@@ -556,15 +702,17 @@ export default function SettingsPage() {
     ]
 
     return (
-        <div className="max-w-2xl mx-auto space-y-6">
+        <div className="mx-auto max-w-2xl space-y-6">
             <div>
-                <h1 className="text-xl font-bold tracking-tight text-foreground">Settings</h1>
-                <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#b6954a]/70 mt-1">
+                <h1 className="text-xl font-bold tracking-tight text-foreground">
+                    Settings
+                </h1>
+                <p className="mt-1 font-mono text-[10px] tracking-[0.25em] text-[#b6954a]/70 uppercase">
                     Manage your account and admin access
                 </p>
             </div>
 
-            <div className="flex gap-1 rounded-xl border border-[#b6954a]/15 bg-card p-1.5 w-fit">
+            <div className="flex w-fit gap-1 rounded-xl border border-[#b6954a]/15 bg-card p-1.5">
                 {tabs.map((tab) => (
                     <button
                         key={tab.id}
@@ -572,10 +720,12 @@ export default function SettingsPage() {
                         className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 ${
                             activeTab === tab.id
                                 ? "bg-gradient-to-r from-[#b6954a]/15 to-transparent text-[#d6b56c] shadow-[inset_2px_0_0_#d6b56c] ring-1 ring-[#b6954a]/20"
-                                : "text-muted-foreground hover:text-foreground hover:bg-[#b6954a]/5"
+                                : "text-muted-foreground hover:bg-[#b6954a]/5 hover:text-foreground"
                         }`}
                     >
-                        <tab.icon className={`h-4 w-4 ${activeTab === tab.id ? "text-[#d6b56c]" : ""}`} />
+                        <tab.icon
+                            className={`h-4 w-4 ${activeTab === tab.id ? "text-[#d6b56c]" : ""}`}
+                        />
                         {tab.label}
                     </button>
                 ))}
@@ -583,7 +733,9 @@ export default function SettingsPage() {
 
             {activeTab === "account" && <AccountTab user={currentUser} />}
             {activeTab === "security" && <SecurityTab />}
-            {activeTab === "members" && <MembersTab currentUserId={currentUser?.id ?? ""} />}
+            {activeTab === "members" && (
+                <MembersTab currentUserId={currentUser?.id ?? ""} />
+            )}
         </div>
     )
 }

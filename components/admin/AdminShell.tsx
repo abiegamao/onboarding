@@ -17,7 +17,10 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                 />
             )}
 
-            <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+            <AdminSidebar
+                isOpen={sidebarOpen}
+                onClose={() => setSidebarOpen(false)}
+            />
 
             <div className="lg:ml-64">
                 <AdminTopbar onMenuToggle={() => setSidebarOpen((o) => !o)} />

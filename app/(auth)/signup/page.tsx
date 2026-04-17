@@ -5,38 +5,62 @@ import { ModeToggle } from "@/components/mode-toggle"
 import { Heart, Brain, Compass, Rocket, Check } from "lucide-react"
 
 const JOURNEY = [
-  { icon: Heart, phase: "01", title: "Connection", desc: "Build your foundation ~ get to know us and let us get to know you.", highlight: true },
-  { icon: Brain, phase: "02", title: "Awareness", desc: "360 evaluation, growth inputs, and evening pulse check-ins.", highlight: true },
-  { icon: Compass, phase: "03", title: "Stabilization", desc: "Vision activation, ideal day narrative, and family mission.", highlight: false },
-  { icon: Rocket, phase: "04", title: "Activation", desc: "Kickstart call, join the community, and set your wealth strategy.", highlight: false },
+    {
+        icon: Heart,
+        phase: "01",
+        title: "Connection",
+        desc: "Build your foundation ~ get to know us and let us get to know you.",
+        highlight: true,
+    },
+    {
+        icon: Brain,
+        phase: "02",
+        title: "Awareness",
+        desc: "360 evaluation, growth inputs, and evening pulse check-ins.",
+        highlight: true,
+    },
+    {
+        icon: Compass,
+        phase: "03",
+        title: "Stabilization",
+        desc: "Vision activation, ideal day narrative, and family mission.",
+        highlight: false,
+    },
+    {
+        icon: Rocket,
+        phase: "04",
+        title: "Activation",
+        desc: "Kickstart call, join the community, and set your wealth strategy.",
+        highlight: false,
+    },
 ]
 
 const PERKS = [
-  "Guided onboarding pathway",
-  "Personalized at every step",
-  "Track your progress",
-  "Unlock phases as you grow",
+    "Guided onboarding pathway",
+    "Personalized at every step",
+    "Track your progress",
+    "Unlock phases as you grow",
 ]
 
 export default function SignupPage() {
-  return (
-    <div className="relative min-h-svh w-full bg-background">
-      {/* Theme toggle */}
-      <div className="fixed top-4 right-4 z-20">
-        <ModeToggle />
-      </div>
+    return (
+        <div className="relative min-h-svh w-full bg-background">
+            {/* Theme toggle */}
+            <div className="fixed top-4 right-4 z-20">
+                <ModeToggle />
+            </div>
 
-      {/* Dashed Bottom Fade Grid */}
+            {/* Dashed Bottom Fade Grid */}
             <div
-                className="fixed inset-0 z-0 pointer-events-none"
+                className="pointer-events-none fixed inset-0 z-0"
                 style={{
-                backgroundImage: `
+                    backgroundImage: `
                     linear-gradient(to right, rgba(182, 149, 74, 0.15) 1px, transparent 1px),
                     linear-gradient(to bottom, rgba(182, 149, 74, 0.15) 1px, transparent 1px)
                 `,
-                backgroundSize: "20px 20px",
-                backgroundPosition: "0 0, 0 0",
-                maskImage: `
+                    backgroundSize: "20px 20px",
+                    backgroundPosition: "0 0, 0 0",
+                    maskImage: `
                     repeating-linear-gradient(
                         to right,
                         black 0px,
@@ -53,7 +77,7 @@ export default function SignupPage() {
                         ),
                         radial-gradient(ellipse 100% 80% at 50% 100%, #000 50%, transparent 90%)
                 `,
-                WebkitMaskImage: `
+                    WebkitMaskImage: `
                     repeating-linear-gradient(
                         to right,
                         black 0px,
@@ -70,16 +94,15 @@ export default function SignupPage() {
                         ),
                         radial-gradient(ellipse 100% 80% at 50% 100%, #000 50%, transparent 90%)
                 `,
-                maskComposite: "intersect",
-                WebkitMaskComposite: "source-in",
+                    maskComposite: "intersect",
+                    WebkitMaskComposite: "source-in",
                 }}
             />
 
-      <div className="relative z-10 w-full max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-start px-6 py-12">
-
-        {/* Left ~ Journey card */}
-        <div className="hidden lg:block lg:sticky lg:top-12 lg:self-start">
-          <style>{`
+            <div className="relative z-10 mx-auto grid w-full max-w-5xl grid-cols-1 items-start gap-16 px-6 py-12 lg:grid-cols-2 lg:gap-20">
+                {/* Left ~ Journey card */}
+                <div className="hidden lg:sticky lg:top-12 lg:block lg:self-start">
+                    <style>{`
             @keyframes jGlow { 0%, 100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } }
             @keyframes jShimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
             @keyframes jFadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
@@ -90,126 +113,210 @@ export default function SignupPage() {
             .j-step:nth-child(3) { animation-delay: 0.4s; }
             .j-step:nth-child(4) { animation-delay: 0.55s; }
           `}</style>
-          <div className="relative rounded-3xl overflow-hidden p-8 xl:p-10 bg-gradient-to-br from-[#f6f0e4] via-[#f9f5ed] to-[#f2eadb] dark:from-[#10241f] dark:via-[#1a2e28] dark:to-[#0d1f1a] border border-[#e0d5c0] dark:border-white/5">
-            {/* Glow orbs */}
-            <div className="absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl pointer-events-none" style={{
-              background: "radial-gradient(circle, rgba(182,149,74,0.15) 0%, transparent 70%)",
-              animation: "jGlow 6s ease-in-out infinite",
-            }} />
-            <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full blur-3xl pointer-events-none" style={{
-              background: "radial-gradient(circle, rgba(182,149,74,0.08) 0%, transparent 70%)",
-              animation: "jGlow 8s ease-in-out infinite 2s",
-            }} />
+                    <div className="relative overflow-hidden rounded-3xl border border-[#e0d5c0] bg-gradient-to-br from-[#f6f0e4] via-[#f9f5ed] to-[#f2eadb] p-8 xl:p-10 dark:border-white/5 dark:from-[#10241f] dark:via-[#1a2e28] dark:to-[#0d1f1a]">
+                        {/* Glow orbs */}
+                        <div
+                            className="pointer-events-none absolute top-0 right-0 h-64 w-64 rounded-full blur-3xl"
+                            style={{
+                                background:
+                                    "radial-gradient(circle, rgba(182,149,74,0.15) 0%, transparent 70%)",
+                                animation: "jGlow 6s ease-in-out infinite",
+                            }}
+                        />
+                        <div
+                            className="pointer-events-none absolute bottom-0 left-0 h-48 w-48 rounded-full blur-3xl"
+                            style={{
+                                background:
+                                    "radial-gradient(circle, rgba(182,149,74,0.08) 0%, transparent 70%)",
+                                animation: "jGlow 8s ease-in-out infinite 2s",
+                            }}
+                        />
 
-            <div className="relative z-10">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 mb-6" style={{
-                backgroundImage: "linear-gradient(90deg, rgba(182,149,74,0.15), rgba(212,180,131,0.15), rgba(182,149,74,0.15))",
-                backgroundSize: "200% 100%",
-                animation: "jShimmer 4s linear infinite",
-                border: "1px solid rgba(182,149,74,0.2)",
-              }}>
-                <Rocket size={10} className="text-primary" />
-                <span className="font-mono text-[9px] uppercase tracking-[4px] text-primary">Start Here</span>
-              </div>
+                        <div className="relative z-10">
+                            {/* Badge */}
+                            <div
+                                className="mb-6 inline-flex items-center gap-2 rounded-full px-3 py-1"
+                                style={{
+                                    backgroundImage:
+                                        "linear-gradient(90deg, rgba(182,149,74,0.15), rgba(212,180,131,0.15), rgba(182,149,74,0.15))",
+                                    backgroundSize: "200% 100%",
+                                    animation: "jShimmer 4s linear infinite",
+                                    border: "1px solid rgba(182,149,74,0.2)",
+                                }}
+                            >
+                                <Rocket size={10} className="text-primary" />
+                                <span className="font-mono text-[9px] tracking-[4px] text-primary uppercase">
+                                    Start Here
+                                </span>
+                            </div>
 
-              <h2 className="text-3xl xl:text-4xl font-bold text-foreground leading-[0.95] mb-3">
-                Begin{" "}
-                <span className="italic font-normal" style={{
-                  backgroundImage: "linear-gradient(135deg, #b6954a, #d4b483)",
-                  backgroundClip: "text",
-                  WebkitBackgroundClip: "text",
-                  color: "transparent",
-                  WebkitTextFillColor: "transparent",
-                }}>
-                  your journey.
-                </span>
-              </h2>
-              <p className="italic text-muted-foreground text-sm mb-8 max-w-sm leading-relaxed">
-                Create your account and step into a guided pathway designed to help you offload what weighs you down.
-              </p>
+                            <h2 className="mb-3 text-3xl leading-[0.95] font-bold text-foreground xl:text-4xl">
+                                Begin{" "}
+                                <span
+                                    className="font-normal italic"
+                                    style={{
+                                        backgroundImage:
+                                            "linear-gradient(135deg, #b6954a, #d4b483)",
+                                        backgroundClip: "text",
+                                        WebkitBackgroundClip: "text",
+                                        color: "transparent",
+                                        WebkitTextFillColor: "transparent",
+                                    }}
+                                >
+                                    your journey.
+                                </span>
+                            </h2>
+                            <p className="mb-8 max-w-sm text-sm leading-relaxed text-muted-foreground italic">
+                                Create your account and step into a guided
+                                pathway designed to help you offload what weighs
+                                you down.
+                            </p>
 
-              {/* Steps */}
-              <div className="space-y-1">
-                {JOURNEY.map((step, i) => (
-                  <div key={step.phase} className="j-step group flex gap-4 items-start">
-                    <div className="flex flex-col items-center">
-                      <div
-                        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110"
-                        style={{
-                          background: step.highlight ? "linear-gradient(135deg, rgba(182,149,74,0.25), rgba(212,180,131,0.2))" : "rgba(255,255,255,0.04)",
-                          border: step.highlight ? "1px solid rgba(182,149,74,0.3)" : "1px solid rgba(255,255,255,0.08)",
-                          boxShadow: step.highlight ? "0 0 20px rgba(182,149,74,0.1)" : "none",
-                        }}
-                      >
-                        <step.icon size={16} className={`transition-colors duration-300 ${step.highlight ? "text-primary" : "text-muted-foreground/70 group-hover:text-primary"}`} />
-                      </div>
-                      {i < JOURNEY.length - 1 && (
-                        <div className="w-px h-6 mt-1" style={{
-                          background: "linear-gradient(to bottom, rgba(182,149,74,0.25), transparent)",
-                          animation: "jPulseLine 3s ease-in-out infinite",
-                          animationDelay: `${i * 0.5}s`,
-                        }} />
-                      )}
+                            {/* Steps */}
+                            <div className="space-y-1">
+                                {JOURNEY.map((step, i) => (
+                                    <div
+                                        key={step.phase}
+                                        className="j-step group flex items-start gap-4"
+                                    >
+                                        <div className="flex flex-col items-center">
+                                            <div
+                                                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110"
+                                                style={{
+                                                    background: step.highlight
+                                                        ? "linear-gradient(135deg, rgba(182,149,74,0.25), rgba(212,180,131,0.2))"
+                                                        : "rgba(255,255,255,0.04)",
+                                                    border: step.highlight
+                                                        ? "1px solid rgba(182,149,74,0.3)"
+                                                        : "1px solid rgba(255,255,255,0.08)",
+                                                    boxShadow: step.highlight
+                                                        ? "0 0 20px rgba(182,149,74,0.1)"
+                                                        : "none",
+                                                }}
+                                            >
+                                                <step.icon
+                                                    size={16}
+                                                    className={`transition-colors duration-300 ${step.highlight ? "text-primary" : "text-muted-foreground/70 group-hover:text-primary"}`}
+                                                />
+                                            </div>
+                                            {i < JOURNEY.length - 1 && (
+                                                <div
+                                                    className="mt-1 h-6 w-px"
+                                                    style={{
+                                                        background:
+                                                            "linear-gradient(to bottom, rgba(182,149,74,0.25), transparent)",
+                                                        animation:
+                                                            "jPulseLine 3s ease-in-out infinite",
+                                                        animationDelay: `${i * 0.5}s`,
+                                                    }}
+                                                />
+                                            )}
+                                        </div>
+                                        <div className="pt-1.5 pb-2">
+                                            <div className="mb-1 flex items-center gap-2">
+                                                <span
+                                                    className="font-mono text-[8px] tracking-widest uppercase"
+                                                    style={{
+                                                        backgroundImage:
+                                                            "linear-gradient(90deg, #b6954a, #d4b483)",
+                                                        backgroundClip: "text",
+                                                        WebkitBackgroundClip:
+                                                            "text",
+                                                        color: "transparent",
+                                                        WebkitTextFillColor:
+                                                            "transparent",
+                                                    }}
+                                                >
+                                                    {step.phase}
+                                                </span>
+                                                <span className="text-sm font-bold text-foreground">
+                                                    {step.title}
+                                                </span>
+                                            </div>
+                                            <p className="text-xs leading-relaxed text-muted-foreground/70 italic">
+                                                {step.desc}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Perks */}
+                            <div
+                                className="mt-8 space-y-3 pt-6"
+                                style={{
+                                    borderTop:
+                                        "1px solid rgba(255,255,255,0.06)",
+                                }}
+                            >
+                                {PERKS.map((perk) => (
+                                    <div
+                                        key={perk}
+                                        className="flex items-center gap-3"
+                                    >
+                                        <div
+                                            className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full"
+                                            style={{
+                                                background:
+                                                    "linear-gradient(135deg, rgba(182,149,74,0.2), rgba(212,180,131,0.15))",
+                                            }}
+                                        >
+                                            <Check
+                                                size={10}
+                                                className="text-primary"
+                                            />
+                                        </div>
+                                        <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
+                                            {perk}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
-                    <div className="pt-1.5 pb-2">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="font-mono text-[8px] uppercase tracking-widest" style={{
-                          backgroundImage: "linear-gradient(90deg, #b6954a, #d4b483)",
-                          backgroundClip: "text",
-                          WebkitBackgroundClip: "text",
-                          color: "transparent",
-                          WebkitTextFillColor: "transparent",
-                        }}>{step.phase}</span>
-                        <span className="text-sm font-bold text-foreground">{step.title}</span>
-                      </div>
-                      <p className="italic text-muted-foreground/70 text-xs leading-relaxed">{step.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Perks */}
-              <div className="mt-8 pt-6 space-y-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-                {PERKS.map((perk) => (
-                  <div key={perk} className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0" style={{
-                      background: "linear-gradient(135deg, rgba(182,149,74,0.2), rgba(212,180,131,0.15))",
-                    }}>
-                      <Check size={10} className="text-primary" />
-                    </div>
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{perk}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right ~ Signup form */}
-        <div className="w-full max-w-sm mx-auto lg:mx-0 flex flex-col items-center gap-8">
-
-          <div className="w-full">
-            <SignupForm />
-          </div>
-
-          {/* Mobile journey */}
-          <div className="lg:hidden w-full pt-6 border-t border-border/40">
-            <p className="font-mono text-[9px] uppercase tracking-[4px] text-muted-foreground mb-4">Your Journey</p>
-            <div className="space-y-3">
-              {JOURNEY.map((step) => (
-                <div key={step.phase} className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${step.highlight ? "bg-primary/15" : "bg-muted"}`}>
-                    <step.icon size={13} className={step.highlight ? "text-primary" : "text-muted-foreground"} />
-                  </div>
-                  <span className="text-xs font-semibold">{step.title}</span>
-                  <span className="font-mono text-[8px] text-muted-foreground ml-auto">{step.phase}</span>
                 </div>
-              ))}
+
+                {/* Right ~ Signup form */}
+                <div className="mx-auto flex w-full max-w-sm flex-col items-center gap-8 lg:mx-0">
+                    <div className="w-full">
+                        <SignupForm />
+                    </div>
+
+                    {/* Mobile journey */}
+                    <div className="w-full border-t border-border/40 pt-6 lg:hidden">
+                        <p className="mb-4 font-mono text-[9px] tracking-[4px] text-muted-foreground uppercase">
+                            Your Journey
+                        </p>
+                        <div className="space-y-3">
+                            {JOURNEY.map((step) => (
+                                <div
+                                    key={step.phase}
+                                    className="flex items-center gap-3"
+                                >
+                                    <div
+                                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${step.highlight ? "bg-primary/15" : "bg-muted"}`}
+                                    >
+                                        <step.icon
+                                            size={13}
+                                            className={
+                                                step.highlight
+                                                    ? "text-primary"
+                                                    : "text-muted-foreground"
+                                            }
+                                        />
+                                    </div>
+                                    <span className="text-xs font-semibold">
+                                        {step.title}
+                                    </span>
+                                    <span className="ml-auto font-mono text-[8px] text-muted-foreground">
+                                        {step.phase}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  )
+    )
 }

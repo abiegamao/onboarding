@@ -6,7 +6,8 @@ import User from "@/models/User"
 
 export async function PATCH(req: Request) {
     const auth = await requireAuth()
-    if (!auth) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    if (!auth)
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
     const body = await req.json()
     const currentPassword = String(body.currentPassword || "")
@@ -16,10 +17,16 @@ export async function PATCH(req: Request) {
         return NextResponse.json({ error: "Missing fields" }, { status: 400 })
     }
     if (newPassword.length < 8) {
-        return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 })
+        return NextResponse.json(
+            { error: "Password must be at least 8 characters" },
+            { status: 400 }
+        )
     }
     if (newPassword.length > 128) {
-        return NextResponse.json({ error: "Password too long" }, { status: 400 })
+        return NextResponse.json(
+            { error: "Password too long" },
+            { status: 400 }
+        )
     }
 
     await connectDB()
@@ -31,7 +38,10 @@ export async function PATCH(req: Request) {
 
     const valid = await bcrypt.compare(currentPassword, user.password)
     if (!valid) {
-        return NextResponse.json({ error: "Current password is incorrect" }, { status: 400 })
+        return NextResponse.json(
+            { error: "Current password is incorrect" },
+            { status: 400 }
+        )
     }
 
     const hashed = await bcrypt.hash(newPassword, 12)

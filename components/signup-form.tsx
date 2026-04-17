@@ -199,7 +199,6 @@ export function SignupForm({
         setIsCountryValid(Boolean(selectedCountryCode))
     }, [values.countryRegion, selectedCountryCode])
 
-
     function handleCountryInputChange(nextValue: string) {
         setCountryQuery(nextValue)
 
@@ -231,7 +230,6 @@ export function SignupForm({
             setIsSelectingCountry(false)
         }, 0)
     }
-
 
     useEffect(() => {
         async function fetchCitySuggestions() {
@@ -376,8 +374,10 @@ export function SignupForm({
                 return false
             }
 
-
-            if (normalizedPhoneNumber.length < 6 || normalizedPhoneNumber.length > 15) {
+            if (
+                normalizedPhoneNumber.length < 6 ||
+                normalizedPhoneNumber.length > 15
+            ) {
                 toast.error("Enter a valid phone number")
                 return false
             }
@@ -816,11 +816,14 @@ export function SignupForm({
                                 placeholder="+1 123 456 7890"
                                 maxLength={FIELD_LIMITS.phoneNumber + 5}
                                 value={values.phoneNumber}
-                                onChange={(e) => updateValue("phoneNumber", e.target.value)}
+                                onChange={(e) =>
+                                    updateValue("phoneNumber", e.target.value)
+                                }
                                 className="h-12 border-border/50 bg-secondary"
                             />
                             <FieldDescription>
-                                Please enter your full phone number with country code.
+                                Please enter your full phone number with country
+                                code.
                             </FieldDescription>
                         </Field>
                     </>

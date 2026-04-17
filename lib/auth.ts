@@ -9,7 +9,10 @@ export async function requireAuth(): Promise<{ userId: string } | null> {
     if (!token) return null
 
     try {
-        const { payload } = await jwtVerify(token, new TextEncoder().encode(JWT_SECRET))
+        const { payload } = await jwtVerify(
+            token,
+            new TextEncoder().encode(JWT_SECRET)
+        )
         const userId = (payload as any).userId
         if (!userId) return null
         return { userId }

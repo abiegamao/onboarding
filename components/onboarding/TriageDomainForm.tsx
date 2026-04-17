@@ -25,7 +25,7 @@ export function TriageDomainForm({
             <div className="space-y-8">
                 {questions.map((q, i) => (
                     <div key={q.key} className="space-y-3">
-                        <label className="block text-sm font-semibold leading-relaxed text-foreground/80">
+                        <label className="block text-sm leading-relaxed font-semibold text-foreground/80">
                             <span className="mr-2 font-mono text-primary">
                                 {String(i + 1).padStart(2, "0")}
                             </span>
@@ -34,7 +34,7 @@ export function TriageDomainForm({
                         <textarea
                             value={answers[q.key] || ""}
                             onChange={(e) => onChange(q.key, e.target.value)}
-                            className="min-h-[130px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-base leading-relaxed outline-none transition-all focus:border-primary/30 focus:ring-2 focus:ring-primary/20"
+                            className="min-h-[130px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-base leading-relaxed transition-all outline-none focus:border-primary/30 focus:ring-2 focus:ring-primary/20"
                             placeholder="Share your thoughts..."
                         />
                     </div>

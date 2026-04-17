@@ -4,6 +4,7 @@ import { jwtVerify } from "jose"
 import connectDB from "@/lib/mongodb"
 import User from "@/models/User"
 import OnboardingProfile from "@/models/OnboardingProfile"
+import redis, { withCache } from "@/lib/redis"
 
 const JWT_SECRET = process.env.JWT_SECRET || "peace-driven-default-secret-key"
 
@@ -61,15 +62,22 @@ export async function GET() {
                 { status: 404 }
             )
 
-        const profile = await getOrCreateProfile(userId)
+        const data = await withCache(
+            `onboarding:progress:${userId}`,
+            30,
+            async () => {
+                const profile = await getOrCreateProfile(userId)
+                return {
+                    onboardingStatus: profile.status,
+                    connection: profile.connection,
+                    awareness: profile.awareness,
+                    stabilization: profile.stabilization,
+                    activation: profile.activation,
+                }
+            }
+        )
 
-        return NextResponse.json({
-            onboardingStatus: profile.status,
-            connection: profile.connection,
-            awareness: profile.awareness,
-            stabilization: profile.stabilization,
-            activation: profile.activation,
-        })
+        return NextResponse.json(data)
     } catch (error) {
         console.error("Progress fetch error:", error)
         return NextResponse.json({ error: "Internal Error" }, { status: 500 })
@@ -121,6 +129,8 @@ export async function PATCH(req: Request) {
             update,
             { returnDocument: "after", upsert: true }
         )
+
+        await redis.del(`onboarding:progress:${userId}`)
 
         return NextResponse.json(profile?.status)
     } catch (error) {

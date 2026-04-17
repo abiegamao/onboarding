@@ -8,20 +8,28 @@ export async function DELETE(
     { params }: { params: Promise<{ id: string }> }
 ) {
     const admin = await requireAdmin()
-    if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    if (!admin)
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
     const { id } = await params
 
     if (id === admin.userId) {
-        return NextResponse.json({ error: "Cannot delete your own account" }, { status: 400 })
+        return NextResponse.json(
+            { error: "Cannot delete your own account" },
+            { status: 400 }
+        )
     }
 
     await connectDB()
 
     const target = await User.findById(id).select("role")
-    if (!target) return NextResponse.json({ error: "User not found" }, { status: 404 })
+    if (!target)
+        return NextResponse.json({ error: "User not found" }, { status: 404 })
     if (target.role !== "admin") {
-        return NextResponse.json({ error: "Target is not an admin" }, { status: 400 })
+        return NextResponse.json(
+            { error: "Target is not an admin" },
+            { status: 400 }
+        )
     }
 
     await User.findByIdAndDelete(id)

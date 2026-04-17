@@ -52,9 +52,7 @@ export async function loadCountries() {
                     }))
                     .filter(
                         (country) =>
-                            country.name &&
-                            country.iso2 &&
-                            country.phoneCode
+                            country.name && country.iso2 && country.phoneCode
                     )
             })
             .catch((error) => {

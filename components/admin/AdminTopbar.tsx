@@ -64,22 +64,22 @@ export function AdminTopbar({ onMenuToggle }: { onMenuToggle?: () => void }) {
     const pageTitle = PAGE_TITLES[pathname] ?? "Admin"
 
     return (
-        <header className="fixed left-0 right-0 top-0 z-40 flex h-16 items-center justify-between border-b border-[#b6954a]/20 bg-background/80 px-4 backdrop-blur-md lg:left-64 lg:px-8 shadow-[0_4px_30px_rgba(182,149,74,0.03)] transition-colors duration-300">
+        <header className="fixed top-0 right-0 left-0 z-40 flex h-16 items-center justify-between border-b border-[#b6954a]/20 bg-background/80 px-4 shadow-[0_4px_30px_rgba(182,149,74,0.03)] backdrop-blur-md transition-colors duration-300 lg:left-64 lg:px-8">
             {/* Left: hamburger (mobile) + page title */}
             <div className="flex items-center gap-4">
                 <button
                     onClick={onMenuToggle}
-                    className="lg:hidden rounded-xl p-2.5 text-muted-foreground hover:bg-[#b6954a]/10 hover:text-[#b6954a] transition-colors"
+                    className="rounded-xl p-2.5 text-muted-foreground transition-colors hover:bg-[#b6954a]/10 hover:text-[#b6954a] lg:hidden"
                 >
                     <Menu className="h-5 w-5" />
                 </button>
                 <div className="flex flex-col justify-center">
-                    <h1 className="text-xl font-bold text-foreground leading-none tracking-tight">
+                    <h1 className="text-xl leading-none font-bold tracking-tight text-foreground">
                         {pageTitle}
                     </h1>
-                    <div className="flex items-center gap-2 mt-1">
+                    <div className="mt-1 flex items-center gap-2">
                         <span className="h-1 w-1 rounded-full bg-[#b6954a] shadow-[0_0_8px_rgba(182,149,74,0.8)]"></span>
-                        <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-muted-foreground/60">
+                        <p className="font-mono text-[9px] tracking-[0.25em] text-muted-foreground/60 uppercase">
                             Admin Panel
                         </p>
                     </div>
@@ -91,7 +91,7 @@ export function AdminTopbar({ onMenuToggle }: { onMenuToggle?: () => void }) {
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="h-9 w-9 rounded-full text-muted-foreground hover:bg-[#b6954a]/10 hover:text-[#b6954a] transition-colors"
+                    className="h-9 w-9 rounded-full text-muted-foreground transition-colors hover:bg-[#b6954a]/10 hover:text-[#b6954a]"
                 >
                     <Bell className="h-4.5 w-4.5" />
                 </Button>
@@ -100,16 +100,16 @@ export function AdminTopbar({ onMenuToggle }: { onMenuToggle?: () => void }) {
                     <ModeToggle />
                 </div>
 
-                <div className="h-6 w-px bg-[#b6954a]/20 mx-1" />
+                <div className="mx-1 h-6 w-px bg-[#b6954a]/20" />
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button
                             variant="ghost"
-                            className="relative h-10 w-10 rounded-full p-0 hover:bg-[#b6954a]/10 transition-colors focus-visible:ring-[#b6954a]/50"
+                            className="relative h-10 w-10 rounded-full p-0 transition-colors hover:bg-[#b6954a]/10 focus-visible:ring-[#b6954a]/50"
                         >
                             <Avatar className="h-9 w-9 border border-[#b6954a]/30 shadow-sm transition-transform hover:scale-105">
-                                <AvatarFallback className="bg-gradient-to-br from-[#b6954a]/20 to-[#b6954a]/5 text-[#b6954a] text-xs font-bold uppercase tracking-wider">
+                                <AvatarFallback className="bg-gradient-to-br from-[#b6954a]/20 to-[#b6954a]/5 text-xs font-bold tracking-wider text-[#b6954a] uppercase">
                                     {user
                                         ? `${user.firstName[0]}${user.lastName[0]}`
                                         : "AD"}
@@ -117,27 +117,34 @@ export function AdminTopbar({ onMenuToggle }: { onMenuToggle?: () => void }) {
                             </Avatar>
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56 rounded-2xl border-[#b6954a]/20 shadow-xl" align="end" sideOffset={8}>
-                        <DropdownMenuLabel className="font-normal px-4 py-3">
+                    <DropdownMenuContent
+                        className="w-56 rounded-2xl border-[#b6954a]/20 shadow-xl"
+                        align="end"
+                        sideOffset={8}
+                    >
+                        <DropdownMenuLabel className="px-4 py-3 font-normal">
                             <div className="flex flex-col gap-1">
                                 <p className="text-sm font-semibold tracking-wide text-foreground">
                                     {user
                                         ? `${user.firstName} ${user.lastName}`
                                         : "Admin User"}
                                 </p>
-                                <p className="text-xs text-muted-foreground truncate">
+                                <p className="truncate text-xs text-muted-foreground">
                                     {user?.email ?? "System Access"}
                                 </p>
                             </div>
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator className="bg-[#b6954a]/10" />
-                        <DropdownMenuItem disabled className="text-xs text-muted-foreground/70 px-4 py-2 font-mono uppercase tracking-wider">
+                        <DropdownMenuItem
+                            disabled
+                            className="px-4 py-2 font-mono text-xs tracking-wider text-muted-foreground/70 uppercase"
+                        >
                             Role: Administrator
                         </DropdownMenuItem>
                         <DropdownMenuSeparator className="bg-[#b6954a]/10" />
                         <DropdownMenuItem
                             onClick={handleLogout}
-                            className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive px-4 py-2.5 rounded-xl m-1 transition-colors"
+                            className="m-1 cursor-pointer rounded-xl px-4 py-2.5 text-destructive transition-colors focus:bg-destructive/10 focus:text-destructive"
                         >
                             <LogOut className="mr-2 h-4 w-4" />
                             Log out

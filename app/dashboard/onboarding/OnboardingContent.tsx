@@ -9,7 +9,6 @@ import { Phase3Stabilization } from "@/components/onboarding/phases/Phase3Stabil
 import { Phase4Activation } from "@/components/onboarding/phases/Phase4Activation"
 import { TRIAGE_DOMAINS, STEP_TO_DOMAIN } from "@/lib/triageConfig"
 
-
 function splitListInput(value: string) {
     return value
         .split(/[\n,]/)
@@ -87,11 +86,21 @@ export default function OnboardingContent() {
                             q5: data.connection?.triage?.selfCare?.q5 || "",
                         },
                         triage_wealthCreation: {
-                            q1: data.connection?.triage?.wealthCreation?.q1 || "",
-                            q2: data.connection?.triage?.wealthCreation?.q2 || "",
-                            q3: data.connection?.triage?.wealthCreation?.q3 || "",
-                            q4: data.connection?.triage?.wealthCreation?.q4 || "",
-                            q5: data.connection?.triage?.wealthCreation?.q5 || "",
+                            q1:
+                                data.connection?.triage?.wealthCreation?.q1 ||
+                                "",
+                            q2:
+                                data.connection?.triage?.wealthCreation?.q2 ||
+                                "",
+                            q3:
+                                data.connection?.triage?.wealthCreation?.q3 ||
+                                "",
+                            q4:
+                                data.connection?.triage?.wealthCreation?.q4 ||
+                                "",
+                            q5:
+                                data.connection?.triage?.wealthCreation?.q5 ||
+                                "",
                         },
                         triage_literacy: {
                             q1: data.connection?.triage?.literacy?.q1 || "",
@@ -101,11 +110,21 @@ export default function OnboardingContent() {
                             q5: data.connection?.triage?.literacy?.q5 || "",
                         },
                         triage_actualization: {
-                            q1: data.connection?.triage?.actualization?.q1 || "",
-                            q2: data.connection?.triage?.actualization?.q2 || "",
-                            q3: data.connection?.triage?.actualization?.q3 || "",
-                            q4: data.connection?.triage?.actualization?.q4 || "",
-                            q5: data.connection?.triage?.actualization?.q5 || "",
+                            q1:
+                                data.connection?.triage?.actualization?.q1 ||
+                                "",
+                            q2:
+                                data.connection?.triage?.actualization?.q2 ||
+                                "",
+                            q3:
+                                data.connection?.triage?.actualization?.q3 ||
+                                "",
+                            q4:
+                                data.connection?.triage?.actualization?.q4 ||
+                                "",
+                            q5:
+                                data.connection?.triage?.actualization?.q5 ||
+                                "",
                         },
                         triage_succession: {
                             q1: data.connection?.triage?.succession?.q1 || "",
@@ -122,11 +141,21 @@ export default function OnboardingContent() {
                             q5: data.connection?.triage?.outreach?.q5 || "",
                         },
                         triage_relationships: {
-                            q1: data.connection?.triage?.relationships?.q1 || "",
-                            q2: data.connection?.triage?.relationships?.q2 || "",
-                            q3: data.connection?.triage?.relationships?.q3 || "",
-                            q4: data.connection?.triage?.relationships?.q4 || "",
-                            q5: data.connection?.triage?.relationships?.q5 || "",
+                            q1:
+                                data.connection?.triage?.relationships?.q1 ||
+                                "",
+                            q2:
+                                data.connection?.triage?.relationships?.q2 ||
+                                "",
+                            q3:
+                                data.connection?.triage?.relationships?.q3 ||
+                                "",
+                            q4:
+                                data.connection?.triage?.relationships?.q4 ||
+                                "",
+                            q5:
+                                data.connection?.triage?.relationships?.q5 ||
+                                "",
                         },
                         triage_health: {
                             q1: data.connection?.triage?.health?.q1 || "",
@@ -136,7 +165,9 @@ export default function OnboardingContent() {
                             q5: data.connection?.triage?.health?.q5 || "",
                         },
                         triage_openReflection: {
-                            q1: data.connection?.triage?.openReflection?.q1 || "",
+                            q1:
+                                data.connection?.triage?.openReflection?.q1 ||
+                                "",
                         },
                         open_share: data.connection?.openShare || "",
                         culture_takeaways:
@@ -262,10 +293,14 @@ export default function OnboardingContent() {
             if (nextStep === "1A") nextStep = "1B"
             else if (nextStep === "1B") nextStep = "1C-1"
             else if (nextStep.startsWith("1C-")) {
-                const idx = TRIAGE_DOMAINS.findIndex((d) => d.stepId === nextStep)
-                nextStep = idx < TRIAGE_DOMAINS.length - 1 ? TRIAGE_DOMAINS[idx + 1].stepId : "1D"
-            }
-            else if (nextStep === "1D") nextStep = "1E"
+                const idx = TRIAGE_DOMAINS.findIndex(
+                    (d) => d.stepId === nextStep
+                )
+                nextStep =
+                    idx < TRIAGE_DOMAINS.length - 1
+                        ? TRIAGE_DOMAINS[idx + 1].stepId
+                        : "1D"
+            } else if (nextStep === "1D") nextStep = "1E"
             else if (nextStep === "1E") nextStep = "1F"
             else if (nextStep === "1F") {
                 nextPhase = 2
@@ -424,10 +459,11 @@ export default function OnboardingContent() {
             if (prevStep === "1B") prevStep = "1A"
             else if (prevStep === "1C-1") prevStep = "1B"
             else if (prevStep.startsWith("1C-")) {
-                const idx = TRIAGE_DOMAINS.findIndex((d) => d.stepId === prevStep)
+                const idx = TRIAGE_DOMAINS.findIndex(
+                    (d) => d.stepId === prevStep
+                )
                 prevStep = idx > 0 ? TRIAGE_DOMAINS[idx - 1].stepId : "1B"
-            }
-            else if (prevStep === "1D") prevStep = "1C-9"
+            } else if (prevStep === "1D") prevStep = "1C-9"
             else if (prevStep === "1E") prevStep = "1D"
             else if (prevStep === "1F") prevStep = "1E"
             else if (prevStep === "2A") {
@@ -742,18 +778,29 @@ export default function OnboardingContent() {
                             Up next
                         </p>
                         <p className="text-sm font-medium text-foreground/70">
-                            {(
+                            {
                                 <>
                                     {currentStep === "1A" &&
                                         "Getting to Know You"}
-                                    {currentStep === "1B" && "Self-Care — Triage"}
-                                    {currentStep.startsWith("1C-") && (() => {
-                                        const idx = TRIAGE_DOMAINS.findIndex((d) => d.stepId === currentStep)
-                                        const next = TRIAGE_DOMAINS[idx + 1]
-                                        return next
-                                            ? next.title.split(" | ")[0].replace(/^[IVX]+\.\s+/, "") + " — Triage"
-                                            : "Open Share"
-                                    })()}
+                                    {currentStep === "1B" &&
+                                        "Self-Care — Triage"}
+                                    {currentStep.startsWith("1C-") &&
+                                        (() => {
+                                            const idx =
+                                                TRIAGE_DOMAINS.findIndex(
+                                                    (d) =>
+                                                        d.stepId === currentStep
+                                                )
+                                            const next = TRIAGE_DOMAINS[idx + 1]
+                                            return next
+                                                ? next.title
+                                                      .split(" | ")[0]
+                                                      .replace(
+                                                          /^[IVX]+\.\s+/,
+                                                          ""
+                                                      ) + " — Triage"
+                                                : "Open Share"
+                                        })()}
                                     {currentStep === "1D" &&
                                         "Getting to Know Us"}
                                     {currentStep === "1E" &&
@@ -776,7 +823,7 @@ export default function OnboardingContent() {
                                     {currentStep === "4C" &&
                                         "Complete Your Pathway"}
                                 </>
-                            )}
+                            }
                         </p>
                     </div>
 
@@ -796,9 +843,11 @@ export default function OnboardingContent() {
                             disabled={isUpdating}
                             className="group relative h-12 overflow-hidden rounded-xl border border-transparent px-10 text-sm font-bold tracking-wider uppercase transition-all duration-300 hover:border-primary/20 disabled:cursor-not-allowed disabled:opacity-40"
                             style={{
-                                backgroundImage: "linear-gradient(135deg, var(--primary), var(--accent-foreground, #d4b483))",
+                                backgroundImage:
+                                    "linear-gradient(135deg, var(--primary), var(--accent-foreground, #d4b483))",
                                 color: "var(--primary-foreground)",
-                                boxShadow: "0 4px 24px rgba(182,149,74,0.25), 0 0 0 1px rgba(182,149,74,0.1)",
+                                boxShadow:
+                                    "0 4px 24px rgba(182,149,74,0.25), 0 0 0 1px rgba(182,149,74,0.1)",
                             }}
                         >
                             <span className="relative z-10 flex items-center gap-2">
