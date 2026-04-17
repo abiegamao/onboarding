@@ -2,20 +2,9 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import {
-  PieChart,
-  Pie,
-  Cell,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  LineChart,
-  Line,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts"
+import { LineChart, Line, ResponsiveContainer, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts"
+import { StepFunnelChart } from "@/components/admin/charts/bar-chart"
+import { PhaseDistributionChart } from "@/components/admin/charts/pie-chart"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Users, TrendingUp, CheckCircle2, Clock } from "lucide-react"
@@ -31,7 +20,6 @@ interface Stats {
   completionTrend: { week: string; count: number }[]
 }
 
-const PHASE_COLORS = ["#6366f1", "#8b5cf6", "#a78bfa", "#c4b5fd", "#ddd6fe"]
 
 function StatCard({
   label,
@@ -113,165 +101,51 @@ export default function AdminDashboard() {
         ))}
       </div>
 
-      {/* Charts row 1 */}
+      {/* Charts — left: 3 stacked, right: step funnel */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <ChartCard title="Phase Distribution">
-          {loading ? (
-            <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
-              Loading…
-            </div>
-          ) : (
-            <ResponsiveContainer width="100%" height={220}>
-              <PieChart>
-                <Pie
-                  data={stats?.phaseDistribution}
-                  dataKey="count"
-                  nameKey="phase"
-                  cx="40%"
-                  cy="50%"
-                  outerRadius={80}
-                  innerRadius={48}
-                  paddingAngle={3}
-                >
-                  {stats?.phaseDistribution.map((_, i) => (
-                    <Cell key={i} fill={PHASE_COLORS[i % PHASE_COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{
-                    background: "var(--card)",
-                    border: "1px solid var(--border)",
-                    borderRadius: 8,
-                    fontSize: 12,
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          )}
-          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
-            {stats?.phaseDistribution.map((d, i) => (
-              <span key={d.phase} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <span
-                  className="inline-block h-2 w-2 rounded-full"
-                  style={{ background: PHASE_COLORS[i % PHASE_COLORS.length] }}
-                />
-                {d.phase} ({d.count})
-              </span>
-            ))}
-          </div>
-        </ChartCard>
+        {/* Left column */}
+        <div className="flex flex-col gap-4">
+          <PhaseDistributionChart data={stats?.phaseDistribution ?? []} loading={loading} />
 
-        <ChartCard title="Step Funnel — Drop-off">
-          {loading ? (
-            <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
-              Loading…
-            </div>
-          ) : (
-            <ResponsiveContainer width="100%" height={260}>
-              <BarChart
-                data={stats?.stepFunnel}
-                layout="vertical"
-                margin={{ left: 16, right: 16, top: 0, bottom: 0 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" horizontal={false} />
-                <XAxis type="number" tick={{ fontSize: 10 }} stroke="var(--muted-foreground)" />
-                <YAxis
-                  type="category"
-                  dataKey="step"
-                  width={28}
-                  tick={{ fontSize: 9 }}
-                  stroke="var(--muted-foreground)"
-                />
-                <Tooltip
-                  contentStyle={{
-                    background: "var(--card)",
-                    border: "1px solid var(--border)",
-                    borderRadius: 8,
-                    fontSize: 12,
-                  }}
-                />
-                <Bar dataKey="count" fill="#6366f1" radius={[0, 4, 4, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          )}
-        </ChartCard>
-      </div>
+          <ChartCard title="New Registrations (8 weeks)">
+            {loading ? (
+              <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
+                Loading…
+              </div>
+            ) : (
+              <ResponsiveContainer width="100%" height={180}>
+                <LineChart data={stats?.registrationTrend}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="week" tick={{ fontSize: 9 }} stroke="var(--muted-foreground)" tickFormatter={(v) => v.slice(5)} />
+                  <YAxis allowDecimals={false} tick={{ fontSize: 10 }} stroke="var(--muted-foreground)" />
+                  <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }} />
+                  <Line type="monotone" dataKey="count" stroke="#6366f1" strokeWidth={2} dot={{ r: 3, fill: "#6366f1" }} activeDot={{ r: 5 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            )}
+          </ChartCard>
 
-      {/* Charts row 2 */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <ChartCard title="New Registrations (8 weeks)">
-          {loading ? (
-            <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
-              Loading…
-            </div>
-          ) : (
-            <ResponsiveContainer width="100%" height={180}>
-              <LineChart data={stats?.registrationTrend}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                <XAxis
-                  dataKey="week"
-                  tick={{ fontSize: 9 }}
-                  stroke="var(--muted-foreground)"
-                  tickFormatter={(v) => v.slice(5)}
-                />
-                <YAxis allowDecimals={false} tick={{ fontSize: 10 }} stroke="var(--muted-foreground)" />
-                <Tooltip
-                  contentStyle={{
-                    background: "var(--card)",
-                    border: "1px solid var(--border)",
-                    borderRadius: 8,
-                    fontSize: 12,
-                  }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="count"
-                  stroke="#6366f1"
-                  strokeWidth={2}
-                  dot={{ r: 3, fill: "#6366f1" }}
-                  activeDot={{ r: 5 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          )}
-        </ChartCard>
+          <ChartCard title="Completions (8 weeks)">
+            {loading ? (
+              <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
+                Loading…
+              </div>
+            ) : (
+              <ResponsiveContainer width="100%" height={180}>
+                <LineChart data={stats?.completionTrend}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="week" tick={{ fontSize: 9 }} stroke="var(--muted-foreground)" tickFormatter={(v) => v.slice(5)} />
+                  <YAxis allowDecimals={false} tick={{ fontSize: 10 }} stroke="var(--muted-foreground)" />
+                  <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }} />
+                  <Line type="monotone" dataKey="count" stroke="#10b981" strokeWidth={2} dot={{ r: 3, fill: "#10b981" }} activeDot={{ r: 5 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            )}
+          </ChartCard>
+        </div>
 
-        <ChartCard title="Completions (8 weeks)">
-          {loading ? (
-            <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
-              Loading…
-            </div>
-          ) : (
-            <ResponsiveContainer width="100%" height={180}>
-              <LineChart data={stats?.completionTrend}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                <XAxis
-                  dataKey="week"
-                  tick={{ fontSize: 9 }}
-                  stroke="var(--muted-foreground)"
-                  tickFormatter={(v) => v.slice(5)}
-                />
-                <YAxis allowDecimals={false} tick={{ fontSize: 10 }} stroke="var(--muted-foreground)" />
-                <Tooltip
-                  contentStyle={{
-                    background: "var(--card)",
-                    border: "1px solid var(--border)",
-                    borderRadius: 8,
-                    fontSize: 12,
-                  }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="count"
-                  stroke="#10b981"
-                  strokeWidth={2}
-                  dot={{ r: 3, fill: "#10b981" }}
-                  activeDot={{ r: 5 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          )}
-        </ChartCard>
+        {/* Right column */}
+        <StepFunnelChart data={stats?.stepFunnel ?? []} loading={loading} />
       </div>
 
       {/* Quick clients link */}
