@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback, useRef } from "react"
+import { useEffect, useState, useCallback, useRef, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Card } from "@/components/ui/card"
@@ -90,7 +90,7 @@ function SkeletonRow() {
   )
 }
 
-export default function ClientsPage() {
+function ClientsPageInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -375,5 +375,24 @@ export default function ClientsPage() {
         </div>
       </Card>
     </div>
+  )
+}
+
+export default function ClientsPage() {
+  return (
+    <Suspense fallback={
+      <Card className="rounded-2xl border border-[#b6954a]/15 bg-card shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
+        <div className="flex flex-wrap items-center gap-3 border-b border-[#b6954a]/10 bg-muted/10 px-6 py-4">
+          <div className="h-8 flex-1 min-w-48 bg-[#b6954a]/5 animate-pulse rounded-lg" />
+          <div className="h-8 w-24 bg-[#b6954a]/5 animate-pulse rounded-lg" />
+          <div className="h-8 w-24 bg-[#b6954a]/5 animate-pulse rounded-lg" />
+        </div>
+        <div className="divide-y divide-[#b6954a]/10">
+          {Array.from({ length: 5 }).map((_, i) => <SkeletonRow key={i} />)}
+        </div>
+      </Card>
+    }>
+      <ClientsPageInner />
+    </Suspense>
   )
 }
