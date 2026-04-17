@@ -21,7 +21,7 @@ import {
 const funnelConfig = {
     count: {
         label: "Clients",
-        color: "#6366f1",
+        color: "#b6954a",
     },
     label: {
         color: "var(--background)",
@@ -30,15 +30,21 @@ const funnelConfig = {
 
 export function StepFunnelChart({ data, loading }: { data: { step: string; count: number }[]; loading?: boolean }) {
     return (
-        <Card className="flex h-full flex-col rounded-2xl border border-border/50 shadow-sm">
-            <CardHeader>
-                <CardTitle className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground/60 font-normal">
-                    Step Funnel — Drop-off
-                </CardTitle>
+        <Card className="flex h-full flex-col rounded-2xl border border-[#b6954a]/15 bg-card shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+            <CardHeader className="pb-2">
+                <div className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#b6954a]/50"></span>
+                    <CardTitle className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground/60 font-normal">
+                        Step Funnel — Drop-off
+                    </CardTitle>
+                </div>
+                <CardDescription className="text-xs mt-1.5 text-muted-foreground/70">
+                    Track client progression and identify drop-off points in the onboarding workflow.
+                </CardDescription>
             </CardHeader>
-            <CardContent className="flex-1 min-h-0 overflow-y-auto">
+            <CardContent className="flex-1 min-h-[300px] overflow-y-auto pt-4 relative">
                 {loading ? (
-                    <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
+                    <div className="absolute inset-0 flex items-center justify-center text-sm text-[#b6954a]/50 animate-pulse font-mono tracking-widest uppercase">
                         Loading…
                     </div>
                 ) : (
@@ -50,7 +56,7 @@ export function StepFunnelChart({ data, loading }: { data: { step: string; count
                         margin={{ right: 16 }}
                         barCategoryGap="20%"
                     >
-                        <CartesianGrid horizontal={false} />
+                        <CartesianGrid horizontal={false} strokeDasharray="3 3" stroke="var(--border)" strokeOpacity={0.5} />
                         <YAxis
                             dataKey="step"
                             type="category"
@@ -60,22 +66,22 @@ export function StepFunnelChart({ data, loading }: { data: { step: string; count
                         />
                         <XAxis dataKey="count" type="number" hide />
                         <ChartTooltip
-                            cursor={false}
+                            cursor={{ fill: 'rgba(182,149,74,0.05)' }}
                             content={<ChartTooltipContent indicator="line" />}
                         />
-                        <Bar dataKey="count" fill="var(--color-count)" radius={4}>
+                        <Bar dataKey="count" fill="var(--color-count)" radius={6}>
                             <LabelList
                                 dataKey="step"
                                 position="insideLeft"
-                                offset={8}
-                                className="fill-(--color-label)"
+                                offset={12}
+                                className="fill-(--color-label) font-medium"
                                 fontSize={12}
                             />
                             <LabelList
                                 dataKey="count"
                                 position="right"
-                                offset={8}
-                                className="fill-foreground"
+                                offset={12}
+                                className="fill-foreground font-bold"
                                 fontSize={12}
                             />
                         </Bar>

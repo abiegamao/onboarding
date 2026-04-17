@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { LineChart, Line, ResponsiveContainer, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts"
 import { StepFunnelChart } from "@/components/admin/charts/bar-chart"
+import { CompletionsBarChart } from "@/components/admin/charts/bar-chart-vertical"
 import { PhaseDistributionChart } from "@/components/admin/charts/pie-chart"
+import { RegistrationAreaChart } from "@/components/admin/charts/area-chart"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Users, TrendingUp, CheckCircle2, Clock } from "lucide-react"
@@ -20,7 +21,6 @@ interface Stats {
   completionTrend: { week: string; count: number }[]
 }
 
-
 function StatCard({
   label,
   value,
@@ -33,27 +33,26 @@ function StatCard({
   warn?: boolean
 }) {
   return (
-    <Card className="relative overflow-hidden rounded-2xl border border-border/50 bg-card p-6 shadow-sm">
-      <div className="flex items-start justify-between">
+    <Card className={`relative overflow-hidden rounded-2xl border ${warn ? 'border-amber-500/20' : 'border-[#b6954a]/20'} bg-card p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(182,149,74,0.08)] group`}>
+      <div className="flex items-start justify-between relative z-10">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground/60">
+          <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground/60 group-hover:text-foreground/80 transition-colors">
             {label}
           </p>
-          <p className={`mt-2 text-4xl font-extrabold tracking-tight ${warn && value ? "text-amber-500" : "text-foreground"}`}>
+          <p className={`mt-2 text-4xl font-extrabold tracking-tight ${warn && value ? "text-amber-500" : "text-foreground"} drop-shadow-sm`}>
             {value ?? "—"}
           </p>
         </div>
-        <div className={`rounded-xl p-2.5 ${warn ? "bg-amber-500/10" : "bg-primary/8"}`}>
-          <Icon className={`h-5 w-5 ${warn ? "text-amber-500" : "text-primary"}`} />
+        <div className={`rounded-xl p-3 shadow-[inset_0_1px_3px_rgba(255,255,255,0.1)] transition-transform duration-300 group-hover:scale-110 ${warn ? "bg-gradient-to-br from-amber-500/15 to-transparent" : "bg-gradient-to-br from-[#b6954a]/15 to-[#b6954a]/5 ring-1 ring-[#b6954a]/10"}`}>
+          <Icon className={`h-5 w-5 ${warn ? "text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]" : "text-[#b6954a] drop-shadow-[0_0_8px_rgba(182,149,74,0.4)]"}`} />
         </div>
       </div>
       <div
-        className="absolute bottom-0 left-0 h-0.5 w-full"
+        className="absolute bottom-0 left-0 h-1 w-full transition-opacity duration-300 opacity-30 group-hover:opacity-60"
         style={{
           backgroundImage: warn
             ? "linear-gradient(90deg, rgb(245 158 11), transparent)"
-            : "linear-gradient(90deg, var(--primary), transparent)",
-          opacity: 0.3,
+            : "linear-gradient(90deg, #b6954a, transparent)",
         }}
       />
     </Card>
@@ -62,8 +61,9 @@ function StatCard({
 
 function ChartCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <Card className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm">
-      <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground/60">
+    <Card className="rounded-2xl border border-[#b6954a]/15 bg-card p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+      <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground/60 flex items-center gap-2">
+        <span className="h-1.5 w-1.5 rounded-full bg-[#b6954a]/50"></span>
         {title}
       </p>
       {children}
@@ -107,41 +107,9 @@ export default function AdminDashboard() {
         <div className="flex flex-col gap-4">
           <PhaseDistributionChart data={stats?.phaseDistribution ?? []} loading={loading} />
 
-          <ChartCard title="New Registrations (8 weeks)">
-            {loading ? (
-              <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
-                Loading…
-              </div>
-            ) : (
-              <ResponsiveContainer width="100%" height={180}>
-                <LineChart data={stats?.registrationTrend}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                  <XAxis dataKey="week" tick={{ fontSize: 9 }} stroke="var(--muted-foreground)" tickFormatter={(v) => v.slice(5)} />
-                  <YAxis allowDecimals={false} tick={{ fontSize: 10 }} stroke="var(--muted-foreground)" />
-                  <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }} />
-                  <Line type="monotone" dataKey="count" stroke="#6366f1" strokeWidth={2} dot={{ r: 3, fill: "#6366f1" }} activeDot={{ r: 5 }} />
-                </LineChart>
-              </ResponsiveContainer>
-            )}
-          </ChartCard>
+          <RegistrationAreaChart data={stats?.registrationTrend ?? []} loading={loading} />
 
-          <ChartCard title="Completions (8 weeks)">
-            {loading ? (
-              <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
-                Loading…
-              </div>
-            ) : (
-              <ResponsiveContainer width="100%" height={180}>
-                <LineChart data={stats?.completionTrend}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                  <XAxis dataKey="week" tick={{ fontSize: 9 }} stroke="var(--muted-foreground)" tickFormatter={(v) => v.slice(5)} />
-                  <YAxis allowDecimals={false} tick={{ fontSize: 10 }} stroke="var(--muted-foreground)" />
-                  <Tooltip contentStyle={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 }} />
-                  <Line type="monotone" dataKey="count" stroke="#10b981" strokeWidth={2} dot={{ r: 3, fill: "#10b981" }} activeDot={{ r: 5 }} />
-                </LineChart>
-              </ResponsiveContainer>
-            )}
-          </ChartCard>
+          <CompletionsBarChart data={stats?.completionTrend ?? []} loading={loading} />
         </div>
 
         {/* Right column */}
@@ -149,24 +117,25 @@ export default function AdminDashboard() {
       </div>
 
       {/* Quick clients link */}
-      <Card className="rounded-2xl border border-border/50 bg-card shadow-sm">
-        <div className="flex items-center justify-between border-b border-border/40 px-6 py-4">
+      <Card className="relative overflow-hidden rounded-2xl border border-[#b6954a]/20 bg-card shadow-[0_8px_30px_rgb(182,149,74,0.03)] group">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#b6954a]/5 to-transparent pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity" />
+        <div className="flex items-center justify-between border-b border-[#b6954a]/10 px-6 py-4 relative z-10">
           <div>
-            <h2 className="text-sm font-semibold text-foreground">Clients</h2>
-            <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/50">
-              {stats?.totalClients ?? "—"} total
+            <h2 className="text-sm font-semibold text-foreground tracking-wide">Clients Database</h2>
+            <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#b6954a]/80 mt-1">
+              {stats?.totalClients ?? "—"} total registered
             </p>
           </div>
-          <Button asChild size="sm" variant="outline" className="h-8 rounded-lg border-border/50 text-xs">
-            <Link href="/admin/clients">View All</Link>
+          <Button asChild size="sm" variant="outline" className="h-8 rounded-lg border-[#b6954a]/20 text-xs hover:bg-[#b6954a]/10 hover:text-[#b6954a]">
+            <Link href="/admin/clients">View Registry</Link>
           </Button>
         </div>
-        <div className="px-6 py-8 text-center text-sm text-muted-foreground">
-          Go to{" "}
-          <Link href="/admin/clients" className="text-primary underline underline-offset-2">
-            Clients
+        <div className="px-6 py-8 text-center text-sm text-muted-foreground relative z-10">
+          Access the{" "}
+          <Link href="/admin/clients" className="font-medium text-[#b6954a] transition-all hover:text-[#d6b56c] underline underline-offset-4 decoration-[#b6954a]/30 hover:decoration-[#d6b56c]">
+            Client Registry
           </Link>{" "}
-          to search, filter, and view individual progress.
+          to search, filter, and monitor individual executive progress.
         </div>
       </Card>
     </div>
