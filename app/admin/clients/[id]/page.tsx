@@ -18,7 +18,6 @@ import {
   ChevronDown,
   CheckCircle2,
   Circle,
-  Lock,
   AlertTriangle,
   MapPin,
   Phone,
@@ -27,7 +26,6 @@ import {
 } from "lucide-react"
 
 const STEPS = ["1A","1B","1C","1D","1E","1F","2A","2B","2C","3A","3B","3C","3D","3E","4A","4B","4C"]
-const LOCKED_STEPS = new Set(["2C", "3E"])
 const STALE_DAYS = 7
 
 const PHASES = [
@@ -205,18 +203,16 @@ function TimelineSidebar({
                       {phase.steps.map((step) => {
                         const done = stepDone(step)
                         const active = !status.isCompleted && step === status.currentStep
-                        const locked = LOCKED_STEPS.has(step) && !done && !active
                         return (
                           <div key={step} className="flex items-center gap-1.5">
                             <div className={`h-1.5 w-1.5 shrink-0 rounded-full ${
-                              done ? "bg-emerald-500" : active ? "bg-primary" : locked ? "bg-border/30" : "bg-border/50"
+                              done ? "bg-emerald-500" : active ? "bg-primary" : "bg-border/50"
                             }`} />
                             <span className={`truncate text-xs leading-tight ${
-                              active ? "font-semibold text-primary" : done ? "text-muted-foreground/60" : locked ? "text-muted-foreground/25" : "text-muted-foreground/50"
+                              active ? "font-semibold text-primary" : done ? "text-muted-foreground/60" : "text-muted-foreground/50"
                             }`}>
                               {STEP_LABELS[step]}
                             </span>
-                            {locked && <Lock className="h-2.5 w-2.5 shrink-0 text-muted-foreground/25" />}
                             {active && <span className="shrink-0 rounded bg-primary/10 px-1 font-mono text-[10px] text-primary">NOW</span>}
                           </div>
                         )

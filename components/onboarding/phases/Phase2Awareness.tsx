@@ -104,61 +104,58 @@ export function Phase2Awareness({ currentStep, formData, setFormData }: Phase2Pr
       )}
 
       {currentStep === "2C" && (
-        <div className="space-y-10 max-w-2xl animate-in fade-in duration-700">
-          <div className="p-10 rounded-[3rem] bg-neutral-900 text-neutral-50 shadow-2xl space-y-10 border border-white/5">
-            <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-2xl bg-primary/20 flex items-center justify-center">
-                <Moon className="h-6 w-6 text-primary" />
+        <div className="space-y-8 max-w-2xl animate-in fade-in duration-700">
+          <div className="flex items-center gap-4">
+            <div className="h-12 w-12 rounded-2xl bg-primary/20 flex items-center justify-center">
+              <Moon className="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold font-serif">The Evening Pulse</h3>
+              <p className="text-primary/70 text-sm">Release. Reflect. Realign.</p>
+            </div>
+          </div>
+
+          <div className="space-y-8">
+            <div className="space-y-6">
+              <div className="flex justify-between items-end">
+                <label className="text-sm font-bold uppercase tracking-widest text-primary">Current Peace Level</label>
+                <span className="text-3xl font-bold text-primary">{formData.pulse_level || 5}</span>
               </div>
-              <div>
-                <h3 className="text-2xl font-bold font-serif">The Evening Pulse</h3>
-                <p className="text-primary/70 text-sm">Release. Reflect. Realign.</p>
+              <Slider
+                value={[formData.pulse_level || 5]}
+                onValueChange={(val) => setFormData({...formData, pulse_level: val[0]})}
+                max={10}
+                step={1}
+                className="py-4"
+              />
+              <div className="flex justify-between text-[10px] uppercase font-bold text-muted-foreground/50 tracking-tighter">
+                <span>Extreme Chaos</span>
+                <span>Deep Peace</span>
               </div>
             </div>
 
-            <div className="space-y-8">
-              {/* Peace Rating */}
-              <div className="space-y-6">
-                <div className="flex justify-between items-end">
-                  <label className="text-sm font-bold uppercase tracking-widest text-primary">Current Peace Level</label>
-                  <span className="text-3xl font-bold text-primary">{formData.pulse_level || 5}</span>
-                </div>
-                <Slider 
-                  value={[formData.pulse_level || 5]}
-                  onValueChange={(val) => setFormData({...formData, pulse_level: val[0]})}
-                  max={10} 
-                  step={1} 
-                  className="py-4"
-                />
-                <div className="flex justify-between text-[10px] uppercase font-bold text-neutral-500 tracking-tighter">
-                  <span>Extreme Chaos</span>
-                  <span>Deep Peace</span>
-                </div>
-              </div>
+            <div className="space-y-4">
+              <label className="text-sm font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+                <Star className="h-3 w-3" /> What went well today?
+              </label>
+              <textarea
+                value={formData.pulse_good}
+                onChange={(e) => setFormData({...formData, pulse_good: e.target.value})}
+                className="w-full bg-muted/40 border border-border rounded-2xl p-4 focus:ring-2 focus:ring-primary/40 outline-none transition-all min-h-[100px]"
+                placeholder="Celebrate a small win..."
+              />
+            </div>
 
-              <div className="space-y-4">
-                <label className="text-sm font-bold uppercase tracking-widest text-primary flex items-center gap-2">
-                  <Star className="h-3 w-3" /> What went well today?
-                </label>
-                <textarea 
-                  value={formData.pulse_good}
-                  onChange={(e) => setFormData({...formData, pulse_good: e.target.value})}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:ring-2 focus:ring-primary/40 outline-none transition-all min-h-[100px]"
-                  placeholder="Celebrate a small win..."
-                />
-              </div>
-
-              <div className="space-y-4">
-                <label className="text-sm font-bold uppercase tracking-widest text-primary flex items-center gap-2">
-                  <Heart className="h-3 w-3" /> What felt heavy today?
-                </label>
-                <textarea 
-                  value={formData.pulse_heavy}
-                  onChange={(e) => setFormData({...formData, pulse_heavy: e.target.value})}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:ring-2 focus:ring-primary/40 outline-none transition-all min-h-[100px]"
-                  placeholder="What are you ready to release?"
-                />
-              </div>
+            <div className="space-y-4">
+              <label className="text-sm font-bold uppercase tracking-widest text-primary flex items-center gap-2">
+                <Heart className="h-3 w-3" /> What felt heavy today?
+              </label>
+              <textarea
+                value={formData.pulse_heavy}
+                onChange={(e) => setFormData({...formData, pulse_heavy: e.target.value})}
+                className="w-full bg-muted/40 border border-border rounded-2xl p-4 focus:ring-2 focus:ring-primary/40 outline-none transition-all min-h-[100px]"
+                placeholder="What are you ready to release?"
+              />
             </div>
           </div>
         </div>

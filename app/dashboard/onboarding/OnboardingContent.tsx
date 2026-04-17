@@ -8,7 +8,6 @@ import { Phase2Awareness } from "@/components/onboarding/phases/Phase2Awareness"
 import { Phase3Stabilization } from "@/components/onboarding/phases/Phase3Stabilization"
 import { Phase4Activation } from "@/components/onboarding/phases/Phase4Activation"
 
-const LOCKED_STEPS = ["2C", "3E"]
 
 function splitListInput(value: string) {
     return value
@@ -233,12 +232,6 @@ export default function OnboardingContent() {
                 dataToSave["onboardingStatus.isCompleted"] = true
             }
 
-            if (LOCKED_STEPS.includes(nextStep)) {
-                toast.info("This phase is locked for now.")
-                setIsUpdating(false)
-                return
-            }
-
             const res = await fetch("/api/onboarding/progress", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
@@ -433,8 +426,6 @@ export default function OnboardingContent() {
     }
 
     const currentStep = status?.currentStep || "1A"
-    const isLocked = LOCKED_STEPS.includes(currentStep)
-
     return (
         <div className="animate-in space-y-10 duration-1000 fade-in slide-in-from-bottom-4">
             {/* Header */}
@@ -688,11 +679,10 @@ export default function OnboardingContent() {
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <p className="mb-0.5 font-mono text-[10px] tracking-widest text-muted-foreground/50 uppercase">
-                            {isLocked ? "Locked" : "Up next"}
+                            Up next
                         </p>
                         <p className="text-sm font-medium text-foreground/70">
-                            {isLocked && "Next phase coming soon..."}
-                            {!isLocked && (
+                            {(
                                 <>
                                     {currentStep === "1A" &&
                                         "Getting to Know You"}
@@ -737,21 +727,12 @@ export default function OnboardingContent() {
 
                         <button
                             onClick={handleContinue}
-                            disabled={isUpdating || isLocked}
+                            disabled={isUpdating}
                             className="group relative h-12 overflow-hidden rounded-xl border border-transparent px-10 text-sm font-bold tracking-wider uppercase transition-all duration-300 hover:border-primary/20 disabled:cursor-not-allowed disabled:opacity-40"
                             style={{
-                                backgroundImage: isLocked
-                                    ? "none"
-                                    : "linear-gradient(135deg, var(--primary), var(--accent-foreground, #d4b483))",
-                                backgroundColor: isLocked
-                                    ? "var(--muted)"
-                                    : undefined,
-                                color: isLocked
-                                    ? "var(--muted-foreground)"
-                                    : "var(--primary-foreground)",
-                                boxShadow: isLocked
-                                    ? "none"
-                                    : "0 4px 24px rgba(182,149,74,0.25), 0 0 0 1px rgba(182,149,74,0.1)",
+                                backgroundImage: "linear-gradient(135deg, var(--primary), var(--accent-foreground, #d4b483))",
+                                color: "var(--primary-foreground)",
+                                boxShadow: "0 4px 24px rgba(182,149,74,0.25), 0 0 0 1px rgba(182,149,74,0.1)",
                             }}
                         >
                             <span className="relative z-10 flex items-center gap-2">
@@ -760,8 +741,6 @@ export default function OnboardingContent() {
                                         <span className="h-4 w-4 animate-spin rounded-full border-2 border-current/30 border-t-current" />
                                         Saving
                                     </>
-                                ) : isLocked ? (
-                                    "Locked"
                                 ) : currentStep === "4C" ? (
                                     status?.onboardingStatus?.isCompleted ? (
                                         "Dashboard"
@@ -787,7 +766,7 @@ export default function OnboardingContent() {
                                     </>
                                 )}
                             </span>
-                            {!isLocked && !isUpdating && (
+                            {!isUpdating && (
                                 <span
                                     className="absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                                     style={{
