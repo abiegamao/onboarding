@@ -88,8 +88,8 @@ function Field({ label, value }: { label: string; value?: unknown }) {
   if (!display.trim()) return null
   return (
     <div className="space-y-0.5">
-      <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/50">{label}</p>
-      <p className="text-sm text-foreground whitespace-pre-wrap">{display}</p>
+      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50">{label}</p>
+      <p className="text-base text-foreground whitespace-pre-wrap">{display}</p>
     </div>
   )
 }
@@ -122,19 +122,19 @@ function PhaseSection({
         className="flex w-full items-center justify-between px-6 py-4 text-left transition-colors hover:bg-primary/3"
       >
         <div className="flex items-center gap-3">
-          <div className={`flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold ${
+          <div className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
             isDone ? "bg-emerald-500 text-white" :
             isActive ? "bg-primary text-white" :
             "bg-border/40 text-muted-foreground/50"
           }`}>
             {isDone ? <CheckCircle2 className="h-3.5 w-3.5" /> : phaseId}
           </div>
-          <span className="text-sm font-semibold text-foreground">{title}</span>
+          <span className="text-base font-semibold text-foreground">{title}</span>
           {isDone && (
-            <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-500">Done</span>
+            <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-500">Done</span>
           )}
           {isActive && (
-            <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">In Progress</span>
+            <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">In Progress</span>
           )}
         </div>
         <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
@@ -167,7 +167,7 @@ function TimelineSidebar({
           onClick={() => setExpanded((v) => !v)}
           className="flex w-full items-center justify-between px-5 py-4 lg:cursor-default lg:pointer-events-none"
         >
-          <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/50">Journey</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground/50">Journey</p>
           <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform lg:hidden ${expanded ? "rotate-180" : ""}`} />
         </button>
 
@@ -194,7 +194,7 @@ function TimelineSidebar({
                   <div className="flex-1 min-w-0">
                     <button
                       onClick={() => scrollToPhase(phase.id)}
-                      className={`text-left text-xs font-semibold leading-tight hover:text-primary transition-colors ${
+                      className={`text-left text-sm font-semibold leading-tight hover:text-primary transition-colors ${
                         isActive ? "text-primary" : isDone ? "text-foreground" : "text-muted-foreground/50"
                       }`}
                     >
@@ -211,13 +211,13 @@ function TimelineSidebar({
                             <div className={`h-1.5 w-1.5 shrink-0 rounded-full ${
                               done ? "bg-emerald-500" : active ? "bg-primary" : locked ? "bg-border/30" : "bg-border/50"
                             }`} />
-                            <span className={`truncate text-[11px] leading-tight ${
+                            <span className={`truncate text-xs leading-tight ${
                               active ? "font-semibold text-primary" : done ? "text-muted-foreground/60" : locked ? "text-muted-foreground/25" : "text-muted-foreground/50"
                             }`}>
                               {STEP_LABELS[step]}
                             </span>
                             {locked && <Lock className="h-2.5 w-2.5 shrink-0 text-muted-foreground/25" />}
-                            {active && <span className="shrink-0 rounded bg-primary/10 px-1 font-mono text-[8px] text-primary">NOW</span>}
+                            {active && <span className="shrink-0 rounded bg-primary/10 px-1 font-mono text-[10px] text-primary">NOW</span>}
                           </div>
                         )
                       })}
@@ -336,7 +336,7 @@ export default function ClientDetailPage() {
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-lg font-bold text-foreground">{user.firstName} {user.lastName}</h1>
+                <h1 className="text-xl font-bold text-foreground">{user.firstName} {user.lastName}</h1>
                 {status?.isCompleted && (
                   <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-500">
                     <CheckCircle2 className="h-3 w-3" /> Completed
@@ -352,20 +352,20 @@ export default function ClientDetailPage() {
           </div>
 
           <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Mail className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Mail className="h-4 w-4 shrink-0 text-muted-foreground/50" />
               <span className="truncate">{user.email}</span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Phone className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Phone className="h-4 w-4 shrink-0 text-muted-foreground/50" />
               <span>{user.phoneNumber}</span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <MapPin className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <MapPin className="h-4 w-4 shrink-0 text-muted-foreground/50" />
               <span className="truncate">{[user.city, user.stateProvince, user.countryRegion].filter(Boolean).join(", ")}</span>
             </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Calendar className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Calendar className="h-4 w-4 shrink-0 text-muted-foreground/50" />
               <span>Joined {new Date(user.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
             </div>
           </div>
@@ -375,7 +375,7 @@ export default function ClientDetailPage() {
         {status && (
           <Card className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm">
             <div className="mb-4 flex items-end justify-between">
-              <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/50">Overall Progress</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground/50">Overall Progress</p>
               <span className={`text-3xl font-extrabold tracking-tight ${status.isCompleted ? "text-emerald-500" : "text-foreground"}`}>
                 {progress}<span className="text-base font-normal text-muted-foreground">%</span>
               </span>
@@ -393,7 +393,7 @@ export default function ClientDetailPage() {
               {PHASES.map((phase) => {
                 const ps = phaseStatus(phase.steps)
                 return (
-                  <div key={phase.id} className={`flex items-center gap-2 rounded-lg px-3 py-2 text-xs ${
+                  <div key={phase.id} className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm ${
                     ps === "done"   ? "bg-emerald-500/8 text-emerald-600" :
                     ps === "active" ? "bg-primary/8 text-primary" :
                                      "bg-border/20 text-muted-foreground/50"
@@ -403,13 +403,13 @@ export default function ClientDetailPage() {
                     }`} />
                     <span className="font-medium">{phase.name}</span>
                     {ps === "done" && <CheckCircle2 className="ml-auto h-3 w-3" />}
-                    {ps === "active" && <span className="ml-auto font-mono text-[8px]">NOW</span>}
+                    {ps === "active" && <span className="ml-auto font-mono text-[10px]">NOW</span>}
                   </div>
                 )
               })}
             </div>
 
-            <div className="space-y-1 border-t border-border/30 pt-3 text-xs text-muted-foreground">
+            <div className="space-y-1 border-t border-border/30 pt-3 text-sm text-muted-foreground">
               {!status.isCompleted && (
                 <p>Current step: <span className="font-medium text-foreground">{status.currentStep} — {STEP_LABELS[status.currentStep]}</span></p>
               )}
@@ -446,7 +446,7 @@ export default function ClientDetailPage() {
               sectionRef={sectionRefs[1]}
             >
               <div>
-                <p className="mb-3 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">Getting to Know You</p>
+                <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground/40">Getting to Know You</p>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <Field label="Favorite Food & Snacks" value={gky.favoriteFoodSnacks as string} />
                   <Field label="Hobbies & Joy" value={gky.hobbiesJoy as string} />
@@ -465,7 +465,7 @@ export default function ClientDetailPage() {
               </div>
 
               <div>
-                <p className="mb-3 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">Leadership Triage</p>
+                <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground/40">Leadership Triage</p>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <Field label="Neurodiversity" value={triage.neurodiversity as string} />
                   <Field label="Internal Wiring" value={triage.internalWiring as string} />
@@ -473,7 +473,7 @@ export default function ClientDetailPage() {
                 </div>
                 {leaderScoreData && leaderScoreData.length > 0 && (
                   <div className="mt-4">
-                    <p className="mb-2 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">PDL Leadership Score</p>
+                    <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground/40">PDL Leadership Score</p>
                     <ResponsiveContainer width="100%" height={240}>
                       <RadarChart data={leaderScoreData}>
                         <PolarGrid stroke="var(--border)" />
@@ -502,12 +502,12 @@ export default function ClientDetailPage() {
             >
               {awareness.evaluation360 && awareness.evaluation360.length > 0 && (
                 <div>
-                  <p className="mb-3 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">360° Contacts</p>
+                  <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground/40">360° Contacts</p>
                   <div className="divide-y divide-border/30 rounded-xl border border-border/40 overflow-hidden">
                     {awareness.evaluation360.map((contact, i) => (
                       <div key={i} className="flex items-center justify-between px-4 py-2.5 text-sm">
                         <span className="font-medium text-foreground">{contact.name || "—"}</span>
-                        <span className="text-xs text-muted-foreground">{contact.email || "—"}</span>
+                        <span className="text-sm text-muted-foreground">{contact.email || "—"}</span>
                       </div>
                     ))}
                   </div>
@@ -516,7 +516,7 @@ export default function ClientDetailPage() {
 
               {awareness.growthInputs && Object.keys(awareness.growthInputs).length > 0 && (
                 <div>
-                  <p className="mb-3 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">Growth Inputs</p>
+                  <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground/40">Growth Inputs</p>
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     {Object.entries(awareness.growthInputs as Record<string, string>).map(([k, v]) => (
                       <Field key={k} label={k} value={v} />
@@ -527,9 +527,9 @@ export default function ClientDetailPage() {
 
               {awareness.eveningPulse && (
                 <div>
-                  <p className="mb-3 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">Evening Pulse</p>
+                  <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground/40">Evening Pulse</p>
                   <div className="mb-3 flex items-center gap-3">
-                    <span className="text-xs text-muted-foreground">Peace Level</span>
+                    <span className="text-sm text-muted-foreground">Peace Level</span>
                     <div className="h-2 w-40 overflow-hidden rounded-full bg-border/50">
                       <div className="h-full rounded-full bg-primary" style={{ width: `${((awareness.eveningPulse.peaceLevel ?? 0) / 10) * 100}%` }} />
                     </div>
@@ -553,7 +553,7 @@ export default function ClientDetailPage() {
             >
               {stabilization.visionActivation && (
                 <div>
-                  <p className="mb-3 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">Vision Activation — 8 Domains</p>
+                  <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground/40">Vision Activation — 8 Domains</p>
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     {VISION_DOMAINS.map((domain) => (
                       <Field key={domain} label={domain} value={(stabilization.visionActivation as Record<string, string>)[domain]} />
@@ -564,7 +564,7 @@ export default function ClientDetailPage() {
 
               {stabilization.visionStatements && (
                 <div>
-                  <p className="mb-3 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">Vision Statements</p>
+                  <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground/40">Vision Statements</p>
                   <div className="space-y-3">
                     {Object.entries(stabilization.visionStatements as Record<string, string>).map(([k, v]) => (
                       <Field key={k} label={`Statement ${k.replace("s", "")}`} value={v} />
@@ -580,7 +580,7 @@ export default function ClientDetailPage() {
 
               {stabilization.familyMission && (
                 <div>
-                  <p className="mb-3 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40">Family Mission</p>
+                  <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground/40">Family Mission</p>
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <Field label="Values" value={stabilization.familyMission.values} />
                     <Field label="Mission Statement" value={stabilization.familyMission.statement} />
@@ -609,7 +609,7 @@ export default function ClientDetailPage() {
                     {value
                       ? <CheckCircle2 className="h-6 w-6 text-emerald-500" />
                       : <Circle className="h-6 w-6 text-border" />}
-                    <span className={`text-xs font-medium ${value ? "text-emerald-600" : "text-muted-foreground"}`}>{label}</span>
+                    <span className={`text-sm font-medium ${value ? "text-emerald-600" : "text-muted-foreground"}`}>{label}</span>
                   </div>
                 ))}
               </div>
