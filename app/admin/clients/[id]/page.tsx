@@ -327,54 +327,99 @@ export default function ClientDetailPage() {
         </Link>
       </Button>
 
-      {/* Profile header — full width */}
-      <Card className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm">
-        <div className="flex flex-wrap items-center gap-6">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-lg font-bold uppercase text-primary">
-            {user.firstName[0]}{user.lastName[0]}
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-2 mb-1">
-              <h1 className="text-lg font-bold text-foreground">{user.firstName} {user.lastName}</h1>
-              {status?.isCompleted && (
-                <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-500">
-                  <CheckCircle2 className="h-3 w-3" /> Completed
-                </span>
-              )}
-              {isStale && (
-                <span className="flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-xs text-amber-500">
-                  <AlertTriangle className="h-3 w-3" /> Stale
-                </span>
-              )}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {/* Profile card */}
+        <Card className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm">
+          <div className="flex items-start gap-4">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xl font-bold uppercase text-primary">
+              {user.firstName[0]}{user.lastName[0]}
             </div>
-            <div className="flex flex-wrap gap-4 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1"><Mail className="h-3.5 w-3.5" />{user.email}</span>
-              <span className="flex items-center gap-1"><Phone className="h-3.5 w-3.5" />{user.phoneNumber}</span>
-              <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{[user.city, user.stateProvince, user.countryRegion].filter(Boolean).join(", ")}</span>
-              <span className="flex items-center gap-1"><Calendar className="h-3.5 w-3.5" />Joined {new Date(user.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-lg font-bold text-foreground">{user.firstName} {user.lastName}</h1>
+                {status?.isCompleted && (
+                  <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-500">
+                    <CheckCircle2 className="h-3 w-3" /> Completed
+                  </span>
+                )}
+                {isStale && (
+                  <span className="flex items-center gap-1 rounded-full bg-amber-500/10 px-2 py-0.5 text-xs text-amber-500">
+                    <AlertTriangle className="h-3 w-3" /> Stale
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Progress */}
-          {status && (
-            <div className="w-full sm:w-56 space-y-1.5 sm:shrink-0">
-              <div className="flex justify-between">
-                <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/50">Overall Progress</span>
-                <span className="font-mono text-[10px] font-bold text-foreground">{progress}%</span>
-              </div>
-              <div className="h-2 overflow-hidden rounded-full bg-border/50">
-                <div className={`h-full rounded-full transition-all ${status.isCompleted ? "bg-emerald-500" : "bg-primary"}`} style={{ width: `${progress}%` }} />
-              </div>
+          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Mail className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
+              <span className="truncate">{user.email}</span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Phone className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
+              <span>{user.phoneNumber}</span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <MapPin className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
+              <span className="truncate">{[user.city, user.stateProvince, user.countryRegion].filter(Boolean).join(", ")}</span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Calendar className="h-3.5 w-3.5 shrink-0 text-muted-foreground/50" />
+              <span>Joined {new Date(user.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
+            </div>
+          </div>
+        </Card>
+
+        {/* Progress card */}
+        {status && (
+          <Card className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm">
+            <div className="mb-4 flex items-end justify-between">
+              <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/50">Overall Progress</p>
+              <span className={`text-3xl font-extrabold tracking-tight ${status.isCompleted ? "text-emerald-500" : "text-foreground"}`}>
+                {progress}<span className="text-base font-normal text-muted-foreground">%</span>
+              </span>
+            </div>
+
+            <div className="mb-5 h-2 overflow-hidden rounded-full bg-border/50">
+              <div
+                className={`h-full rounded-full transition-all ${status.isCompleted ? "bg-emerald-500" : "bg-primary"}`}
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+
+            {/* Phase pills */}
+            <div className="mb-4 grid grid-cols-2 gap-2">
+              {PHASES.map((phase) => {
+                const ps = phaseStatus(phase.steps)
+                return (
+                  <div key={phase.id} className={`flex items-center gap-2 rounded-lg px-3 py-2 text-xs ${
+                    ps === "done"   ? "bg-emerald-500/8 text-emerald-600" :
+                    ps === "active" ? "bg-primary/8 text-primary" :
+                                     "bg-border/20 text-muted-foreground/50"
+                  }`}>
+                    <div className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                      ps === "done" ? "bg-emerald-500" : ps === "active" ? "bg-primary" : "bg-border/50"
+                    }`} />
+                    <span className="font-medium">{phase.name}</span>
+                    {ps === "done" && <CheckCircle2 className="ml-auto h-3 w-3" />}
+                    {ps === "active" && <span className="ml-auto font-mono text-[8px]">NOW</span>}
+                  </div>
+                )
+              })}
+            </div>
+
+            <div className="space-y-1 border-t border-border/30 pt-3 text-xs text-muted-foreground">
               {!status.isCompleted && (
-                <p className="text-[11px] text-muted-foreground">
-                  Current: <span className="font-medium text-foreground">{status.currentStep} — {STEP_LABELS[status.currentStep]}</span>
-                </p>
+                <p>Current step: <span className="font-medium text-foreground">{status.currentStep} — {STEP_LABELS[status.currentStep]}</span></p>
+              )}
+              {status.updatedAt && (
+                <p>Last active: <span className="text-foreground">{new Date(status.updatedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span></p>
               )}
             </div>
-          )}
-        </div>
-      </Card>
+          </Card>
+        )}
+      </div>
 
       {/* 2-col: timeline left, content right */}
       {profile && status && (
@@ -390,7 +435,7 @@ export default function ClientDetailPage() {
           />
 
           {/* RIGHT: Phase content */}
-          <div className="flex-1 min-w-0 space-y-4">
+          <div className="w-full min-w-0 space-y-4 lg:flex-1">
 
             {/* Phase 1 */}
             <PhaseSection
