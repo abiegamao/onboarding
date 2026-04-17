@@ -20,22 +20,22 @@ const PERKS = [
 
 export default function SignupPage() {
   return (
-    <div className="relative min-h-svh w-full flex items-center justify-center bg-background overflow-hidden">
+    <div className="relative min-h-svh w-full bg-background">
       {/* Theme toggle */}
-      <div className="absolute top-4 right-4 z-20">
+      <div className="fixed top-4 right-4 z-20">
         <ModeToggle />
       </div>
 
       {/* Subtle grid */}
-      <div className="absolute inset-0 opacity-[0.03]" style={{
+      <div className="fixed inset-0 opacity-[0.03] pointer-events-none" style={{
         backgroundImage: "linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)",
         backgroundSize: "40px 40px",
       }} />
 
-      <div className="relative z-10 w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center px-6 py-12">
+      <div className="relative z-10 w-full max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-start px-6 py-12">
 
         {/* Left ~ Journey card */}
-        <div className="hidden lg:block">
+        <div className="hidden lg:block lg:sticky lg:top-12 lg:self-start">
           <style>{`
             @keyframes jGlow { 0%, 100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } }
             @keyframes jShimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
@@ -146,24 +146,9 @@ export default function SignupPage() {
         {/* Right ~ Signup form */}
         <div className="w-full max-w-sm mx-auto lg:mx-0 flex flex-col items-center gap-8">
 
-          <div className="w-full max-h-[calc(100vh-280px)] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="w-full">
             <SignupForm />
           </div>
-          <style>{`
-            .custom-scrollbar::-webkit-scrollbar {
-              width: 4px;
-            }
-            .custom-scrollbar::-webkit-scrollbar-track {
-              background: ;
-            }
-            .custom-scrollbar::-webkit-scrollbar-thumb {
-              background: hsl(var(--primary) / 0.1);
-              border-radius: 10px;
-            }
-            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-              background: hsl(var(--primary) / 0.2);
-            }
-          `}</style>
 
           {/* Mobile journey */}
           <div className="lg:hidden w-full pt-6 border-t border-border/40">
