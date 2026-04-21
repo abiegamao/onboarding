@@ -23,7 +23,7 @@ export async function GET() {
 
         await connectDB()
         const user = await User.findById(userId).select(
-            "firstName lastName email"
+            "firstName lastName email role"
         )
 
         if (!user) {
@@ -35,9 +35,11 @@ export async function GET() {
 
         return NextResponse.json({
             user: {
+                id: user._id.toString(),
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                role: user.role,
             },
         })
     } catch (error) {
