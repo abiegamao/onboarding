@@ -8,6 +8,13 @@ import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog"
+import {
     Field,
     FieldDescription,
     FieldGroup,
@@ -101,6 +108,8 @@ export function SignupForm({
         boolean | null
     >(null)
     const [hasAgreedToPolicies, setHasAgreedToPolicies] = useState(false)
+    const [showTCModal, setShowTCModal] = useState(false)
+    const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -303,6 +312,27 @@ export function SignupForm({
             clearTimeout(timer)
         }
     }, [step, values.city, selectedCountryCode])
+
+    function handleAgreementCheckboxClick() {
+        if (hasAgreedToPolicies) {
+            setHasAgreedToPolicies(false)
+        } else {
+            setHasScrolledToBottom(false)
+            setShowTCModal(true)
+        }
+    }
+
+    function handleTCScroll(e: React.UIEvent<HTMLDivElement>) {
+        const el = e.currentTarget
+        if (el.scrollTop + el.clientHeight >= el.scrollHeight - 10) {
+            setHasScrolledToBottom(true)
+        }
+    }
+
+    function handleTCAgree() {
+        setHasAgreedToPolicies(true)
+        setShowTCModal(false)
+    }
 
     function validateStep(currentStep: number) {
         if (currentStep === 1) {
@@ -944,27 +974,203 @@ export function SignupForm({
                             <label
                                 htmlFor="agreeToPolicies"
                                 className="flex cursor-pointer items-start gap-3 rounded-lg border border-border/60 bg-secondary/40 p-3"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    handleAgreementCheckboxClick()
+                                }}
                             >
                                 <input
                                     id="agreeToPolicies"
                                     name="agreeToPolicies"
                                     type="checkbox"
                                     checked={hasAgreedToPolicies}
-                                    onChange={(event) =>
-                                        setHasAgreedToPolicies(
-                                            event.target.checked
-                                        )
-                                    }
+                                    readOnly
                                     className="mt-0.5 h-4 w-4 cursor-pointer rounded border-border/70 accent-primary"
                                 />
                                 <span className="text-sm text-foreground">
-                                    I agree to Terms and Privacy Policy.
+                                    I have read and agree to the{" "}
+                                    <span className="font-medium text-primary underline underline-offset-4">
+                                        Terms &amp; Privacy Policy
+                                    </span>
+                                    .
                                 </span>
                             </label>
                             <FieldDescription>
-                                You must agree before creating account.
+                                You must read and agree before creating account.
                             </FieldDescription>
                         </Field>
+
+                        <Dialog
+                            open={showTCModal}
+                            onOpenChange={(open) => {
+                                if (!open) setShowTCModal(false)
+                            }}
+                        >
+                            <DialogContent
+                                className="flex max-h-[85vh] max-w-lg flex-col gap-0 p-0"
+                                showCloseButton={false}
+                            >
+                                <DialogHeader className="shrink-0 border-b border-border/40 px-6 py-5">
+                                    <DialogTitle className="text-base font-semibold">
+                                        Terms &amp; Privacy Policy
+                                    </DialogTitle>
+                                    <p className="mt-1 text-xs text-muted-foreground">
+                                        Please read carefully and scroll to the
+                                        bottom to agree.
+                                    </p>
+                                </DialogHeader>
+
+                                <div
+                                    className="flex-1 overflow-y-auto px-6 py-4 text-sm leading-relaxed text-foreground/80"
+                                    onScroll={handleTCScroll}
+                                >
+                                    <h3 className="mb-2 font-semibold text-foreground">
+                                        1. Acceptance of Terms
+                                    </h3>
+                                    <p className="mb-4">
+                                        By creating an account and accessing the
+                                        Minesha onboarding platform, you
+                                        acknowledge that you have read,
+                                        understood, and agree to be bound by
+                                        these Terms of Service and our Privacy
+                                        Policy. If you do not agree, you may not
+                                        use this platform.
+                                    </p>
+
+                                    <h3 className="mb-2 font-semibold text-foreground">
+                                        2. Use of the Platform
+                                    </h3>
+                                    <p className="mb-4">
+                                        You agree to use the platform solely for
+                                        its intended purpose — participating in
+                                        the guided onboarding journey. You must
+                                        not misuse, reverse-engineer, or attempt
+                                        to gain unauthorized access to any part
+                                        of the system.
+                                    </p>
+
+                                    <h3 className="mb-2 font-semibold text-foreground">
+                                        3. Account Responsibility
+                                    </h3>
+                                    <p className="mb-4">
+                                        You are responsible for maintaining the
+                                        confidentiality of your login
+                                        credentials. You agree to notify us
+                                        immediately of any unauthorized use of
+                                        your account. We are not liable for any
+                                        loss arising from unauthorized access
+                                        caused by your failure to protect your
+                                        credentials.
+                                    </p>
+
+                                    <h3 className="mb-2 font-semibold text-foreground">
+                                        4. Personal Information &amp; Privacy
+                                    </h3>
+                                    <p className="mb-4">
+                                        We collect and process personal
+                                        information you provide during
+                                        registration and throughout the
+                                        onboarding process. This data is used to
+                                        personalize your experience, track your
+                                        progress, and communicate with you. We
+                                        do not sell or share your personal data
+                                        with third parties except as required by
+                                        law or as described in our full Privacy
+                                        Policy.
+                                    </p>
+
+                                    <h3 className="mb-2 font-semibold text-foreground">
+                                        5. Data Retention
+                                    </h3>
+                                    <p className="mb-4">
+                                        Your data will be retained for as long
+                                        as your account is active or as needed
+                                        to provide services. You may request
+                                        deletion of your account and associated
+                                        data at any time by contacting our
+                                        support team.
+                                    </p>
+
+                                    <h3 className="mb-2 font-semibold text-foreground">
+                                        6. Intellectual Property
+                                    </h3>
+                                    <p className="mb-4">
+                                        All content, materials, and features on
+                                        this platform are the exclusive property
+                                        of Minesha and its licensors. You may
+                                        not copy, distribute, or create
+                                        derivative works from any platform
+                                        content without prior written permission.
+                                    </p>
+
+                                    <h3 className="mb-2 font-semibold text-foreground">
+                                        7. Limitation of Liability
+                                    </h3>
+                                    <p className="mb-4">
+                                        To the maximum extent permitted by
+                                        applicable law, Minesha shall not be
+                                        liable for any indirect, incidental,
+                                        special, or consequential damages arising
+                                        from your use of, or inability to use,
+                                        the platform.
+                                    </p>
+
+                                    <h3 className="mb-2 font-semibold text-foreground">
+                                        8. Modifications
+                                    </h3>
+                                    <p className="mb-4">
+                                        We reserve the right to update these
+                                        Terms at any time. Continued use of the
+                                        platform after changes are posted
+                                        constitutes your acceptance of the
+                                        revised Terms.
+                                    </p>
+
+                                    <h3 className="mb-2 font-semibold text-foreground">
+                                        9. Governing Law
+                                    </h3>
+                                    <p className="mb-6">
+                                        These Terms are governed by applicable
+                                        law. Any disputes arising out of or
+                                        related to these Terms shall be resolved
+                                        through binding arbitration or in the
+                                        courts of the applicable jurisdiction.
+                                    </p>
+
+                                    <div className="rounded-lg border border-primary/20 bg-primary/5 p-4 text-xs text-muted-foreground">
+                                        By clicking &quot;I Agree&quot; below,
+                                        you confirm you have read and accept all
+                                        terms above.
+                                    </div>
+                                </div>
+
+                                {!hasScrolledToBottom && (
+                                    <div className="shrink-0 border-t border-border/40 bg-muted/30 px-6 py-2 text-center text-xs text-muted-foreground">
+                                        Scroll down to read all terms and enable
+                                        the agree button
+                                    </div>
+                                )}
+
+                                <DialogFooter className="shrink-0 gap-2 border-t border-border/40 px-6 py-4 sm:flex-row">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        className="flex-1"
+                                        onClick={() => setShowTCModal(false)}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        className="flex-1"
+                                        disabled={!hasScrolledToBottom}
+                                        onClick={handleTCAgree}
+                                    >
+                                        I Agree
+                                    </Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
                     </>
                 ) : null}
 
