@@ -224,8 +224,9 @@ export default function OnboardingContent() {
     }, [])
 
     async function handleContinue() {
-        setIsUpdating(true)
+        if (isUpdating) return
         const currentStep = status?.currentStep || "1A"
+        const prevStatus = status
         try {
             let nextPhase = status?.currentPhase || 1
             let nextStep = currentStep
@@ -344,6 +345,10 @@ export default function OnboardingContent() {
                 dataToSave["onboardingStatus.isCompleted"] = true
             }
 
+            // Optimistic: advance UI immediately
+            setStatus((prev: any) => ({ ...prev, currentPhase: nextPhase, currentStep: nextStep }))
+            setIsUpdating(true)
+
             const res = await fetch("/api/onboarding/progress", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
@@ -355,24 +360,21 @@ export default function OnboardingContent() {
             })
 
             if (res.ok) {
-                const newStatus = await res.json()
-                setStatus(newStatus)
                 if (!hasShownToast && currentStep === "1A") {
                     toast.success("Pathway Activated!", { duration: 3000 })
                     setHasShownToast(true)
                 }
-                router.refresh()
-
                 if (dataToSave["onboardingStatus.isCompleted"]) {
                     router.push("/dashboard")
-                    return
+                } else {
+                    router.refresh()
                 }
-
-                if (nextStep === `${(status?.currentPhase || 1) + 1}A`) {
-                    window.location.reload()
-                }
+            } else {
+                setStatus(prevStatus)
+                toast.error("Failed to update progress")
             }
         } catch (error) {
+            setStatus(prevStatus)
             toast.error("Failed to update progress")
         } finally {
             setIsUpdating(false)
@@ -477,7 +479,8 @@ export default function OnboardingContent() {
     }, [formData, status?.currentStep])
 
     async function handleBack() {
-        setIsUpdating(true)
+        if (isUpdating) return
+        const prevStatus = status
         try {
             let prevPhase = status?.currentPhase || 1
             let prevStep = status?.currentStep || "1A"
@@ -511,6 +514,10 @@ export default function OnboardingContent() {
             } else if (prevStep === "4B") prevStep = "4A"
             else if (prevStep === "4C") prevStep = "4B"
 
+            // Optimistic: revert UI immediately
+            setStatus((prev: any) => ({ ...prev, currentPhase: prevPhase, currentStep: prevStep }))
+            setIsUpdating(true)
+
             const res = await fetch("/api/onboarding/progress", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
@@ -521,16 +528,13 @@ export default function OnboardingContent() {
             })
 
             if (res.ok) {
-                const newStatus = await res.json()
-                setStatus(newStatus)
-                toast.success("Moving back...")
                 router.refresh()
-
-                if (prevPhase < (status?.currentPhase || 1)) {
-                    window.location.reload()
-                }
+            } else {
+                setStatus(prevStatus)
+                toast.error("Failed to go back")
             }
         } catch (error) {
+            setStatus(prevStatus)
             toast.error("Failed to go back")
         } finally {
             setIsUpdating(false)
@@ -551,14 +555,6 @@ export default function OnboardingContent() {
     const currentStep = status?.currentStep || "1A"
     return (
         <>
-            {isUpdating && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-                    <div className="flex flex-col items-center gap-3">
-                        <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                        <p className="text-sm text-muted-foreground">Saving your progress...</p>
-                    </div>
-                </div>
-            )}
         <div className="animate-in space-y-10 duration-1000 fade-in slide-in-from-bottom-4">
             {/* Header */}
             <div className="space-y-4">
