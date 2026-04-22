@@ -280,9 +280,9 @@ models/
 
 ### Critical (blocks production)
 
-1. **Stripe Webhook** — Payments do NOT auto-activate accounts. Admin must manually set `accountStatus = active`. Need to implement `/api/webhooks/stripe` that listens for `checkout.session.completed`, verifies signature, and updates user status.
+1. **Email Pipeline** — Resend API key exists but zero sending logic. Need emails for: signup confirmation, pending approval notification, account activated, step completion nudges.
 
-2. **Email Pipeline** — Resend API key exists but zero sending logic. Need emails for: signup confirmation, pending approval notification, account activated, step completion nudges.
+2. **UI Refactor** - Improve user experience
 
 
 ### Medium Priority
