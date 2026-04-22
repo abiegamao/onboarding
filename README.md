@@ -293,9 +293,7 @@ models/
 
 7. **Email Notifications on Status Change** — When admin approves an account (status → active), user should get an email. No trigger exists.
 
-8. **Stale Threshold Config** — Hardcoded to 7 days in admin stats. Should be admin-configurable.
-
-9. **Admin Pagination Limit** — Currently caps at 50 clients. May need cursor-based pagination for scale.
+8. **Admin Pagination Limit** — Currently caps at 50 clients. May need cursor-based pagination for scale.
 
 ---
 
