@@ -86,6 +86,7 @@ export async function GET(req: Request) {
             plan: u.plan ?? null,
             joinedAt: u.createdAt?.toISOString() ?? null,
             progress,
+            currentPhase: profile?.status.isCompleted ? "completed" : (profile?.status.currentPhase ?? null),
             isCompleted: profile?.status.isCompleted ?? false,
             isStale: !!isStale,
             lastActive: profile?.status.updatedAt?.toISOString() ?? null,

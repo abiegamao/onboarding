@@ -36,6 +36,7 @@ import {
     ArrowUpDown,
     ArrowUp,
     ArrowDown,
+    MoreHorizontal,
     X,
 } from "lucide-react"
 
@@ -78,6 +79,7 @@ interface Client {
     plan: "basic" | "intermediate" | "custom" | null
     joinedAt: string | null
     progress: number
+    currentPhase: number | "completed" | null
     isCompleted: boolean
     isStale: boolean
     lastActive: string | null
@@ -129,9 +131,31 @@ function PlanBadge({ plan }: { plan: string | null }) {
     )
 }
 
+const PHASE_LABELS: Record<string, { label: string; color: string }> = {
+    "1": { label: "Connection", color: "text-sky-400 bg-sky-400/10 border-sky-400/20" },
+    "2": { label: "Awareness", color: "text-violet-400 bg-violet-400/10 border-violet-400/20" },
+    "3": { label: "Stabilization", color: "text-amber-400 bg-amber-400/10 border-amber-400/20" },
+    "4": { label: "Activation", color: "text-orange-400 bg-orange-400/10 border-orange-400/20" },
+    completed: { label: "Done", color: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20" },
+}
+
+function PhaseBadge({ phase }: { phase: number | "completed" | null }) {
+    if (phase === null)
+        return <span className="text-xs text-muted-foreground/40">—</span>
+    const key = phase === "completed" ? "completed" : String(phase)
+    const cfg = PHASE_LABELS[key]
+    if (!cfg) return null
+    return (
+        <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${cfg.color}`}>
+            {phase !== "completed" && <span className="mr-1 font-mono opacity-60">P{phase}</span>}
+            {cfg.label}
+        </span>
+    )
+}
+
 function SkeletonRow() {
     return (
-        <div className="grid grid-cols-[1fr_200px_130px_130px_110px] items-center gap-x-6 px-6 py-5">
+        <div className="grid grid-cols-[2fr_1.5fr_130px_100px_110px_48px] items-center gap-x-4 px-6 py-5">
             <div className="flex items-center gap-4">
                 <div className="h-10 w-10 shrink-0 animate-pulse rounded-full bg-[#b6954a]/10" />
                 <div className="space-y-1.5">
@@ -141,8 +165,9 @@ function SkeletonRow() {
             </div>
             <div className="h-2 w-full animate-pulse rounded-full bg-[#b6954a]/10" />
             <div className="h-5 w-20 animate-pulse rounded-full bg-[#b6954a]/10" />
+            <div className="h-5 w-16 animate-pulse rounded-full bg-[#b6954a]/10" />
             <div className="h-5 w-20 animate-pulse rounded-full bg-[#b6954a]/10" />
-            <div className="h-7 w-20 animate-pulse rounded-lg bg-[#b6954a]/10" />
+            <div className="h-7 w-7 animate-pulse rounded-lg bg-[#b6954a]/10" />
         </div>
     )
 }
@@ -367,9 +392,13 @@ function ClientsPageInner() {
                     </DropdownMenu>
                 </div>
 
+                {/* Scrollable table area */}
+                <div className="overflow-x-auto">
+                <div className="min-w-[750px]">
+
                 {/* Column headers */}
-                <div className="hidden grid-cols-[1fr_200px_130px_130px_110px] items-center gap-x-6 border-b border-[#b6954a]/10 bg-muted/20 px-6 py-3 sm:grid">
-                    {["Client", "Progress", "Plan", "Status", "Action"].map((h) => (
+                <div className="grid grid-cols-[2fr_1.5fr_130px_100px_110px_48px] items-center gap-x-4 border-b border-[#b6954a]/10 bg-muted/20 px-6 py-3">
+                    {["Client", "Progress", "Phase", "Plan", "Status", ""].map((h) => (
                         <span key={h} className="text-xs font-semibold tracking-widest text-muted-foreground/70 uppercase">{h}</span>
                     ))}
                 </div>
@@ -384,7 +413,7 @@ function ClientsPageInner() {
                         clients.map((client) => (
                             <ContextMenu key={client.id}>
                                 <ContextMenuTrigger asChild>
-                                    <div className="grid grid-cols-[1fr_200px_130px_130px_110px] items-center gap-x-6 px-6 py-5 transition-all hover:bg-[#b6954a]/[0.02]">
+                                    <div className="grid grid-cols-[2fr_1.5fr_130px_100px_110px_48px] items-center gap-x-4 px-6 py-5 transition-all hover:bg-[#b6954a]/[0.02]">
                                         {/* Avatar + name */}
                                         <Link href={`/admin/clients/${client.id}`} className="group flex min-w-0 items-center gap-4">
                                             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#b6954a]/10 text-sm font-bold text-[#b6954a] uppercase ring-1 ring-[#b6954a]/20 transition-all group-hover:scale-105 group-hover:bg-[#b6954a]/20">
@@ -419,15 +448,15 @@ function ClientsPageInner() {
                                             </span>
                                         </div>
 
+                                        <PhaseBadge phase={client.currentPhase} />
                                         <PlanBadge plan={client.plan} />
                                         <StatusBadge status={client.accountStatus} />
 
                                         {/* Manage dropdown */}
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Button variant="outline" size="sm" className="h-7 rounded-lg border-[#b6954a]/20 px-3 text-xs text-[#b6954a] hover:border-[#b6954a]/40 hover:bg-[#b6954a]/10">
-                                                    Manage
-                                                    <ChevronDown className="ml-1 h-3 w-3 opacity-60" />
+                                                <Button variant="outline" size="icon" className="h-7 w-7 rounded-lg border-[#b6954a]/20 text-muted-foreground hover:border-[#b6954a]/40 hover:bg-[#b6954a]/10 hover:text-[#b6954a]">
+                                                    <MoreHorizontal className="h-3.5 w-3.5" />
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end" className="w-44">
@@ -493,6 +522,9 @@ function ClientsPageInner() {
                         ))
                     )}
                 </div>
+
+                </div>{/* end min-w */}
+                </div>{/* end overflow-x-auto */}
 
                 {/* Pagination */}
                 <div className="flex items-center justify-between border-t border-[#b6954a]/10 bg-muted/10 px-6 py-3">
