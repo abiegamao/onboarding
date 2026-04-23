@@ -1,11 +1,12 @@
 import Link from "next/link"
-import { FileText, ChevronRight, Database } from "lucide-react"
+import { FileText, ChevronRight } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import connectDB from "@/lib/mongodb"
 import QuestionConfig from "@/models/QuestionConfig"
 import { QUESTION_SEEDS } from "@/lib/questionSeeds"
 import { requireAdmin } from "@/lib/adminAuth"
 import { redirect } from "next/navigation"
+import SeedButton from "./SeedButton"
 
 const PHASE_LABELS: Record<number, string> = {
     1: "Phase 1 — Connection",
@@ -100,16 +101,3 @@ export default async function QuestionsPage() {
     )
 }
 
-function SeedButton() {
-    return (
-        <form action="/api/admin/questions" method="POST">
-            <button
-                type="submit"
-                className="flex items-center gap-2 rounded-xl border border-[#b6954a]/25 bg-[#b6954a]/8 px-4 py-2 text-sm font-medium text-[#b6954a] transition-colors hover:bg-[#b6954a]/15"
-            >
-                <Database className="h-4 w-4" />
-                Seed Defaults
-            </button>
-        </form>
-    )
-}

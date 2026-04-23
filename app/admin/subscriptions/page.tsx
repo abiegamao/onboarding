@@ -103,9 +103,9 @@ function PlanBadge({ plan }: { plan: string | null }) {
 
 function SkeletonRow() {
     return (
-        <div className="grid grid-cols-[1fr_140px_140px_160px_120px] items-center px-6 py-4">
-            <div className="flex items-center gap-3">
-                <div className="h-9 w-9 shrink-0 animate-pulse rounded-full bg-[#b6954a]/10" />
+        <div className="grid grid-cols-[1fr_140px_140px_160px_120px] items-center gap-x-6 px-6 py-5">
+            <div className="flex items-center gap-4">
+                <div className="h-10 w-10 shrink-0 animate-pulse rounded-full bg-[#b6954a]/10" />
                 <div className="space-y-1.5">
                     <div className="h-3 w-28 animate-pulse rounded bg-[#b6954a]/10" />
                     <div className="h-2.5 w-36 animate-pulse rounded bg-[#b6954a]/5" />
@@ -126,8 +126,7 @@ function SubscriptionsPageInner() {
     const [subs, setSubs] = useState<Subscription[]>([])
     const [pagination, setPagination] = useState<Pagination | null>(null)
     const [loading, setLoading] = useState(true)
-    const [activating, setActivating] = useState<string | null>(null)
-    const [settingPlan, setSettingPlan] = useState<string | null>(null)
+
 
     const [search, setSearch] = useState(searchParams.get("search") ?? "")
     const [statusFilter, setStatusFilter] = useState(searchParams.get("status") ?? "")
@@ -176,30 +175,32 @@ function SubscriptionsPageInner() {
     }, [fetchSubs, debouncedSearch, statusFilter, planFilter, page, limit, router])
 
     async function setStatus(id: string, accountStatus: string) {
-        setActivating(id)
+        const prev = subs.find((s) => s.id === id)
+        setSubs((cur) => cur.map((s) => s.id === id ? { ...s, accountStatus: accountStatus as Subscription["accountStatus"] } : s))
         try {
-            await fetch(`/api/admin/subscriptions/${id}`, {
+            const res = await fetch(`/api/admin/subscriptions/${id}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ accountStatus }),
             })
-            fetchSubs()
-        } finally {
-            setActivating(null)
+            if (!res.ok) throw new Error()
+        } catch {
+            if (prev) setSubs((cur) => cur.map((s) => s.id === id ? prev : s))
         }
     }
 
     async function setPlan(id: string, plan: string | null) {
-        setSettingPlan(id)
+        const prev = subs.find((s) => s.id === id)
+        setSubs((cur) => cur.map((s) => s.id === id ? { ...s, plan: plan as Subscription["plan"] } : s))
         try {
-            await fetch(`/api/admin/subscriptions/${id}`, {
+            const res = await fetch(`/api/admin/subscriptions/${id}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ plan }),
             })
-            fetchSubs()
-        } finally {
-            setSettingPlan(null)
+            if (!res.ok) throw new Error()
+        } catch {
+            if (prev) setSubs((cur) => cur.map((s) => s.id === id ? prev : s))
         }
     }
 
@@ -286,9 +287,9 @@ function SubscriptionsPageInner() {
                 </div>
 
                 {/* Column headers */}
-                <div className="hidden grid-cols-[1fr_140px_140px_160px_120px] items-center border-b border-[#b6954a]/10 bg-muted/5 px-6 py-2 sm:grid">
+                <div className="hidden grid-cols-[1fr_140px_140px_160px_120px] items-center gap-x-6 border-b border-[#b6954a]/10 bg-muted/20 px-6 py-3 sm:grid">
                     {["Client", "Plan", "Status", "Joined", "Action"].map((h) => (
-                        <span key={h} className="font-mono text-[9px] tracking-[0.2em] text-muted-foreground/40 uppercase">{h}</span>
+                        <span key={h} className="text-xs font-semibold tracking-widest text-muted-foreground/70 uppercase">{h}</span>
                     ))}
                 </div>
 
@@ -300,21 +301,21 @@ function SubscriptionsPageInner() {
                         <div className="py-16 text-center text-sm text-muted-foreground">No subscriptions found.</div>
                     ) : (
                         subs.map((sub) => (
-                            <div key={sub.id} className="grid grid-cols-[1fr_140px_140px_160px_120px] items-center px-6 py-4 transition-all hover:bg-[#b6954a]/[0.02]">
+                            <div key={sub.id} className="grid grid-cols-[1fr_140px_140px_160px_120px] items-center gap-x-6 px-6 py-5 transition-all hover:bg-[#b6954a]/[0.02]">
                                 {/* Avatar + name */}
-                                <div className="flex min-w-0 items-center gap-3">
-                                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#b6954a]/10 text-xs font-bold text-[#b6954a] uppercase ring-1 ring-[#b6954a]/20">
+                                <div className="flex min-w-0 items-center gap-4">
+                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#b6954a]/10 text-sm font-bold text-[#b6954a] uppercase ring-1 ring-[#b6954a]/20">
                                         {sub.firstName[0]}{sub.lastName[0]}
                                     </div>
                                     <div className="min-w-0">
-                                        <p className="truncate text-sm font-medium text-foreground">{sub.firstName} {sub.lastName}</p>
-                                        <p className="truncate text-xs text-muted-foreground">{sub.email}</p>
+                                        <p className="truncate text-sm font-semibold text-foreground">{sub.firstName} {sub.lastName}</p>
+                                        <p className="truncate text-xs text-muted-foreground/80 mt-0.5">{sub.email}</p>
                                     </div>
                                 </div>
 
                                 <PlanBadge plan={sub.plan} />
                                 <StatusBadge status={sub.accountStatus} />
-                                <span className="text-xs text-muted-foreground/60">{formatDate(sub.joinedAt)}</span>
+                                <span className="text-sm text-muted-foreground/70">{formatDate(sub.joinedAt)}</span>
 
                                 {/* Action */}
                                 <DropdownMenu>
@@ -322,10 +323,9 @@ function SubscriptionsPageInner() {
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            disabled={activating === sub.id || settingPlan === sub.id}
                                             className="h-7 rounded-lg border-[#b6954a]/20 px-3 text-xs text-[#b6954a] hover:border-[#b6954a]/40 hover:bg-[#b6954a]/10"
                                         >
-                                            {activating === sub.id || settingPlan === sub.id ? "Saving…" : "Manage"}
+                                            Manage
                                             <ChevronDown className="ml-1 h-3 w-3 opacity-60" />
                                         </Button>
                                     </DropdownMenuTrigger>
