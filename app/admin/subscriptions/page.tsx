@@ -86,7 +86,12 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 function PlanBadge({ plan }: { plan: string | null }) {
-    if (!plan) return <span className="text-xs text-muted-foreground/50">—</span>
+    if (!plan)
+        return (
+            <span className="flex items-center gap-1 rounded-full border border-border/40 bg-muted/30 px-2.5 py-0.5 text-xs font-medium text-muted-foreground/50">
+                No plan
+            </span>
+        )
     const Icon = PLAN_ICONS[plan] ?? Zap
     return (
         <span className="flex items-center gap-1.5 rounded-full border border-[#b6954a]/20 bg-[#b6954a]/5 px-2.5 py-0.5 text-xs font-medium text-[#b6954a]">
@@ -122,6 +127,7 @@ function SubscriptionsPageInner() {
     const [pagination, setPagination] = useState<Pagination | null>(null)
     const [loading, setLoading] = useState(true)
     const [activating, setActivating] = useState<string | null>(null)
+    const [settingPlan, setSettingPlan] = useState<string | null>(null)
 
     const [search, setSearch] = useState(searchParams.get("search") ?? "")
     const [statusFilter, setStatusFilter] = useState(searchParams.get("status") ?? "")
@@ -180,6 +186,20 @@ function SubscriptionsPageInner() {
             fetchSubs()
         } finally {
             setActivating(null)
+        }
+    }
+
+    async function setPlan(id: string, plan: string | null) {
+        setSettingPlan(id)
+        try {
+            await fetch(`/api/admin/subscriptions/${id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ plan }),
+            })
+            fetchSubs()
+        } finally {
+            setSettingPlan(null)
         }
     }
 
@@ -302,10 +322,10 @@ function SubscriptionsPageInner() {
                                         <Button
                                             variant="outline"
                                             size="sm"
-                                            disabled={activating === sub.id}
+                                            disabled={activating === sub.id || settingPlan === sub.id}
                                             className="h-7 rounded-lg border-[#b6954a]/20 px-3 text-xs text-[#b6954a] hover:border-[#b6954a]/40 hover:bg-[#b6954a]/10"
                                         >
-                                            {activating === sub.id ? "Saving…" : "Set Status"}
+                                            {activating === sub.id || settingPlan === sub.id ? "Saving…" : "Manage"}
                                             <ChevronDown className="ml-1 h-3 w-3 opacity-60" />
                                         </Button>
                                     </DropdownMenuTrigger>
@@ -320,6 +340,21 @@ function SubscriptionsPageInner() {
                                         </DropdownMenuItem>
                                         <DropdownMenuItem onClick={() => setStatus(sub.id, "unsubscribed")} className="gap-2 text-muted-foreground">
                                             <Ban className="h-3.5 w-3.5" /> Unsubscribe
+                                        </DropdownMenuItem>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuLabel className="text-[10px] tracking-widest text-muted-foreground/50 uppercase">Set Plan</DropdownMenuLabel>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem onClick={() => setPlan(sub.id, "basic")} className="gap-2">
+                                            <Zap className="h-3.5 w-3.5 text-[#b6954a]" /> Basic
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => setPlan(sub.id, "intermediate")} className="gap-2">
+                                            <Sparkles className="h-3.5 w-3.5 text-[#b6954a]" /> Intermediate
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => setPlan(sub.id, "custom")} className="gap-2">
+                                            <MessageSquare className="h-3.5 w-3.5 text-[#b6954a]" /> Custom
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => setPlan(sub.id, null)} className="gap-2 text-muted-foreground">
+                                            <Ban className="h-3.5 w-3.5" /> Remove Plan
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>

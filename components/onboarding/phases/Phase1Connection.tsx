@@ -3,18 +3,58 @@ import { ArrowRight, ShieldCheck, Heart, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TriageDomainForm } from "@/components/onboarding/TriageDomainForm"
 import { STEP_TO_DOMAIN } from "@/lib/triageConfig"
+import type { QuestionField } from "@/lib/questionSeeds"
 
 interface Phase1Props {
     currentStep: string
     formData: any
     setFormData: (data: any) => void
+    questionConfigs?: Record<string, any>
+}
+
+// Static fallbacks for step 1B
+const DEFAULT_1B_QUESTIONS: QuestionField[] = [
+    { key: "favoriteFoodSnacks", label: "What's your favorite food and snacks?", placeholder: "Example: stuffed mushrooms" },
+    { key: "hobbiesJoy", label: "What do you like to do for fun — what hobbies bring you joy?", placeholder: "Example: nature, short adventures, dancing" },
+    { key: "selfCareTop3", label: "What are your top 3 favorite things to do for self-care?", placeholder: "One per line or comma-separated. Example: Meditation, Nature Walks, Journaling" },
+    { key: "favoriteMoviesShows", label: "What are your favorite movies or shows you could rewatch anytime?", placeholder: "Example: anything funny" },
+    { key: "dreamDestinationsTop3", label: "If you could travel anywhere, what are your top 3 dream destinations you haven't been to yet?", placeholder: "One per line or comma-separated. Example: Paris, Dubai, Hawaii" },
+    { key: "financialGoals", label: "What are your financial goals for this year and over the next 12 months?", placeholder: "Example: learn how to flow off written budget" },
+    { key: "bucketListTop3", label: "What are the top 3 things on your bucket list?", placeholder: "One per line or comma-separated" },
+    { key: "proudGrowth", label: "If we were looking back a year from now, what would make you feel proud of your growth?", placeholder: "Example: remain consistent and true to myself without giving up" },
+    { key: "workBusiness", label: "Tell me a little about your work or business — what do you love most, and what drains you the most?", placeholder: "Share what you love most and what drains you most" },
+    { key: "boundaries", label: "When you think about your boundaries with family, friends, and clients, what feels easy? What feels hard?", placeholder: "Share what feels easy and what feels hard" },
+    { key: "importantPeople", label: "Who are the most important people in your life right now?", placeholder: "Example: family, close connections" },
+    { key: "personalPrinciples", label: "What personal principles guide your decisions in life and leadership?", placeholder: "Share the principles that guide your decisions" },
+    { key: "uncompromisableStandards", label: "What standards do you hold for yourself that you'd never compromise on?", placeholder: "Share your non-negotiables" },
+]
+
+// Map question key to formData key
+const FORM_KEY_MAP: Record<string, string> = {
+    favoriteFoodSnacks: "getting_favoriteFoodSnacks",
+    hobbiesJoy: "getting_hobbiesJoy",
+    selfCareTop3: "getting_selfCareTop3",
+    favoriteMoviesShows: "getting_favoriteMoviesShows",
+    dreamDestinationsTop3: "getting_dreamDestinationsTop3",
+    financialGoals: "getting_financialGoals",
+    bucketListTop3: "getting_bucketListTop3",
+    proudGrowth: "getting_proudGrowth",
+    workBusiness: "getting_workBusiness",
+    boundaries: "getting_boundaries",
+    importantPeople: "getting_importantPeople",
+    personalPrinciples: "getting_personalPrinciples",
+    uncompromisableStandards: "getting_uncompromisableStandards",
 }
 
 export function Phase1Connection({
     currentStep,
     formData,
     setFormData,
+    questionConfigs = {},
 }: Phase1Props) {
+    const step1BQuestions: QuestionField[] =
+        questionConfigs["1B"]?.questions ?? DEFAULT_1B_QUESTIONS
+
     return (
         <div className="min-h-[40vh]">
             {currentStep === "1A" && (
@@ -50,254 +90,41 @@ export function Phase1Connection({
             {currentStep === "1B" && (
                 <div className="max-w-5xl animate-in space-y-10 px-1 duration-700 fade-in">
                     <div className="grid gap-8 md:grid-cols-2">
-                        <div className="space-y-3 md:col-span-2">
-                            <label className="text-sm font-bold tracking-wider text-primary uppercase">
-                                What’s your favorite food and snacks?
-                            </label>
-                            <textarea
-                                value={formData.getting_favoriteFoodSnacks}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        getting_favoriteFoodSnacks:
-                                            e.target.value,
-                                    })
-                                }
-                                className="min-h-[120px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-lg transition-all outline-none focus:ring-2 focus:ring-primary/20"
-                                placeholder="Example: stuffed mushrooms"
-                            />
-                        </div>
-
-                        <div className="space-y-3 md:col-span-2">
-                            <label className="text-sm font-bold tracking-wider text-primary uppercase">
-                                What do you like to do for fun - what hobbies
-                                bring you joy?
-                            </label>
-                            <textarea
-                                value={formData.getting_hobbiesJoy}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        getting_hobbiesJoy: e.target.value,
-                                    })
-                                }
-                                className="min-h-[140px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-lg transition-all outline-none focus:ring-2 focus:ring-primary/20"
-                                placeholder="Example: nature, short adventures, dancing, star watching, beach, parks, taking pictures of nature"
-                            />
-                        </div>
-
-                        <div className="space-y-3 md:col-span-2">
-                            <label className="text-sm font-bold tracking-wider text-primary uppercase">
-                                What are your top 3 favorite things to do for
-                                self-care? Choose your Top 3.
-                            </label>
-                            <textarea
-                                value={formData.getting_selfCareTop3}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        getting_selfCareTop3: e.target.value,
-                                    })
-                                }
-                                className="min-h-[120px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-lg transition-all outline-none focus:ring-2 focus:ring-primary/20"
-                                placeholder="One per line or comma-separated. Example: Meditation, Nature Walks, Journaling"
-                            />
-                        </div>
-
-                        <div className="space-y-3 md:col-span-2">
-                            <label className="text-sm font-bold tracking-wider text-primary uppercase">
-                                What are your favorite movies or shows you could
-                                rewatch anytime?
-                            </label>
-                            <textarea
-                                value={formData.getting_favoriteMoviesShows}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        getting_favoriteMoviesShows:
-                                            e.target.value,
-                                    })
-                                }
-                                className="min-h-[120px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-lg transition-all outline-none focus:ring-2 focus:ring-primary/20"
-                                placeholder="Example: anything funny"
-                            />
-                        </div>
-
-                        <div className="space-y-3 md:col-span-2">
-                            <label className="text-sm font-bold tracking-wider text-primary uppercase">
-                                If you could travel anywhere, what are your top
-                                3 dream destinations you haven’t been to yet?
-                            </label>
-                            <textarea
-                                value={formData.getting_dreamDestinationsTop3}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        getting_dreamDestinationsTop3:
-                                            e.target.value,
-                                    })
-                                }
-                                className="min-h-[120px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-lg transition-all outline-none focus:ring-2 focus:ring-primary/20"
-                                placeholder="One per line or comma-separated. Example: Paris, Dubai, Hawaii"
-                            />
-                        </div>
-
-                        <div className="space-y-3 md:col-span-2">
-                            <label className="text-sm font-bold tracking-wider text-primary uppercase">
-                                What are your financial goals for this year and
-                                over the next 12 months?
-                            </label>
-                            <textarea
-                                value={formData.getting_financialGoals}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        getting_financialGoals: e.target.value,
-                                    })
-                                }
-                                className="min-h-[140px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-lg transition-all outline-none focus:ring-2 focus:ring-primary/20"
-                                placeholder="Example: learn how to flow off written budget, set a spending plan, start a savings plan"
-                            />
-                        </div>
-
-                        <div className="space-y-3 md:col-span-2">
-                            <label className="text-sm font-bold tracking-wider text-primary uppercase">
-                                What are the top 3 things on your bucket list?
-                            </label>
-                            <textarea
-                                value={formData.getting_bucketListTop3}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        getting_bucketListTop3: e.target.value,
-                                    })
-                                }
-                                className="min-h-[120px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-lg transition-all outline-none focus:ring-2 focus:ring-primary/20"
-                                placeholder="One per line or comma-separated. Example: take a cruise, get on an airplane, visit somewhere I need a passport"
-                            />
-                        </div>
-
-                        <div className="space-y-3 md:col-span-2">
-                            <label className="text-sm font-bold tracking-wider text-primary uppercase">
-                                If we were looking back a year from now, what
-                                would make you feel proud of your growth?
-                            </label>
-                            <textarea
-                                value={formData.getting_proudGrowth}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        getting_proudGrowth: e.target.value,
-                                    })
-                                }
-                                className="min-h-[140px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-lg transition-all outline-none focus:ring-2 focus:ring-primary/20"
-                                placeholder="Example: remain consistent and true to myself without giving up"
-                            />
-                        </div>
-
-                        <div className="space-y-3 md:col-span-2">
-                            <label className="text-sm font-bold tracking-wider text-primary uppercase">
-                                Tell me a little about your work or business -
-                                what do you love most, and what drains you the
-                                most?
-                            </label>
-                            <textarea
-                                value={formData.getting_workBusiness}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        getting_workBusiness: e.target.value,
-                                    })
-                                }
-                                className="min-h-[180px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-lg transition-all outline-none focus:ring-2 focus:ring-primary/20"
-                                placeholder="Share what you love most and what drains you most"
-                            />
-                        </div>
-
-                        <div className="space-y-3 md:col-span-2">
-                            <label className="text-sm font-bold tracking-wider text-primary uppercase">
-                                When you think about your boundaries with
-                                family, friends, and clients, what feels easy
-                                for you? What feels hard?
-                            </label>
-                            <textarea
-                                value={formData.getting_boundaries}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        getting_boundaries: e.target.value,
-                                    })
-                                }
-                                className="min-h-[180px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-lg transition-all outline-none focus:ring-2 focus:ring-primary/20"
-                                placeholder="Share what feels easy and what feels hard"
-                            />
-                        </div>
-
-                        <div className="space-y-3 md:col-span-2">
-                            <label className="text-sm font-bold tracking-wider text-primary uppercase">
-                                Who are the most important people in your life
-                                right now?
-                            </label>
-                            <textarea
-                                value={formData.getting_importantPeople}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        getting_importantPeople: e.target.value,
-                                    })
-                                }
-                                className="min-h-[120px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-lg transition-all outline-none focus:ring-2 focus:ring-primary/20"
-                                placeholder="Example: girls, grandbaby, grandmother, family, close connections"
-                            />
-                        </div>
-
-                        <div className="space-y-3 md:col-span-2">
-                            <label className="text-sm font-bold tracking-wider text-primary uppercase">
-                                What personal principles guide your decisions in
-                                life and leadership?
-                            </label>
-                            <textarea
-                                value={formData.getting_personalPrinciples}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        getting_personalPrinciples:
-                                            e.target.value,
-                                    })
-                                }
-                                className="min-h-[180px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-lg transition-all outline-none focus:ring-2 focus:ring-primary/20"
-                                placeholder="Share the principles that guide your decisions"
-                            />
-                        </div>
-
-                        <div className="space-y-3 md:col-span-2">
-                            <label className="text-sm font-bold tracking-wider text-primary uppercase">
-                                What standards do you hold for yourself that
-                                you’d never compromise on?
-                            </label>
-                            <textarea
-                                value={
-                                    formData.getting_uncompromisableStandards
-                                }
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        getting_uncompromisableStandards:
-                                            e.target.value,
-                                    })
-                                }
-                                className="min-h-[140px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-lg transition-all outline-none focus:ring-2 focus:ring-primary/20"
-                                placeholder="Share your non-negotiables"
-                            />
-                        </div>
+                        {step1BQuestions.map((q) => {
+                            const formKey = FORM_KEY_MAP[q.key] ?? `getting_${q.key}`
+                            return (
+                                <div key={q.key} className="space-y-3 md:col-span-2">
+                                    <label className="text-sm font-bold tracking-wider text-primary uppercase">
+                                        {q.label}
+                                    </label>
+                                    <textarea
+                                        value={formData[formKey] ?? ""}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                [formKey]: e.target.value,
+                                            })
+                                        }
+                                        className="min-h-[120px] w-full rounded-2xl border-2 border-border/50 bg-background p-4 text-lg transition-all outline-none focus:ring-2 focus:ring-primary/20"
+                                        placeholder={q.placeholder ?? ""}
+                                    />
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
             )}
 
             {STEP_TO_DOMAIN[currentStep] && (
                 <TriageDomainForm
-                    title={STEP_TO_DOMAIN[currentStep].title}
-                    questions={STEP_TO_DOMAIN[currentStep].questions}
+                    title={
+                        questionConfigs[currentStep]?.description ||
+                        STEP_TO_DOMAIN[currentStep].title
+                    }
+                    questions={
+                        questionConfigs[currentStep]?.questions ||
+                        STEP_TO_DOMAIN[currentStep].questions
+                    }
                     answers={
                         formData[`triage_${STEP_TO_DOMAIN[currentStep].key}`] ||
                         {}

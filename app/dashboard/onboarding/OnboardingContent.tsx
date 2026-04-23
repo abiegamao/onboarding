@@ -28,13 +28,21 @@ export default function OnboardingContent() {
     const [formData, setFormData] = useState<any>({})
     const [isUpdating, setIsUpdating] = useState(false)
     const [hasShownToast, setHasShownToast] = useState(false)
+    const [questionConfigs, setQuestionConfigs] = useState<Record<string, any>>({})
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const res = await fetch("/api/onboarding/progress")
-                if (res.ok) {
-                    const data = await res.json()
+                const [progressRes, configRes] = await Promise.all([
+                    fetch("/api/onboarding/progress"),
+                    fetch("/api/onboarding/question-configs"),
+                ])
+                if (configRes.ok) {
+                    const configData = await configRes.json()
+                    setQuestionConfigs(configData.configs || {})
+                }
+                if (progressRes.ok) {
+                    const data = await progressRes.json()
                     setUserData(data)
                     setStatus(data.onboardingStatus)
 
@@ -773,6 +781,7 @@ export default function OnboardingContent() {
                     currentStep={currentStep}
                     formData={formData}
                     setFormData={setFormData}
+                    questionConfigs={questionConfigs}
                 />
             )}
 
@@ -781,6 +790,7 @@ export default function OnboardingContent() {
                     currentStep={currentStep}
                     formData={formData}
                     setFormData={setFormData}
+                    questionConfigs={questionConfigs}
                 />
             )}
 

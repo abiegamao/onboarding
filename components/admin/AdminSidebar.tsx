@@ -11,6 +11,8 @@ import {
     CreditCard,
     ChevronRight,
     X,
+    FileQuestion,
+    Tag,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -18,6 +20,8 @@ const NAV_ITEMS = [
     { label: "Overview", href: "/admin", icon: LayoutDashboard, exact: true },
     { label: "Clients", href: "/admin/clients", icon: Users },
     { label: "Subscriptions", href: "/admin/subscriptions", icon: CreditCard },
+    { label: "Questions", href: "/admin/questions", icon: FileQuestion },
+    { label: "Plan Config", href: "/admin/plan-config", icon: Tag },
     { label: "Onboarding", href: "/admin/onboarding", icon: ClipboardList },
     { label: "Reports", href: "/admin/reports", icon: BarChart3 },
     { label: "Settings", href: "/admin/settings", icon: Settings },
