@@ -1,6 +1,7 @@
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 import { Button } from "@/components/ui/button"
 import { LandingNav } from "@/components/landing-nav"
+import { requireAuth } from "@/lib/auth"
 import {
     Sparkles,
     UserCircle,
@@ -60,7 +61,9 @@ const PROMISES = [
     "Built for leaders, not followers",
 ]
 
-export default function Page() {
+export default async function Page() {
+    const auth = await requireAuth()
+    const isLoggedIn = !!auth
     return (
         <div className="relative min-h-screen overflow-x-hidden bg-background font-sans text-foreground">
             {/* Global animations */}
@@ -187,19 +190,21 @@ export default function Page() {
                     </p>
 
                     <div className="fade-up fade-up-4 mx-auto flex w-full max-w-md flex-col items-center justify-center gap-4 pt-4 sm:max-w-none sm:flex-row">
-                        <Link href="/signup" className="w-full sm:w-auto">
+                        <Link href={isLoggedIn ? "/dashboard" : "/signup"} className="w-full sm:w-auto">
                             <InteractiveHoverButton className="h-12 w-full px-8 text-base md:h-14 md:px-10 md:text-lg">
-                                Start Your Pathway
+                                {isLoggedIn ? "Go to Dashboard" : "Start Your Pathway"}
                             </InteractiveHoverButton>
                         </Link>
-                        <Link href="/login" className="w-full sm:w-auto">
-                            <Button
-                                variant="ghost"
-                                className="h-12 w-full gap-2 px-6 text-base text-muted-foreground hover:bg-primary/5 md:h-14 md:px-8 md:text-lg"
-                            >
-                                Sign In <ArrowRight className="h-5 w-5" />
-                            </Button>
-                        </Link>
+                        {!isLoggedIn && (
+                            <Link href="/login" className="w-full sm:w-auto">
+                                <Button
+                                    variant="ghost"
+                                    className="h-12 w-full gap-2 px-6 text-base text-muted-foreground hover:bg-primary/5 md:h-14 md:px-8 md:text-lg"
+                                >
+                                    Sign In <ArrowRight className="h-5 w-5" />
+                                </Button>
+                            </Link>
+                        )}
                     </div>
                 </section>
 
@@ -494,11 +499,11 @@ export default function Page() {
                             </p>
                             <div className="pt-4 md:pt-6">
                                 <Link
-                                    href="/signup"
+                                    href={isLoggedIn ? "/dashboard" : "/signup"}
                                     className="inline-block w-full sm:w-auto"
                                 >
                                     <InteractiveHoverButton className="h-14 w-full px-10 text-lg sm:w-auto md:h-16 md:px-12 md:text-xl">
-                                        Apply to Join
+                                        {isLoggedIn ? "Go to Dashboard" : "Apply to Join"}
                                     </InteractiveHoverButton>
                                 </Link>
                             </div>
