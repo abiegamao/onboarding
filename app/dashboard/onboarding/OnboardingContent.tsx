@@ -356,6 +356,7 @@ export default function OnboardingContent() {
             // Optimistic: advance UI immediately
             setStatus((prev: any) => ({ ...prev, currentPhase: nextPhase, currentStep: nextStep }))
             setIsUpdating(true)
+            window.scrollTo({ top: 0, behavior: "smooth" })
 
             const res = await fetch("/api/onboarding/progress", {
                 method: "PATCH",
