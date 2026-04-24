@@ -55,6 +55,8 @@ export default async function DashboardPage() {
         const status = onboardingStatus || {
             currentPhase: 1,
             currentStep: "1A",
+            highestPhase: 1,
+            highestStep: "1A",
             isCompleted: false,
             hasSeenCelebration: false,
         }
@@ -77,12 +79,13 @@ export default async function DashboardPage() {
             "4C",
         ]
         const currentStep = status?.currentStep || "1A"
-        const currentStepIndex = allSteps.indexOf(currentStep)
+        const highestStep = status?.highestStep || currentStep
+        const highestStepIndex = allSteps.indexOf(highestStep)
         const progressValue = status?.isCompleted
             ? 100
             : Math.max(
                   0,
-                  Math.round((currentStepIndex / allSteps.length) * 100)
+                  Math.round((highestStepIndex / allSteps.length) * 100)
               )
 
         const phaseNames: Record<number, string> = {
@@ -290,18 +293,17 @@ export default async function DashboardPage() {
                                     <CardContent className="p-0">
                                         <div className="flex flex-col">
                                             {[1, 2, 3, 4].map((phaseNum) => {
+                                                const highestPhase = status.highestPhase || status.currentPhase
                                                 const isActive =
                                                     status.currentPhase ===
                                                         phaseNum &&
                                                     !status.isCompleted
                                                 const isComplete =
-                                                    status.currentPhase >
-                                                        phaseNum ||
-                                                    (status.isCompleted &&
-                                                        phaseNum === 4)
+                                                    status.isCompleted ||
+                                                    highestPhase > phaseNum
                                                 const isLocked =
-                                                    status.currentPhase <
-                                                    phaseNum
+                                                    !status.isCompleted &&
+                                                    highestPhase < phaseNum
 
                                                 return (
                                                     <div

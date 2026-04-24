@@ -152,20 +152,11 @@ export async function GET() {
                 })
             }
 
-            const priorityOrder: Record<NotificationPriority, number> = {
-                high: 0,
-                medium: 1,
-                info: 2,
-            }
-            notifs.sort((a, b) => {
-                const pd =
-                    priorityOrder[a.priority] - priorityOrder[b.priority]
-                if (pd !== 0) return pd
-                return (
+            notifs.sort(
+                (a, b) =>
                     new Date(b.timestamp).getTime() -
                     new Date(a.timestamp).getTime()
-                )
-            })
+            )
 
             return notifs
         }

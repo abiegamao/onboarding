@@ -6,6 +6,8 @@ export interface IOnboardingProfile extends Document {
         hasSeenCelebration: boolean
         currentPhase: number
         currentStep: string
+        highestPhase: number
+        highestStep: string
         isCompleted: boolean
         updatedAt: Date
     }
@@ -152,6 +154,8 @@ const OnboardingProfileSchema = new Schema<IOnboardingProfile>(
             hasSeenCelebration: { type: Boolean, default: false },
             currentPhase: { type: Number, default: 1 },
             currentStep: { type: String, default: "1A" },
+            highestPhase: { type: Number, default: 1 },
+            highestStep: { type: String, default: "1A" },
             isCompleted: { type: Boolean, default: false },
             updatedAt: { type: Date, default: Date.now },
         },

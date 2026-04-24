@@ -84,6 +84,11 @@ export async function GET() {
     }
 }
 
+const ALL_STEPS = [
+    "1A","1B","1C-1","1C-2","1C-3","1C-4","1C-5","1C-6","1C-7","1C-8","1C-9",
+    "1D","1E","1F","2A","2B","2C","2D","3A","3B","3C","3D","3E","4A","4B","4C",
+]
+
 export async function PATCH(req: Request) {
     try {
         const userId = await getUserId()
@@ -101,18 +106,25 @@ export async function PATCH(req: Request) {
                 { status: 404 }
             )
 
+        const existingProfile = await OnboardingProfile.findOne({ userId }).select("status")
+        const prevHighestStep = existingProfile?.status?.highestStep || existingProfile?.status?.currentStep || "1A"
+        const prevHighestPhase = existingProfile?.status?.highestPhase || existingProfile?.status?.currentPhase || 1
+
         const update: any = {
             "status.updatedAt": new Date(),
         }
 
         if (currentPhase !== undefined) {
-            update["status.currentPhase"] = Math.max(
-                1,
-                Math.min(4, currentPhase)
-            )
+            const clamped = Math.max(1, Math.min(4, currentPhase))
+            update["status.currentPhase"] = clamped
+            update["status.highestPhase"] = Math.max(prevHighestPhase, clamped)
         }
-        if (currentStep !== undefined)
+        if (currentStep !== undefined) {
             update["status.currentStep"] = currentStep
+            const newIdx = ALL_STEPS.indexOf(currentStep)
+            const highestIdx = ALL_STEPS.indexOf(prevHighestStep)
+            update["status.highestStep"] = newIdx > highestIdx ? currentStep : prevHighestStep
+        }
         if (isCompleted !== undefined)
             update["status.isCompleted"] = isCompleted
 
