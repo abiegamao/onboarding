@@ -63,10 +63,11 @@ export default async function OnboardingLayout({
         "4B",
         "4C",
     ]
-    const currentStepIndex = allSteps.indexOf(status.currentStep)
+    const highestStep = status.highestStep || status.currentStep
+    const progressStepIndex = allSteps.indexOf(highestStep)
     const progressValue = status.isCompleted
         ? 100
-        : Math.max(0, (currentStepIndex / allSteps.length) * 100)
+        : Math.max(0, (progressStepIndex / allSteps.length) * 100)
 
     return (
         <div className="container mx-auto animate-in px-4 py-8 duration-700 fade-in sm:px-6 lg:px-8">
