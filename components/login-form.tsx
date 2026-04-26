@@ -63,93 +63,95 @@ export function LoginForm({
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
                     <div className="flex flex-col items-center gap-3">
                         <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                        <p className="text-sm text-muted-foreground">Signing in...</p>
+                        <p className="text-sm text-muted-foreground">
+                            Signing in...
+                        </p>
                     </div>
                 </div>
             )}
-        <form
-            onSubmit={handleSubmit}
-            className={cn("flex flex-col gap-6", className)}
-            {...props}
-        >
-            <FieldGroup>
-                <div className="flex flex-col items-center gap-1 text-center">
-                    <h1 className="text-2xl font-bold">
-                        Login to your account
-                    </h1>
-                    <p className="text-sm text-balance text-muted-foreground">
-                        Enter your email below to login to your account
-                    </p>
-                </div>
-                <Field>
-                    <FieldLabel htmlFor="email">Email</FieldLabel>
-                    <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="m@example.com"
-                        required
-                        className="h-12 border-border/50 bg-secondary"
-                    />
-                </Field>
-                <Field>
-                    <div className="flex items-center">
-                        <FieldLabel htmlFor="password">Password</FieldLabel>
-                        <a
-                            href="#"
-                            className="ml-auto text-sm underline-offset-4 hover:underline"
-                        >
-                            Forgot your password?
-                        </a>
+            <form
+                onSubmit={handleSubmit}
+                className={cn("flex flex-col gap-6", className)}
+                {...props}
+            >
+                <FieldGroup>
+                    <div className="flex flex-col items-center gap-1 text-center">
+                        <h1 className="text-2xl font-bold">
+                            Login to your account
+                        </h1>
+                        <p className="text-sm text-balance text-muted-foreground">
+                            Enter your email below to login to your account
+                        </p>
                     </div>
-                    <div className="relative">
+                    <Field>
+                        <FieldLabel htmlFor="email">Email</FieldLabel>
                         <Input
-                            id="password"
-                            name="password"
-                            type={showPassword ? "text" : "password"}
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="m@example.com"
                             required
-                            className="h-12 border-border/50 bg-secondary pr-10"
+                            className="h-12 border-border/50 bg-secondary"
                         />
-                        <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                    </Field>
+                    <Field>
+                        <div className="flex items-center">
+                            <FieldLabel htmlFor="password">Password</FieldLabel>
+                            <Link
+                                href="/forgot-password"
+                                className="ml-auto text-sm underline-offset-4 hover:underline"
+                            >
+                                Forgot your password?
+                            </Link>
+                        </div>
+                        <div className="relative">
+                            <Input
+                                id="password"
+                                name="password"
+                                type={showPassword ? "text" : "password"}
+                                required
+                                className="h-12 border-border/50 bg-secondary pr-10"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                            >
+                                {showPassword ? (
+                                    <EyeOff className="h-4 w-4" />
+                                ) : (
+                                    <Eye className="h-4 w-4" />
+                                )}
+                                <span className="sr-only">
+                                    {showPassword
+                                        ? "Hide password"
+                                        : "Show password"}
+                                </span>
+                            </button>
+                        </div>
+                    </Field>
+                    <Field>
+                        <Button
+                            className="cursor-pointer"
+                            type="submit"
+                            disabled={isLoading}
                         >
-                            {showPassword ? (
-                                <EyeOff className="h-4 w-4" />
-                            ) : (
-                                <Eye className="h-4 w-4" />
-                            )}
-                            <span className="sr-only">
-                                {showPassword
-                                    ? "Hide password"
-                                    : "Show password"}
-                            </span>
-                        </button>
-                    </div>
-                </Field>
-                <Field>
-                    <Button
-                        className="cursor-pointer"
-                        type="submit"
-                        disabled={isLoading}
-                    >
-                        {isLoading ? "Signing in..." : "Login"}
-                    </Button>
-                </Field>
-                <Field>
-                    <FieldDescription className="text-center">
-                        Don&apos;t have an account?{" "}
-                        <Link
-                            href="/signup"
-                            className="underline underline-offset-4"
-                        >
-                            Sign up
-                        </Link>
-                    </FieldDescription>
-                </Field>
-            </FieldGroup>
-        </form>
+                            {isLoading ? "Signing in..." : "Login"}
+                        </Button>
+                    </Field>
+                    <Field>
+                        <FieldDescription className="text-center">
+                            Don&apos;t have an account?{" "}
+                            <Link
+                                href="/signup"
+                                className="underline underline-offset-4"
+                            >
+                                Sign up
+                            </Link>
+                        </FieldDescription>
+                    </Field>
+                </FieldGroup>
+            </form>
         </>
     )
 }
